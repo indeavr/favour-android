@@ -1,46 +1,28 @@
 package com.example.allfavour.data
 
+import LoginMutation
+import RegisterMutation
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.coroutines.toDeferred
+import com.apollographql.apollo.exception.ApolloException
 import com.example.allfavour.data.model.LoggedInUser
+import com.example.allfavour.graphql.GraphqlConnector
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class LoginRepository {
 
-    // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
-        private set
+    suspend fun login(username: String, password: String): LoggedInUser {
+        val mutation = RegisterMutation(username, password)
+        val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
-    val isLoggedIn: Boolean
-        get() = user != null
-
-    init {
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-        user = null
-    }
-
-    fun logout() {
-        user = null
-        dataSource.logout()
-    }
-
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        // handle login
-        val result = dataSource.login(username, password)
-
-        if (result is Result.Success) {
-            setLoggedInUser(result.data)
-        }
-
-        return result
-    }
-
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+        val fakeUser = LoggedInUser(result.data()!!.register!!.userId, username)
+        return fakeUser
     }
 }

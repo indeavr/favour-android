@@ -1,30 +1,37 @@
 package com.example.allfavour.ui.login
 
 import android.util.Patterns
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.allfavour.data.LoginRepository
 import com.example.allfavour.data.Result
 
 import com.example.allfavour.R
+import com.example.allfavour.data.model.LoggedInUser
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
-    private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> = _loginResult
+    private var _loginResult = MutableLiveData<LoggedInUser>()
+    val loginResult: LiveData<LoggedInUser> = _loginResult
+
+    init {
+        _loginResult = loginRepository.loggedInUser
+    }
 
     fun login(username: String, password: String) {
+//        _loginResult.switchMap{
+//            liveData(context = viewModelScope.coroutineContext + Dispatcher.IO) {
+//
+//            }
+//        }
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
+        _loginResult.switchMap {
+            liveData {
+                val data = loginRepository.login(username, password) // loadUser is a suspend function.
+                emit(data)
+            }
         }
     }
 
