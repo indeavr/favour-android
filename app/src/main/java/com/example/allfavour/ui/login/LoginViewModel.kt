@@ -7,6 +7,7 @@ import com.example.allfavour.data.Result
 
 import com.example.allfavour.R
 import com.example.allfavour.data.model.LoggedInUser
+import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -16,22 +17,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private var _loginResult = MutableLiveData<LoggedInUser>()
     val loginResult: LiveData<LoggedInUser> = _loginResult
 
-    init {
-        _loginResult = loginRepository.loggedInUser
-    }
-
-    fun login(username: String, password: String) {
-//        _loginResult.switchMap{
-//            liveData(context = viewModelScope.coroutineContext + Dispatcher.IO) {
-//
-//            }
-//        }
-        // can be launched in a separate asynchronous job
-        _loginResult.switchMap {
-            liveData {
-                val data = loginRepository.login(username, password) // loadUser is a suspend function.
-                emit(data)
-            }
+    fun register(username: String, password: String) {
+        viewModelScope.launch {
+            val result = loginRepository.register(username, password)
+            _loginResult.value = result
         }
     }
 

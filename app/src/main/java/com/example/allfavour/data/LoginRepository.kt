@@ -4,6 +4,7 @@ import LoginMutation
 import RegisterMutation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
@@ -18,11 +19,10 @@ import com.example.allfavour.graphql.GraphqlConnector
 
 class LoginRepository {
 
-    suspend fun login(username: String, password: String): LoggedInUser {
+    suspend fun register(username: String, password: String): LoggedInUser {
         val mutation = RegisterMutation(username, password)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
-        val fakeUser = LoggedInUser(result.data()!!.register!!.userId, username)
-        return fakeUser
+        return LoggedInUser(result.data()!!.register!!.userId, username)
     }
 }
