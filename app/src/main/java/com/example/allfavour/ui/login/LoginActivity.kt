@@ -1,6 +1,7 @@
 package com.example.allfavour.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.liveData
 
 import com.example.allfavour.R
+import com.example.allfavour.ui.register.RegisterActivity
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -49,6 +52,12 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        switchToRegisterText.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+
+            startActivity(intent)
+        }
+
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
@@ -79,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.register(
+                        loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
@@ -89,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.register((
+                loginViewModel.login(
                     username.text.toString(),
                     password.text.toString()
                 )

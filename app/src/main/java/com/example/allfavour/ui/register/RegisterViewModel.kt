@@ -9,7 +9,7 @@ import com.example.allfavour.R
 import com.example.allfavour.data.model.LoggedInUser
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class RegisterViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -17,9 +17,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private var _loginResult = MutableLiveData<LoggedInUser>()
     val loginResult: LiveData<LoggedInUser> = _loginResult
 
-    fun login(username: String, password: String) {
+    fun register(username: String, password: String) {
         viewModelScope.launch {
-            val result = loginRepository.login(username, password)
+            val result = loginRepository.register(username, password)
             _loginResult.value = result
         }
     }

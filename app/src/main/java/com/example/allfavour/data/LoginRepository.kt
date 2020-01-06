@@ -19,6 +19,13 @@ import com.example.allfavour.graphql.GraphqlConnector
 
 class LoginRepository {
 
+    suspend fun login(username: String, password: String): LoggedInUser {
+        val mutation = LoginMutation(username, password)
+        val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
+
+        return LoggedInUser(result.data()!!.login!!.userId, username)
+    }
+
     suspend fun register(username: String, password: String): LoggedInUser {
         val mutation = RegisterMutation(username, password)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
