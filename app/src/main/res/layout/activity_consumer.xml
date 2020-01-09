@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.ConsumerActivity">
 
+    <include layout="@layout/consumer_toolbar"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

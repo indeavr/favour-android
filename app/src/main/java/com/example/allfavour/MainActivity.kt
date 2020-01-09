@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.allfavour.graphql.GraphqlConnector
+import com.example.allfavour.ui.ConsumerActivity
 import com.example.allfavour.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
@@ -14,8 +15,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         GraphqlConnector.setup(applicationContext)
 
-        val loginIntent = Intent(this, LoginActivity::class.java)
+//        val loginIntent = Intent(this, LoginActivity::class.java)
+//
+//        startActivity(loginIntent)
 
-        startActivity(loginIntent)
+        val consumerActivityIntent = Intent(this, ConsumerActivity::class.java)
+        startActivity(consumerActivityIntent);
     }
 }
