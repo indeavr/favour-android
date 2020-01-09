@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(
+                loginViewModel.register(
                     username.text.toString(),
                     password.text.toString()
                 )
