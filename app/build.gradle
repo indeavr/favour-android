@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'com.apollographql.android'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion 28
@@ -21,6 +19,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            testCoverageEnabled false
+        }
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
@@ -34,15 +39,14 @@ apollo {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation "com.apollographql.apollo:apollo-runtime:1.2.2"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.apollographql.apollo:apollo-android-support:1.2.2"
@@ -55,4 +59,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
 }

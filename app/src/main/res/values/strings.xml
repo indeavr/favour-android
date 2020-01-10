@@ -12,4 +12,11 @@
     <string name="action_switch_to_register">Don\'t have an account click here</string>
     <string name="register_button_text">Register</string>
     <string name="action_switch_to_login">Already have an account click here</string>
+
+<!--    Consumer-->
+    <string name="my_favours">My Favours</string>
+    <string name="search">Search</string>
+    <string name="my_interests">My Interests</string>
+    <string name="messages">Messages</string>
+    <string name="profile">Profile</string>
 </resources>

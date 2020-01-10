@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consumer_navigation"
+    app:startDestination="@id/consumerActivity">
+
+    <activity
+        android:id="@+id/consumerActivity"
+        android:name="com.example.allfavour.ui.ConsumerActivity"
+        android:label="activity_consumer"
+        tools:layout="@layout/activity_consumer" />
+</navigation>
