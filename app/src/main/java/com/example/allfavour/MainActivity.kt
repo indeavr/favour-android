@@ -1,12 +1,10 @@
 package com.example.allfavour
 
-import PositionsQuery
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.allfavour.graphql.GraphqlConnector
-import com.example.allfavour.ui.ConsumerActivity
-import com.example.allfavour.ui.login.LoginActivity
+import com.example.allfavour.ui.consumer.ConsumerActivity
 
 class MainActivity : AppCompatActivity() {
 

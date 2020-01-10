@@ -13,10 +13,20 @@
     <string name="register_button_text">Register</string>
     <string name="action_switch_to_login">Already have an account click here</string>
 
-<!--    Consumer-->
+    <!--    Consumer-->
     <string name="my_favours">My Favours</string>
     <string name="search">Search</string>
     <string name="my_interests">My Interests</string>
     <string name="messages">Messages</string>
     <string name="profile">Profile</string>
+    <string name="notifications">Notifications</string>
+    <string name="consumer_switch">Switch To Provider</string>
+    <string name="my_account">My Account</string>
+
+
+    <!--    Provider-->
+    <string name="provider_switch">Switch To Consumer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

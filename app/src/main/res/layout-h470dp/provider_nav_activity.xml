@@ -5,30 +5,30 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.allfavour.ui.consumer.ConsumerActivity">
+    tools:context="com.example.allfavour.ui.provider.ProviderActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/consumer_toolbar"
+        android:id="@+id/provider_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primaryColor"
-        app:menu="@menu/consumer_top_menu"
+        app:menu="@menu/provider_top_menu"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <fragment
-        android:id="@+id/consumer_nav_host_fragment"
+        android:id="@+id/provider_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/consumer_navigation" />
+        app:navGraph="@navigation/provider_navigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/consumer_bottom_nav_view"
+        android:id="@+id/provider_bottom_nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/consumer_bottom_nav" />
+        app:menu="@menu/provider_bottom_nav" />
 
 </LinearLayout>

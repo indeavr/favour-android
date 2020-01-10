@@ -3,11 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/consumer_navigation"
-    app:startDestination="@id/consumerActivity">
+    app:startDestination="@+id/consumer_search_dest">
+
+    <fragment
+        android:id="@+id/consumer_search_dest"
+        android:name="com.example.allfavour.ui.consumer.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/consumer_search_fragment" />
+
+    <fragment
+        android:id="@+id/consumer_my_favours_dest"
+        android:name="com.example.allfavour.ui.consumer.myFavours.MyFavoursFragment"
+        android:label="My Favours"
+        tools:layout="@layout/consumer_my_favours_fragment" />
+
+    <fragment
+        android:id="@+id/consumer_my_interests_dest"
+        android:name="com.example.allfavour.ui.consumer.myInterests.MyInterestsFragment"
+        android:label="My Interests"
+        tools:layout="@layout/consumer_my_interests_fragment" />
+
+    <fragment
+        android:id="@+id/consumer_notifications_dest"
+        android:name="com.example.allfavour.ui.consumer.notifications.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/consumer_notifications_fragment" />
+
+    <fragment
+        android:id="@+id/consumer_profile_dest"
+        android:name="com.example.allfavour.ui.consumer.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/consumer_profile_fragment" >
+        <action
+            android:id="@+id/my_account_dest_action"
+            app:destination="@id/consumer_my_account_dest"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/consumer_my_account_dest"
+        android:name="com.example.allfavour.ui.consumer.profile.myAccount.MyAccountFragment"
+        android:label="@string/my_account"
+        tools:layout="@layout/consumer_my_account_fragment" />
 
     <activity
-        android:id="@+id/consumerActivity"
-        android:name="com.example.allfavour.ui.ConsumerActivity"
-        android:label="activity_consumer"
-        tools:layout="@layout/activity_consumer" />
+        android:id="@+id/consumer_to_provider_dest"
+        android:name="com.example.allfavour.ui.provider.ProviderActivity"
+        android:label="provider_nav_activity"
+        tools:layout="@layout/provider_nav_activity" />
+
 </navigation>

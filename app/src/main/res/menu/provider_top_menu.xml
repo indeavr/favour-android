@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/provider_notifications_dest"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notifications"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/provider_to_consumer_dest"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/provider_switch"
+        app:showAsAction="ifRoom" />
+</menu>
