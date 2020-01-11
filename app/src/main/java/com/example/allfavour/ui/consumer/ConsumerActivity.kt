@@ -5,19 +5,24 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
 import androidx.navigation.ui.*
 import com.example.allfavour.R
+import com.example.allfavour.ui.provider.ProviderActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.internal.NavigationMenu
 import com.google.android.material.navigation.NavigationView
 
 class ConsumerActivity : AppCompatActivity() {
     lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,16 +34,15 @@ class ConsumerActivity : AppCompatActivity() {
         var hostContainer: NavHostFragment =supportFragmentManager
             .findFragmentById(R.id.consumer_nav_host_fragment) as NavHostFragment? ?: return
 
-        val navController: NavController = hostContainer.navController
+        this.navController = hostContainer.navController
 
-        setupActionBar(navController)
-        setupSideNavigationMenu(navController)
-        setupBottomAppBar(navController)
+        setupActionBar()
+        setupSideNavigationMenu()
+        setupBottomAppBar()
     }
 
-    fun setupActionBar(navController: NavController){
+    fun setupActionBar(){
         val drawerLayout : DrawerLayout? = findViewById(R.id.consumer_drawer_layout)
-
         val homeDestinations = setOf(
             R.id.consumer_search_dest,
             R.id.consumer_my_favours_dest,
@@ -50,20 +54,20 @@ class ConsumerActivity : AppCompatActivity() {
             homeDestinations,
             drawerLayout)
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        setupActionBarWithNavController(this.navController, appBarConfiguration)
     }
 
-    fun setupSideNavigationMenu(navController: NavController){
+    fun setupSideNavigationMenu(){
         // the drawer when the height is too small
         val sideNavView = findViewById<NavigationView>(R.id.consumer_nav_view)
 
-        sideNavView?.setupWithNavController(navController)
+        sideNavView?.setupWithNavController(this.navController)
     }
 
-    fun setupBottomAppBar(navController: NavController){
+    fun setupBottomAppBar(){
         val bottomNav = findViewById<BottomNavigationView>(R.id.consumer_bottom_nav_view)
 
-        bottomNav?.setupWithNavController(navController)
+        bottomNav?.setupWithNavController(this.navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -86,6 +90,30 @@ class ConsumerActivity : AppCompatActivity() {
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.
         // Otherwise, bubble up to the parent.
+//        if(item.itemId === R.id.consumer_to_provider_dest){
+//            val currentDest = this.navController.currentDestination
+//
+//            navController.navigate(R.id.consumer_to_provider_dest).also {
+//                findNavController(R.id.provider_nav_host_fragment)
+//                    .navigate(R.id.provider_profile_dest)
+//            }
+//        }
+
+        if(item.itemId === R.id.consumer_notifications_dest){
+            var options = navOptions {
+                anim{
+                    enter = R.anim.slide_in_up
+                    exit = R.anim.slide_out_down
+                    popEnter = R.anim.slide_in_up
+                    popExit = R.anim.slide_out_down
+                }
+            }
+            navController.navigate(R.id.consumer_notifications_dest, null, options)
+
+            return super.onOptionsItemSelected(item)
+        }
+
+
         return item.onNavDestinationSelected(findNavController(R.id.consumer_nav_host_fragment))
                 || super.onOptionsItemSelected(item)
     }
