@@ -1,4 +1,4 @@
-package com.example.allfavour.ui.login
+package com.example.allfavour.ui.auth
 
 /**
  * User details post authentication that is exposed to the UI

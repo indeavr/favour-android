@@ -1,4 +1,4 @@
-package com.example.allfavour.ui.login
+package com.example.allfavour.ui.auth
 
 /**
  * Authentication result : success (user details) or error message.

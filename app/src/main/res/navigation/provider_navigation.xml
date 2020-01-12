@@ -42,6 +42,6 @@
         android:id="@+id/provider_to_consumer_dest"
         android:name="com.example.allfavour.ui.consumer.ConsumerActivity"
         android:label="provider_nav_activity"
-        tools:layout="@layout/provider_nav_activity" />
+        tools:layout="@layout/provider_nav_host" />
 
 </navigation>

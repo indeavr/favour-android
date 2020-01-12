@@ -1,4 +1,4 @@
-package com.example.allfavour.ui.login
+package com.example.allfavour.ui.auth
 
 import android.app.Activity
 import android.content.Intent
@@ -15,7 +15,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.liveData
 
 import com.example.allfavour.R
 import com.example.allfavour.ui.register.RegisterActivity

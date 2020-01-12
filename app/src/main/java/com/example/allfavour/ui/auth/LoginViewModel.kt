@@ -1,9 +1,8 @@
-package com.example.allfavour.ui.login
+package com.example.allfavour.ui.auth
 
 import android.util.Patterns
 import androidx.lifecycle.*
 import com.example.allfavour.data.LoginRepository
-import com.example.allfavour.data.Result
 
 import com.example.allfavour.R
 import com.example.allfavour.data.model.LoggedInUser

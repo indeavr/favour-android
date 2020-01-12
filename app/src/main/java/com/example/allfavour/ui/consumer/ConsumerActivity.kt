@@ -3,36 +3,32 @@ package com.example.allfavour.ui.consumer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.navigation.ui.*
 import com.example.allfavour.R
-import com.example.allfavour.ui.provider.ProviderActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.internal.NavigationMenu
 import com.google.android.material.navigation.NavigationView
 
-class ConsumerActivity : AppCompatActivity() {
+class ConsumerActivityDeprecated : AppCompatActivity() {
     lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.consumer_nav_activity)
+        setContentView(R.layout.consumer_nav_host)
 
         val toolbar = findViewById<Toolbar>(R.id.consumer_toolbar)
         setSupportActionBar(toolbar)
 
         var hostContainer: NavHostFragment =supportFragmentManager
-            .findFragmentById(R.id.consumer_nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.consumer_nav_host) as NavHostFragment? ?: return
 
         this.navController = hostContainer.navController
 
@@ -90,14 +86,12 @@ class ConsumerActivity : AppCompatActivity() {
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.
         // Otherwise, bubble up to the parent.
-//        if(item.itemId === R.id.consumer_to_provider_dest){
-//            val currentDest = this.navController.currentDestination
-//
-//            navController.navigate(R.id.consumer_to_provider_dest).also {
-//                findNavController(R.id.provider_nav_host_fragment)
-//                    .navigate(R.id.provider_profile_dest)
-//            }
-//        }
+        if(item.itemId === R.id.consumer_to_provider_dest){
+            val currentDest = this.navController.currentDestination
+
+            var bundle = bundleOf("currentDest" to "profile")
+            navController.navigate(R.id.consumer_to_provider_dest, bundle)
+        }
 
         if(item.itemId === R.id.consumer_notifications_dest){
             var options = navOptions {
@@ -113,14 +107,13 @@ class ConsumerActivity : AppCompatActivity() {
             return super.onOptionsItemSelected(item)
         }
 
-
-        return item.onNavDestinationSelected(findNavController(R.id.consumer_nav_host_fragment))
+        return item.onNavDestinationSelected(findNavController(R.id.consumer_nav_host))
                 || super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         // Allows NavigationUI to support proper up navigation or the drawer layout
         // drawer menu, depending on the situation
-        return findNavController(R.id.consumer_nav_host_fragment).navigateUp(appBarConfiguration)
+        return findNavController(R.id.consumer_nav_host).navigateUp(appBarConfiguration)
     }
 }

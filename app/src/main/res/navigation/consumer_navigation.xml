@@ -54,6 +54,11 @@
         android:id="@+id/consumer_to_provider_dest"
         android:name="com.example.allfavour.ui.provider.ProviderActivity"
         android:label="provider_nav_activity"
-        tools:layout="@layout/provider_nav_activity" />
+        tools:layout="@layout/provider_nav_host" >
+        <argument
+            android:name="currentDest"
+            app:argType="string"
+            android:defaultValue="1" />
+    </activity>
 
 </navigation>

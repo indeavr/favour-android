@@ -1,0 +1,5 @@
+query ConsumerQuery {
+    consumer {
+        id
+    }
+}

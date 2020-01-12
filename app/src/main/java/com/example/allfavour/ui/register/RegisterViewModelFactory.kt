@@ -1,4 +1,4 @@
-package com.example.allfavour.ui.login
+package com.example.allfavour.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

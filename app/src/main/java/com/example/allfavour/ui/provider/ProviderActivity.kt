@@ -6,29 +6,30 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.*
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.example.allfavour.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
-class ProviderActivity : AppCompatActivity() {
+class ProviderActivityDeprecated : AppCompatActivity() {
 
     lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.provider_nav_activity)
+        setContentView(R.layout.provider_nav_host)
 
         val toolbar = findViewById<Toolbar>(R.id.provider_toolbar)
         setSupportActionBar(toolbar)
 
         var hostContainer: NavHostFragment =supportFragmentManager
-            .findFragmentById(R.id.provider_nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.provider_nav_host) as NavHostFragment? ?: return
 
         val navController: NavController = hostContainer.navController
+
+//        var navGraph = findViewById<Navigation>()
 
         setupActionBar(navController)
         setupSideNavigationMenu(navController)
@@ -82,13 +83,13 @@ class ProviderActivity : AppCompatActivity() {
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.
         // Otherwise, bubble up to the parent.
-        return item.onNavDestinationSelected(findNavController(R.id.provider_nav_host_fragment))
+        return item.onNavDestinationSelected(findNavController(R.id.provider_nav_host))
                 || super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         // Allows NavigationUI to support proper up navigation or the drawer layout
         // drawer menu, depending on the situation
-        return findNavController(R.id.provider_nav_host_fragment).navigateUp(appBarConfiguration)
+        return findNavController(R.id.provider_nav_host).navigateUp(appBarConfiguration)
     }
 }
