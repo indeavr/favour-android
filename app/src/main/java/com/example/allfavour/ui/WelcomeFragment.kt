@@ -1,18 +1,13 @@
 package com.example.allfavour.ui
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.example.allfavour.R
-import com.example.allfavour.ui.consumer.ConsumerFragment
-import com.example.allfavour.ui.consumer.profile.ProfileFragmentDirections
+import kotlinx.android.synthetic.main.welcome_fragment.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +31,17 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.consumer_button).setOnClickListener {
+        login_button.setOnClickListener {
+            val action = WelcomeFragmentDirections.authDest()
+            findNavController().navigate(action)
+        }
+
+        provider_button.setOnClickListener {
+            val action = WelcomeFragmentDirections.providerDest()
+            findNavController().navigate(action)
+        }
+
+        consumer_button.setOnClickListener {
             val action = WelcomeFragmentDirections.consumerDest()
             findNavController().navigate(action)
         }

@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--    Main-->
+    <FrameLayout
+        android:id="@+id/main_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <fragment
+            android:id="@+id/main_nav_activity"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/main_navigation" />
+    </FrameLayout>
+
+    <!--    Auth-->
+    <FrameLayout
+        android:id="@+id/auth_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <fragment
+            android:id="@+id/auth_nav_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/main_navigation" />
+    </FrameLayout>
+
+    <!--    Consumer-->
     <FrameLayout
         android:id="@+id/consumer_wrapper"
         android:layout_width="match_parent"
@@ -37,6 +73,11 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/consumer_navigation" />
 
+            <com.example.allfavour.NonSwipingViewPager
+                android:id="@+id/main_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/consumer_bottom_nav_view"
                 android:layout_width="match_parent"
@@ -48,22 +89,7 @@
         </LinearLayout>
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/main_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <fragment
-            android:id="@+id/main_nav_activity"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_navigation" />
-    </FrameLayout>
-
+    <!--    Provider-->
     <FrameLayout
         android:id="@+id/provider_wrapper"
         android:layout_width="match_parent"
@@ -72,12 +98,10 @@
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             tools:context="com.example.allfavour.ui.provider.ProviderFragment">
 
             <androidx.appcompat.widget.Toolbar
@@ -85,8 +109,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/primaryColor"
-                app:menu="@menu/provider_top_menu"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                app:menu="@menu/provider_top_menu" />
 
             <fragment
                 android:id="@+id/provider_nav_host"

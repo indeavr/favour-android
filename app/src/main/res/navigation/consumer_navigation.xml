@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/consumer_navigation"
-    app:startDestination="@+id/consumer_search_dest">
+    app:startDestination="@id/consumer_search_dest">
 
     <fragment
         android:id="@+id/consumer_search_dest"
@@ -33,15 +33,14 @@
         android:id="@+id/consumer_profile_dest"
         android:name="com.example.allfavour.ui.consumer.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/consumer_profile_fragment" >
+        tools:layout="@layout/consumer_profile_fragment">
         <action
             android:id="@+id/my_account_dest_action"
             app:destination="@id/consumer_my_account_dest"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
-            app:popExitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -50,15 +49,15 @@
         android:label="@string/my_account"
         tools:layout="@layout/consumer_my_account_fragment" />
 
-    <activity
-        android:id="@+id/consumer_to_provider_dest"
-        android:name="com.example.allfavour.ui.provider.ProviderActivity"
-        android:label="provider_nav_activity"
-        tools:layout="@layout/provider_nav_host" >
-        <argument
-            android:name="currentDest"
-            app:argType="string"
-            android:defaultValue="1" />
-    </activity>
+    <!--    <activity-->
+    <!--        android:id="@+id/consumer_to_provider_dest"-->
+    <!--        android:name="com.example.allfavour.ui.provider.ProviderActivity"-->
+    <!--        android:label="provider_nav_activity"-->
+    <!--        tools:layout="@layout/provider_nav_host" >-->
+    <!--        <argument-->
+    <!--            android:name="currentDest"-->
+    <!--            app:argType="string"-->
+    <!--            android:defaultValue="1" />-->
+    <!--    </activity>-->
 
 </navigation>
