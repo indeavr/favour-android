@@ -8,15 +8,12 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.*
 import com.example.allfavour.graphql.GraphqlConnector
 import com.example.allfavour.ui.WelcomeFragmentDirections
-import com.example.allfavour.ui.consumer.BaseFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
@@ -40,20 +37,6 @@ val providerFragments: List<Int> = listOf(
 val authFragments: Set<Int> = setOf(R.id.login) // TODO
 
 class MainActivity : AppCompatActivity() {
-    // list of base destination containers
-    private val fragments = listOf(
-        BaseFragment.newInstance(
-            R.layout.consumer_search_fragment,
-            R.id.consumer_search_toolbar,
-            R.id.consumer_search_nav_host
-        ),
-        BaseFragment.newInstance(
-            R.layout.consumer_profile_fragment,
-            R.id.consumer_profile_toolbar,
-            R.id.consumer_profile_nav_host
-        )
-    )
-
 
     private val mainWrapper: FrameLayout by lazy { main_wrapper }
     private val authWrapper: FrameLayout by lazy { auth_wrapper }
@@ -75,11 +58,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        // setup main view pager
-        main_pager.adapter = ViewPagerAdapter()
-
         currentController = mainNavController
-
 
 //        // TODO: review this approach -->
 //        NavController.OnDestinationChangedListener { controller, destination, _ ->
@@ -132,16 +111,6 @@ class MainActivity : AppCompatActivity() {
             // consumer/provider  Navigation must be activated --> use mainNavController to redirect, because the the listener is attached to it
         }
     }
-
-
-    inner class ViewPagerAdapter : FragmentPagerAdapter(supportFragmentManager) {
-
-        override fun getItem(position: Int): Fragment = fragments[position]
-
-        override fun getCount(): Int = fragments.size
-
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Top Menu create
