@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.allfavour.R
+import kotlinx.android.synthetic.main.main_nav_activity.*
 
 class NotificationsFragment : Fragment() {
 
@@ -26,6 +27,9 @@ class NotificationsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+//        consumer_bottom_nav_view.visibility = View.INVISIBLE
+
         viewModel = ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
         // TODO: Use the ViewModel
     }

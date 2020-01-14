@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity(),
             R.layout.consumer_profile_nav_host,
             R.id.consumer_profile_toolbar,
             R.id.consumer_profile_nav_host
+        ),
+        ConsumerBaseFragment.newInstance(
+            R.layout.consumer_notifications_nav_host,
+            R.id.consumer_notifications_toolbar,
+            R.id.consumer_notifications_nav_host
         )
     )
 
@@ -84,9 +89,17 @@ class MainActivity : AppCompatActivity(),
 
     // maps of navigation_id to container index
     private val indexToConsumerPage =
-        mapOf(0 to R.id.consumer_search_dest, 1 to R.id.consumer_profile_dest)
+        mapOf(
+            0 to R.id.consumer_search_dest,
+            1 to R.id.consumer_profile_dest,
+            2 to R.id.consumer_notifications_dest
+        )
     private val consumerPageToIndex =
-        mapOf(R.id.consumer_search_dest to 0, R.id.consumer_profile_dest to 1)
+        mapOf(
+            R.id.consumer_search_dest to 0,
+            R.id.consumer_profile_dest to 1,
+            R.id.consumer_notifications_dest to 2
+        )
 
 
     private val indexToProviderPage =
@@ -108,6 +121,14 @@ class MainActivity : AppCompatActivity(),
 
     var currentSide: String? = null
 
+    fun BottomNavigationView.uncheckAllItems() {
+        menu.setGroupCheckable(0, true, false)
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).isChecked = false
+        }
+        menu.setGroupCheckable(0, true, true)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
@@ -125,6 +146,11 @@ class MainActivity : AppCompatActivity(),
 
             } else if (pFragments.contains(destination.id)) {
                 activateProviderNavigation(destination.id)
+            }
+
+            if (destination.id == R.id.consumer_notifications_dest) {
+                setItem(2)
+                consumer_bottom_nav_view.uncheckAllItems()
             }
         }
 
@@ -244,13 +270,13 @@ class MainActivity : AppCompatActivity(),
             val position = indexToProviderPage.values.indexOf(item.itemId)
 
             if (provider_pager.currentItem != position) setItem(position)
-            return true
         } else {
             val position = indexToConsumerPage.values.indexOf(item.itemId)
 
             if (consumer_pager.currentItem != position) setItem(position)
-            return true
         }
+
+        return true
     }
 
     /// OnPageSelected Listener Implementation
@@ -269,7 +295,6 @@ class MainActivity : AppCompatActivity(),
                 consumer_bottom_nav_view.selectedItemId = itemId
         }
     }
-
 
 
     private fun setItem(position: Int) {

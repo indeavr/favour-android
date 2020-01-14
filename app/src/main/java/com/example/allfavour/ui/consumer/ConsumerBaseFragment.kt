@@ -15,6 +15,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
+import kotlinx.android.synthetic.main.consumer_notifications_nav_host.*
 import kotlinx.android.synthetic.main.main_nav_activity.*
 
 class ConsumerBaseFragment : Fragment() {
@@ -29,6 +30,7 @@ class ConsumerBaseFragment : Fragment() {
 //        R.id.consumer_my_favours_dest,
 //        R.id.consumer_my_interests_dest,
         R.id.consumer_profile_dest
+//        R.id.consumer_notifications_dest
 //        R.id.consumer_messages_dest
     )
     // nav config with root destinations
@@ -75,11 +77,12 @@ class ConsumerBaseFragment : Fragment() {
             }
         }
 
-        return when (item.itemId) {
+        when (item.itemId) {
             R.id.consumer_notifications_dest -> {
-                mainNavController.navigate(MainNavigationDirections.consumerNotificationsDest(), options)
-
-                return super.onOptionsItemSelected(item)
+                mainNavController.navigate(
+                    MainNavigationDirections.consumerNotificationsDest(),
+                    options
+                )
             }
             R.id.consumer_to_provider_dest -> {
                 when (navHostId) {
@@ -90,12 +93,11 @@ class ConsumerBaseFragment : Fragment() {
                         mainNavController.navigate(MainNavigationDirections.providerProfileDest())
                     }
                 }
-
-                true
             }
-
-            else -> true
         }
+
+        return item.onNavDestinationSelected(mainNavController)
+                || super.onOptionsItemSelected(item)
     }
 
 
@@ -124,13 +126,6 @@ class ConsumerBaseFragment : Fragment() {
         return requireActivity()
             .findNavController(navHostId)
             .navigateUp(appBarConfig)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = requireActivity().findNavController(R.id.provider_search_nav_host)
-        navController.navigate(R.id.provider_search_dest)
-
-        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
     companion object {
