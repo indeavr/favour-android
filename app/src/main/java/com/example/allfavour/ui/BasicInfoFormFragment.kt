@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
 import kotlinx.android.synthetic.main.basic_info_form_fragment.*
@@ -34,7 +35,7 @@ class BasicInfoFormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         basic_forms_submit_button.setOnClickListener {
-            val action = BasicInfoFormFragmentDirections.consumerDest()
+            val action = MainNavigationDirections.consumerSearchDest()
             mainNavController?.navigate(action)
         }
     }

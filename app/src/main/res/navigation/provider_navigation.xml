@@ -5,36 +5,40 @@
     android:id="@+id/provider_navigation"
     app:startDestination="@id/provider_search_dest">
 
-    <fragment
-        android:id="@+id/provider_search_dest"
-        android:name="com.example.allfavour.ui.provider.search.SearchFragment"
-        android:label="Search"
-        tools:layout="@layout/provider_profile_fragment" />
+    <include app:graph="@navigation/provider_profile"/>
 
-    <fragment
-        android:id="@+id/provider_notifications_dest"
-        android:name="com.example.allfavour.ui.provider.notifications.NotificationsFragment"
-        android:label="Notifications"
-        tools:layout="@layout/provider_notifications_fragment" />
+    <include app:graph="@navigation/provider_search"/>
 
-    <fragment
-        android:id="@+id/provider_profile_dest"
-        android:name="com.example.allfavour.ui.provider.profile.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/provider_profile_fragment">
-        <action
-            android:id="@+id/my_account_dest_action"
-            app:destination="@id/provider_my_account_dest"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/provider_search_dest"-->
+<!--        android:name="com.example.allfavour.ui.provider.search.SearchFragment"-->
+<!--        android:label="Search"-->
+<!--        tools:layout="@layout/provider_search_fragment" />-->
 
-    <fragment
-        android:id="@+id/provider_my_account_dest"
-        android:name="com.example.allfavour.ui.provider.profile.myAccount.MyAccountFragment"
-        android:label="@string/my_account"
-        tools:layout="@layout/provider_my_account_fragment" />
+<!--    <fragment-->
+<!--        android:id="@+id/provider_notifications_dest"-->
+<!--        android:name="com.example.allfavour.ui.provider.notifications.NotificationsFragment"-->
+<!--        android:label="Notifications"-->
+<!--        tools:layout="@layout/provider_notifications_fragment" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/provider_profile_dest"-->
+<!--        android:name="com.example.allfavour.ui.provider.profile.ProfileFragment"-->
+<!--        android:label="Profile"-->
+<!--        tools:layout="@layout/provider_profile_fragment">-->
+<!--        <action-->
+<!--            android:id="@+id/my_account_dest_action"-->
+<!--            app:destination="@id/provider_my_account_dest"-->
+<!--            app:enterAnim="@anim/slide_in_left"-->
+<!--            app:exitAnim="@anim/slide_out_right"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
+<!--    </fragment>-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/provider_my_account_dest"-->
+<!--        android:name="com.example.allfavour.ui.provider.profile.myAccount.MyAccountFragment"-->
+<!--        android:label="@string/my_account"-->
+<!--        tools:layout="@layout/provider_my_account_fragment" />-->
 
 </navigation>

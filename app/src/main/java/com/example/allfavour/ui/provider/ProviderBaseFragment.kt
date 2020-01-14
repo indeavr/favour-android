@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
+import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 
 class ProviderBaseFragment : Fragment() {
@@ -69,11 +72,52 @@ class ProviderBaseFragment : Fragment() {
             .navigateUp(appBarConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = requireActivity().findNavController(navHostId)
-        navController.navigate(R.id.consumer_search_dest)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
+        toolbar.inflateMenu(R.menu.provider_top_menu)
+        toolbar.setOnMenuItemClickListener(this::onProviderItemSelected)
 
-        return super.onOptionsItemSelected(item)
+        super.onActivityCreated(savedInstanceState)
+    }
+
+
+    fun onProviderItemSelected(item: MenuItem): Boolean {
+        val currentDestination = requireActivity().findNavController(navHostId).currentDestination?.id;
+        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
+
+
+//        val a = currentDestination == R.id.consumer_search_navigation
+//        val b = currentDestination == R.id.consumer_search_dest
+
+        var options = navOptions {
+            anim {
+                enter = R.anim.slide_in_up
+                exit = R.anim.slide_out_down
+                popEnter = R.anim.slide_in_up
+                popExit = R.anim.slide_out_down
+            }
+        }
+
+        return when (item.itemId) {
+            R.id.provider_notifications_dest -> {
+                mainNavController.navigate(MainNavigationDirections.consumerNotificationsDest(), options)
+
+                return super.onOptionsItemSelected(item)
+            }
+            R.id.provider_to_consumer_dest -> {
+                when (navHostId) {
+                    R.id.provider_search_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+                    }
+                    R.id.provider_profile_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.consumerProfileDest())
+                    }
+                }
+
+                true
+            }
+            else -> true
+        }
     }
 
     companion object {

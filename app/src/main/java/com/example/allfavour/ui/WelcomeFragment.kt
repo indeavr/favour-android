@@ -31,20 +31,20 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login_button.setOnClickListener {
-            val action = WelcomeFragmentDirections.authDest()
-            findNavController().navigate(action)
-        }
-
-        provider_button.setOnClickListener {
-            val action = WelcomeFragmentDirections.providerDest()
-            findNavController().navigate(action)
-        }
-
-        consumer_button.setOnClickListener {
-            val action = WelcomeFragmentDirections.consumerDest()
-            findNavController().navigate(action)
-        }
+//        login_button.setOnClickListener {
+//            val action = WelcomeFragmentDirections.authDest()
+//            findNavController().navigate(action)
+//        }
+//
+//        provider_button.setOnClickListener {
+//            val action = WelcomeFragmentDirections.providerDest()
+//            findNavController().navigate(action)
+//        }
+//
+//        consumer_button.setOnClickListener {
+//            val action = WelcomeFragmentDirections.consumerDest()
+//            findNavController().navigate(action)
+//        }
     }
 
     override fun onCreateView(

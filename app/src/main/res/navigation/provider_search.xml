@@ -9,6 +9,6 @@
         android:id="@+id/provider_search_dest"
         android:name="com.example.allfavour.ui.provider.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/provider_profile_fragment" />
+        tools:layout="@layout/provider_search_fragment" />
 
 </navigation>

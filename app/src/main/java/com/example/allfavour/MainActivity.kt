@@ -23,6 +23,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
+import androidx.core.os.HandlerCompat.postDelayed
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.ViewTreeObserver
+
 
 val cFragments: List<Int> = listOf(
     R.id.consumer_search_dest,
@@ -42,6 +48,7 @@ val pFragments: List<Int> = listOf(
 
 val authFragments: Set<Int> = setOf(R.id.login) // TODO
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(),
     ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -74,8 +81,19 @@ class MainActivity : AppCompatActivity(),
 
     // overall back stack of containers
     private val backStack = Stack<Int>()
-    // map of navigation_id to container index
-    private val indexToPage = mapOf(0 to R.id.consumer_search_dest, 1 to R.id.consumer_profile_dest)
+
+    // maps of navigation_id to container index
+    private val indexToConsumerPage =
+        mapOf(0 to R.id.consumer_search_dest, 1 to R.id.consumer_profile_dest)
+    private val consumerPageToIndex =
+        mapOf(R.id.consumer_search_dest to 0, R.id.consumer_profile_dest to 1)
+
+
+    private val indexToProviderPage =
+        mapOf(0 to R.id.provider_search_dest, 1 to R.id.provider_profile_dest)
+
+    private val providerPageToIndex =
+        mapOf(R.id.provider_search_dest to 0, R.id.provider_profile_dest to 1)
 
     private val mainWrapper: FrameLayout by lazy { main_wrapper }
     private val authWrapper: FrameLayout by lazy { auth_wrapper }
@@ -84,8 +102,6 @@ class MainActivity : AppCompatActivity(),
 
     private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
     private val authNavController: NavController by lazy { findNavController(R.id.auth_nav_host) }
-    //    private val consumerNavController: NavController by lazy { findNavController(R.id.consumer_nav_host) }
-//    private val providerNavController: NavController by lazy { findNavController(R.id.provider_nav_host) }
 
     private lateinit var currentController: NavController
     private lateinit var currentConfig: AppBarConfiguration
@@ -97,64 +113,35 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        // setup main view pager
-        consumer_pager.adapter = ViewPagerAdapter()
-        consumer_pager.addOnPageChangeListener(this)
-        consumer_bottom_nav_view.setOnNavigationItemSelectedListener(this)
-
-//        provider_pager.adapter = ViewPagerAdapter()
-//        provider_pager.addOnPageChangeListener(this)
-//        provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
-
-
         // initialize backStack with home page index
         if (backStack.empty()) backStack.push(0)
-
-
-
 
         currentController = mainNavController
 
 
-//        // TODO: review this approach -->
-//        NavController.OnDestinationChangedListener { controller, destination, _ ->
-//            if (controller.graph.id != currentController.graph.id) {
-//                if (consumerFragments.contains(destination.id)) {
-//                    activateConsumerNavigation()
-//                    println("Destination changed to consumer")
-//
-//                } else if (providerFragments.contains(destination.id)) {
-//                    activateProviderNavigation()
-//                    println("Destination changed to provider")
-//                }
-//            }
-//        }
-
         mainNavController.addOnDestinationChangedListener { _, destination, _ ->
             if (cFragments.contains(destination.id)) {
-                activateConsumerNavigation()
-                println("Destination changed to consumer")
+                activateConsumerNavigation(destination.id)
 
             } else if (pFragments.contains(destination.id)) {
-                activateProviderNavigation()
-                println("Destination changed to provider")
+                activateProviderNavigation(destination.id)
             }
         }
 
         if (true) { //logged in
-            if (false) { // hasPassedBasicForms
+            if (true) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return
             }
 
             if (true) { // consumer
                 activateConsumerNavigation()
-                val action = WelcomeFragmentDirections.consumerDest()
+                val action = MainNavigationDirections.consumerSearchDest()
                 mainNavController.navigate(action)
 
-            } else if (false) { //provider
+            } else if (true) { //provider
                 activateProviderNavigation()
-                val action = WelcomeFragmentDirections.providerDest()
+                val action = MainNavigationDirections.providerSearchDest()
                 mainNavController.navigate(action)
             }
         } else {
@@ -183,25 +170,25 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+//
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Top Menu create
+//        val retValue = super.onCreateOptionsMenu(menu)
+//
+//        if (currentSide == "provider") {
+//            menuInflater.inflate(R.menu.provider_top_menu, menu)
+//        } else {
+//            menuInflater.inflate(R.menu.consumer_top_menu, menu)
+//        }
+//
+//        return retValue
+//    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Top Menu create
-        val retValue = super.onCreateOptionsMenu(menu)
-
-        if (currentSide == "provider") {
-            menuInflater.inflate(R.menu.provider_top_menu, menu)
-        } else {
-            menuInflater.inflate(R.menu.consumer_top_menu, menu)
-        }
-
-        return retValue
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        // Allows NavigationUI to support proper up navigation or the drawer layout
-        // drawer menu, depending on the situation
-        return currentController.navigateUp(currentConfig)
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        // Allows NavigationUI to support proper up navigation or the drawer layout
+//        // drawer menu, depending on the situation
+//        return currentController.navigateUp(currentConfig)
+//    }
 
 //    override fun onBackPressed() {
 //        currentController.let { if (it.popBackStack().not()) finish() }
@@ -252,12 +239,15 @@ class MainActivity : AppCompatActivity(),
 
     /// BottomNavigationView ItemSelected Implementation
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val position = indexToPage.values.indexOf(item.itemId)
 
         if (currentSide == "provider") {
+            val position = indexToProviderPage.values.indexOf(item.itemId)
+
             if (provider_pager.currentItem != position) setItem(position)
             return true
         } else {
+            val position = indexToConsumerPage.values.indexOf(item.itemId)
+
             if (consumer_pager.currentItem != position) setItem(position)
             return true
         }
@@ -269,10 +259,18 @@ class MainActivity : AppCompatActivity(),
     override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
 
     override fun onPageSelected(page: Int) {
-        val itemId = indexToPage[page] ?: R.id.consumer_search_dest
-        if (consumer_bottom_nav_view.selectedItemId != itemId)
-            consumer_bottom_nav_view.selectedItemId = itemId
+        if (currentSide == "provider") {
+            val itemId = indexToProviderPage[page] ?: R.id.provider_search_dest
+            if (provider_bottom_nav_view.selectedItemId != itemId)
+                provider_bottom_nav_view.selectedItemId = itemId
+        } else {
+            val itemId = indexToConsumerPage[page] ?: R.id.consumer_search_dest
+            if (consumer_bottom_nav_view.selectedItemId != itemId)
+                consumer_bottom_nav_view.selectedItemId = itemId
+        }
     }
+
+
 
     private fun setItem(position: Int) {
         if (currentSide == "provider") provider_pager.currentItem = position
@@ -281,88 +279,36 @@ class MainActivity : AppCompatActivity(),
         backStack.push(position)
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        var options = navOptions {
-//            anim {
-//                enter = R.anim.slide_in_up
-//                exit = R.anim.slide_out_down
-//                popEnter = R.anim.slide_in_up
-//                popExit = R.anim.slide_out_down
-//            }
-//        }
-//
-//        return when (item.itemId) {
-//            R.id.consumer_notifications_dest -> {
-//                currentController.navigate(R.id.consumer_notifications_dest, null, options)
-//
-//                return super.onOptionsItemSelected(item)
-//            }
-//            R.id.provider_notifications_dest -> {
-//                currentController.navigate(R.id.provider_notifications_dest, null, options)
-//
-//                return super.onOptionsItemSelected(item)
-//            }
-//            R.id.consumer_to_provider_dest -> {
-//                activateProviderNavigation()
-//
-//                var currentDestination = consumerNavController.currentDestination
-//
-//                when (currentDestination?.id) {
-//                    R.id.consumer_search_dest -> {
-//                        providerNavController.navigate(R.id.provider_search_dest)
-//                    }
-//                    R.id.consumer_messages_dest -> providerNavController.navigate(R.id.provider_messages_dest)
-//                    R.id.consumer_profile_dest -> {
-//                        providerNavController.navigate(R.id.provider_profile_dest)
-//                    }
-//                }
-//
-//                return item.onNavDestinationSelected(findNavController(R.id.main_nav_activity))
-//                        || super.onOptionsItemSelected(item)
-//            }
-//            R.id.provider_to_consumer_dest -> {
-//                activateConsumerNavigation()
-//
-//                var currentDestination = providerNavController.currentDestination
-//
-//                when (currentDestination?.id) {
-//                    R.id.provider_search_dest -> {
-//                        consumerNavController.navigate(R.id.consumer_search_dest)
-//                    }
-//                    R.id.provider_messages_dest -> consumerNavController.navigate(R.id.consumer_messages_dest)
-//                    R.id.provider_profile_dest -> {
-//                        consumerNavController.navigate(R.id.consumer_profile_dest)
-//                    }
-//                }
-//
-//                return item.onNavDestinationSelected(findNavController(R.id.main_nav_activity))
-//                        || super.onOptionsItemSelected(item)
-//            }
-//            else -> item.onNavDestinationSelected(findNavController(R.id.main_nav_activity))
-//                    || super.onOptionsItemSelected(item)
-//        }
-//    }
 
-    fun activateProviderNavigation() {
+    fun activateProviderNavigation(destination: Int = -1) {
         currentSide = "provider"
 //        currentController = providerNavController
+
+        val a = destination == R.id.provider_profile_dest
+        val b = destination == R.id.provider_my_account_dest
+        val c = destination == R.id.provider_profile_nav_host
 
         mainWrapper.visibility = View.INVISIBLE
         authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.INVISIBLE
         providerWrapper.visibility = View.VISIBLE
 
-//        val drawerLayout: DrawerLayout? = findViewById(R.id.provider_drawer_layout)
-//        val homeDestinations = setOf(
-//            R.id.provider_search_dest,
-//            R.id.provider_profile_dest,
-//            R.id.provider_messages_dest
-//        )
-//
-//        currentConfig = AppBarConfiguration(
-//            homeDestinations,
-//            drawerLayout
-//        )
+        backStack.pop()
+
+        val currentItem = providerPageToIndex[destination] ?: 0
+
+        consumer_pager.adapter = null
+        consumer_pager.currentItem = -1
+        // setup view pager
+        provider_pager.adapter = ViewPagerAdapter()
+        setItem(currentItem)
+
+        provider_bottom_nav_view.selectedItemId = destination
+
+        consumer_pager.removeOnPageChangeListener(this)
+        provider_pager.addOnPageChangeListener(this)
+        provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
+
 //
 //        val toolbar = findViewById<Toolbar>(R.id.provider_toolbar)
 //
@@ -380,28 +326,32 @@ class MainActivity : AppCompatActivity(),
 //        bottomNav?.setupWithNavController(providerNavController)
     }
 
-    fun activateConsumerNavigation() {
+
+    fun activateConsumerNavigation(destination: Int = -1) {
         currentSide = "consumer"
-//        currentController = consumerNavController
 
         mainWrapper.visibility = View.INVISIBLE
         authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.VISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
-//        val drawerLayout: DrawerLayout? = findViewById(R.id.consumer_drawer_layout)
-//        val homeDestinations = setOf(
-//            R.id.consumer_search_dest,
-//            R.id.consumer_my_favours_dest,
-//            R.id.consumer_my_interests_dest,
-//            R.id.consumer_profile_dest,
-//            R.id.consumer_messages_dest
-//        )
-//
-//        currentConfig = AppBarConfiguration(
-//            homeDestinations,
-//            drawerLayout
-//        )
+        val a = destination == R.id.consumer_profile_dest
+        val b = destination == R.id.consumer_my_account_dest
+        val c = destination == R.id.consumer_profile_nav_host
+
+        val currentItem = consumerPageToIndex[destination] ?: 0
+
+        // setup view pager
+        provider_pager.adapter = null
+        provider_pager.currentItem = -1
+        provider_pager.removeOnPageChangeListener(this)
+
+        consumer_pager.adapter = ViewPagerAdapter()
+        setItem(currentItem)
+        consumer_bottom_nav_view.selectedItemId = destination
+
+        consumer_pager.addOnPageChangeListener(this)
+        consumer_bottom_nav_view.setOnNavigationItemSelectedListener(this)
 
 //        val toolbar = findViewById<Toolbar>(R.id.consumer_toolbar)
 //

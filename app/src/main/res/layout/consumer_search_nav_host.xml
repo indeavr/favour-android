@@ -14,8 +14,7 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/primaryColor"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/consumer_top_menu"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <fragment
         android:id="@+id/consumer_search_nav_host"
@@ -26,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/consumer_search_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/consumer_search_toolbar"
         app:navGraph="@navigation/consumer_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

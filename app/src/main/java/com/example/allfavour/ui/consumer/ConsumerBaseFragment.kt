@@ -7,10 +7,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
+import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 import kotlinx.android.synthetic.main.main_nav_activity.*
 
@@ -43,6 +46,59 @@ class ConsumerBaseFragment : Fragment() {
         } ?: return
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
+        toolbar.inflateMenu(R.menu.consumer_top_menu)
+        toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
+        super.onActivityCreated(savedInstanceState)
+    }
+
+
+    fun onConsumerItemSelected(item: MenuItem): Boolean {
+//        val currentDestination = requireActivity().findNavController(navHostId).currentDestination?.id;
+        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
+
+
+//        val a = currentDestination == R.id.consumer_search_navigation
+//        val b = currentDestination == R.id.consumer_search_dest
+
+        var options = navOptions {
+            anim {
+                enter = R.anim.slide_in_up
+                exit = R.anim.slide_out_down
+                popEnter = R.anim.slide_in_up
+                popExit = R.anim.slide_out_down
+            }
+        }
+
+        return when (item.itemId) {
+            R.id.consumer_notifications_dest -> {
+                mainNavController.navigate(MainNavigationDirections.consumerNotificationsDest(), options)
+
+                return super.onOptionsItemSelected(item)
+            }
+            R.id.consumer_to_provider_dest -> {
+                when (navHostId) {
+                    R.id.consumer_search_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.providerSearchDest())
+                    }
+                    R.id.consumer_profile_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.providerProfileDest())
+                    }
+                }
+
+                true
+            }
+
+            else -> true
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,19 +127,11 @@ class ConsumerBaseFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = requireActivity().findNavController(navHostId)
+        val navController = requireActivity().findNavController(R.id.provider_search_nav_host)
         navController.navigate(R.id.provider_search_dest)
 
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        // Top Menu create
-//        inflater.inflate(R.menu.consumer_top_menu, menu)
-//
-//        return true
-//    }
-
 
     companion object {
 
