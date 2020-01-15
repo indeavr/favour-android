@@ -188,43 +188,7 @@ class MainActivity : AppCompatActivity(),
             return if (currentSide == "provider") providerFragments.size
             else consumerFragments.size
         }
-
     }
-
-//
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Top Menu create
-//        val retValue = super.onCreateOptionsMenu(menu)
-//
-//        if (currentSide == "provider") {
-//            menuInflater.inflate(R.menu.provider_top_menu, menu)
-//        } else {
-//            menuInflater.inflate(R.menu.consumer_top_menu, menu)
-//        }
-//
-//        return retValue
-//    }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        // Allows NavigationUI to support proper up navigation or the drawer layout
-//        // drawer menu, depending on the situation
-//        return currentController.navigateUp(currentConfig)
-//    }
-
-//    override fun onBackPressed() {
-//        currentController.let { if (it.popBackStack().not()) finish() }
-//            ?: finish()
-//    }
-
-//    override fun onBackPressed() {
-//        if (backStack.size > 1) {
-//            // remove current position from stack
-//            backStack.pop()
-//            // set the next item in stack as current
-//            main_pager.currentItem = backStack.peek()
-//
-//        } else super.onBackPressed()
-//    }
 
     override fun onBackPressed() {
         if (currentSide == "provider") {
@@ -237,8 +201,14 @@ class MainActivity : AppCompatActivity(),
                     // remove current position from stack
                     backStack.pop()
                     // set the next item in stack as current
-                    provider_pager.currentItem = backStack.peek()
+                    val index = backStack.peek()
+                    val currentPage = indexToProviderPage[index]
 
+                    // because when getting back from notifications, which is not part of the bottom_nav it doest get set automatically
+                    provider_pager.currentItem = index
+                    if (currentPage != null) {
+                        provider_bottom_nav_view.selectedItemId = currentPage
+                    }
                 } else super.onBackPressed()
             }
         } else {
@@ -251,14 +221,20 @@ class MainActivity : AppCompatActivity(),
                     // remove current position from stack
                     backStack.pop()
                     // set the next item in stack as current
-                    consumer_pager.currentItem = backStack.peek()
+                    val index = backStack.peek()
+                    val currentPage = indexToConsumerPage[index]
+                    // because when getting back from notifications, which is not part of the bottom_nav it doest get set automatically
+                    consumer_pager.currentItem = index
+                    if (currentPage != null) {
+                        consumer_bottom_nav_view.selectedItemId = currentPage
+                    }
 
                 } else super.onBackPressed()
             }
         }
     }
 
-    /// BottomNavigationView ItemSelected Implementation
+    /// BottomNavigationView
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         if (currentSide == "provider") {
@@ -291,6 +267,17 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    override fun onNavigationItemReselected(item: MenuItem) {
+        if (currentSide == "consumer") {
+            val position = indexToConsumerPage.values.indexOf(item.itemId)
+            val fragment = consumerFragments[position]
+            fragment.popToRoot()
+        } else {
+            val position = indexToProviderPage.values.indexOf(item.itemId)
+            val fragment = providerFragments[position]
+            fragment.popToRoot()
+        }
+    }
 
     private fun setItem(position: Int) {
         if (currentSide == "provider") provider_pager.currentItem = position
@@ -299,14 +286,8 @@ class MainActivity : AppCompatActivity(),
         backStack.push(position)
     }
 
-
     fun activateProviderNavigation(destination: Int = -1) {
         currentSide = "provider"
-//        currentController = providerNavController
-
-        val a = destination == R.id.provider_profile_dest
-        val b = destination == R.id.provider_my_account_dest
-        val c = destination == R.id.provider_profile_nav_host
 
         mainWrapper.visibility = View.INVISIBLE
 //        authWrapper.visibility = View.INVISIBLE
@@ -320,21 +301,24 @@ class MainActivity : AppCompatActivity(),
         // force viewPager to create all fragments
         provider_pager.offscreenPageLimit = providerFragments.size
 
+        // clear consumer
         consumer_pager.adapter = null
         consumer_pager.currentItem = -1
+        consumer_pager.removeOnPageChangeListener(this)
+
         // setup view pager
         provider_pager.adapter = ViewPagerAdapter()
         setItem(currentItem)
-
-        provider_bottom_nav_view.selectedItemId = destination
-
-        consumer_pager.removeOnPageChangeListener(this)
         provider_pager.addOnPageChangeListener(this)
 
         // check deeplink only after viewPager is setup
         provider_pager.post(this::checkDeepLink)
 
+        if (provider_bottom_nav_view.selectedItemId != destination)
+            provider_bottom_nav_view.selectedItemId = destination
+
         provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
+//        provider_bottom_nav_view.setOnNavigationItemReselectedListener(this)
 
 //
 //        val toolbar = findViewById<Toolbar>(R.id.provider_toolbar)
@@ -353,7 +337,6 @@ class MainActivity : AppCompatActivity(),
 //        bottomNav?.setupWithNavController(providerNavController)
     }
 
-
     fun activateConsumerNavigation(destination: Int = -1) {
         currentSide = "consumer"
 
@@ -361,10 +344,6 @@ class MainActivity : AppCompatActivity(),
 //        authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.VISIBLE
         providerWrapper.visibility = View.INVISIBLE
-
-        val a = destination == R.id.consumer_profile_dest
-        val b = destination == R.id.consumer_my_account_dest
-        val c = destination == R.id.consumer_profile_nav_host
 
         val currentItem = consumerPageToIndex[destination] ?: 0
 
@@ -378,15 +357,18 @@ class MainActivity : AppCompatActivity(),
 
         consumer_pager.adapter = ViewPagerAdapter()
         setItem(currentItem)
-        consumer_bottom_nav_view.selectedItemId = destination
+        
+        if (consumer_bottom_nav_view.selectedItemId != destination) {
+            consumer_bottom_nav_view.selectedItemId = destination
+        }
 
         consumer_pager.addOnPageChangeListener(this)
 
-
         // check deeplink only after viewPager is setup
-        val success = consumer_pager.post(this::checkDeepLink)
+        consumer_pager.post(this::checkDeepLink)
 
         consumer_bottom_nav_view.setOnNavigationItemSelectedListener(this)
+        consumer_bottom_nav_view.setOnNavigationItemReselectedListener(this)
 
 //        val toolbar = findViewById<Toolbar>(R.id.consumer_toolbar)
 //
@@ -433,7 +415,7 @@ class MainActivity : AppCompatActivity(),
             setItem(2)
             consumer_bottom_nav_view.uncheckAllItems()
         } else {
-
+            // Todo
         }
     }
 
@@ -448,18 +430,6 @@ class MainActivity : AppCompatActivity(),
                 val hasDeepLink = fragment.handleDeepLink(intent)
                 if (hasDeepLink) setItem(index)
             }
-        }
-    }
-
-    override fun onNavigationItemReselected(item: MenuItem) {
-        if (currentSide == "consumer") {
-            val position = indexToConsumerPage.values.indexOf(item.itemId)
-            val fragment = consumerFragments[position]
-            fragment.popToRoot()
-        } else {
-            val position = indexToProviderPage.values.indexOf(item.itemId)
-            val fragment = providerFragments[position]
-            fragment.popToRoot()
         }
     }
 }
