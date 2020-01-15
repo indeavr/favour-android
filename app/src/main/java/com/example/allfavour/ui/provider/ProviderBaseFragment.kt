@@ -1,5 +1,6 @@
 package com.example.allfavour.ui.provider
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -119,6 +120,17 @@ class ProviderBaseFragment : Fragment() {
             else -> true
         }
     }
+
+    fun popToRoot() {
+        val navController =
+            requireActivity().findNavController(navHostId)
+        // navigate to the start destination
+        navController.popBackStack(
+            navController.graph.startDestination, false)
+    }
+
+    fun handleDeepLink(intent: Intent): Boolean =
+        false
 
     companion object {
 

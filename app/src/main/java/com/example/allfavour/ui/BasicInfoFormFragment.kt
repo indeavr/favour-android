@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
+import com.example.allfavour.utility.HandleNotifications
 import kotlinx.android.synthetic.main.basic_info_form_fragment.*
 
 class BasicInfoFormFragment : Fragment() {

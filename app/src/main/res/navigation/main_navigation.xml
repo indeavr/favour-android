@@ -5,7 +5,7 @@
     android:id="@+id/main_navigation"
     app:startDestination="@id/welcomeFragment">
 
-    <include app:graph="@navigation/auth_navigation" />
+<!--    <include app:graph="@navigation/auth_navigation" />-->
 
     <!--    <include app:graph="@navigation/consumer_navigation" />-->
 
@@ -69,5 +69,8 @@
     <action
         android:id="@+id/consumer_profile_dest"
         app:destination="@id/consumer_profile_navigation" />
+    <action
+        android:id="@+id/auth_navigation_dest"
+        app:destination="@id/auth_navigation" />
 
 </navigation>

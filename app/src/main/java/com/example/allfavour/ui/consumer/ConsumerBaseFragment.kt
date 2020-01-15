@@ -1,5 +1,6 @@
 package com.example.allfavour.ui.consumer
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
+import com.example.allfavour.WithBottomNavigationSwitcher
 import kotlinx.android.synthetic.main.consumer_notifications_nav_host.*
 import kotlinx.android.synthetic.main.main_nav_activity.*
 
@@ -79,6 +81,7 @@ class ConsumerBaseFragment : Fragment() {
 
         when (item.itemId) {
             R.id.consumer_notifications_dest -> {
+                (requireActivity() as WithBottomNavigationSwitcher).switchToNotificaitons()
                 mainNavController.navigate(
                     MainNavigationDirections.consumerNotificationsDest(),
                     options
@@ -96,8 +99,7 @@ class ConsumerBaseFragment : Fragment() {
             }
         }
 
-        return item.onNavDestinationSelected(mainNavController)
-                || super.onOptionsItemSelected(item)
+        return true
     }
 
 
@@ -126,6 +128,28 @@ class ConsumerBaseFragment : Fragment() {
         return requireActivity()
             .findNavController(navHostId)
             .navigateUp(appBarConfig)
+    }
+
+    fun popToRoot() {
+        val navController =
+            requireActivity().findNavController(navHostId)
+        // navigate to the start destination
+        navController.popBackStack(
+            navController.graph.startDestination, false
+        )
+    }
+
+    fun handleDeepLink(intent: Intent): Boolean {
+        var res = false
+        try {
+            res = requireActivity()
+                .findNavController(navHostId)
+                .handleDeepLink(intent)
+        } catch (e: IllegalStateException) {
+            println("tui kat stane")
+        }
+
+        return res
     }
 
     companion object {

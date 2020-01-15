@@ -10,4 +10,9 @@
         android:name="com.example.allfavour.ui.consumer.notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/consumer_notifications_fragment" />
+
+    <deepLink
+        android:id="@+id/consumer_notifications_deepLink"
+        app:uri="www.nav.viewpager.com/{title}/{date}" />
+
 </navigation>

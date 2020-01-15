@@ -2,32 +2,22 @@ package com.example.allfavour
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.navOptions
 import androidx.navigation.ui.*
 import androidx.viewpager.widget.ViewPager
 import com.example.allfavour.graphql.GraphqlConnector
-import com.example.allfavour.ui.WelcomeFragmentDirections
 import com.example.allfavour.ui.consumer.ConsumerBaseFragment
 import com.example.allfavour.ui.provider.ProviderBaseFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
-import androidx.core.os.HandlerCompat.postDelayed
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.ViewTreeObserver
+import android.content.Intent
 
 
 val cFragments: List<Int> = listOf(
@@ -48,10 +38,16 @@ val pFragments: List<Int> = listOf(
 
 val authFragments: Set<Int> = setOf(R.id.login) // TODO
 
+interface WithBottomNavigationSwitcher {
+    fun switchToNotificaitons()
+}
+
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(),
     ViewPager.OnPageChangeListener,
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    BottomNavigationView.OnNavigationItemReselectedListener,
+    WithBottomNavigationSwitcher {
     // list of base destination containers
     private val consumerFragments = listOf(
         ConsumerBaseFragment.newInstance(
@@ -109,37 +105,27 @@ class MainActivity : AppCompatActivity(),
         mapOf(R.id.provider_search_dest to 0, R.id.provider_profile_dest to 1)
 
     private val mainWrapper: FrameLayout by lazy { main_wrapper }
-    private val authWrapper: FrameLayout by lazy { auth_wrapper }
+    //    private val authWrapper: FrameLayout by lazy { auth_wrapper }
     private val consumerWrapper: FrameLayout by lazy { consumer_wrapper }
     private val providerWrapper: FrameLayout by lazy { provider_wrapper }
 
     private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
-    private val authNavController: NavController by lazy { findNavController(R.id.auth_nav_host) }
 
     private lateinit var currentController: NavController
     private lateinit var currentConfig: AppBarConfiguration
 
     var currentSide: String? = null
 
-    fun BottomNavigationView.uncheckAllItems() {
-        menu.setGroupCheckable(0, true, false)
-        for (i in 0 until menu.size()) {
-            menu.getItem(i).isChecked = false
-        }
-        menu.setGroupCheckable(0, true, true)
-    }
+    val hasStartedFromAWebDeepLink: Boolean by lazy { intent.action == Intent.ACTION_VIEW && intent.data != null }
+    val hasStartedFromAPendingDeepLink: Boolean by lazy { intent.action == null && intent.data == null }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        // initialize backStack with home page index
-        if (backStack.empty()) backStack.push(0)
-
         currentController = mainNavController
-
-
+        intent.action == Intent.ACTION_VIEW
         mainNavController.addOnDestinationChangedListener { _, destination, _ ->
             if (cFragments.contains(destination.id)) {
                 activateConsumerNavigation(destination.id)
@@ -147,37 +133,46 @@ class MainActivity : AppCompatActivity(),
             } else if (pFragments.contains(destination.id)) {
                 activateProviderNavigation(destination.id)
             }
-
-            if (destination.id == R.id.consumer_notifications_dest) {
-                setItem(2)
-                consumer_bottom_nav_view.uncheckAllItems()
-            }
         }
 
         if (true) { //logged in
-            if (true) { // hasPassedBasicForms
+            if (false) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return
             }
 
-            if (true) { // consumer
+            if (true)  // consumer
                 activateConsumerNavigation()
-                val action = MainNavigationDirections.consumerSearchDest()
-                mainNavController.navigate(action)
-
-            } else if (true) { //provider
+            else if (true) //provider
                 activateProviderNavigation()
-                val action = MainNavigationDirections.providerSearchDest()
-                mainNavController.navigate(action)
-            }
+
+            navigateToCorrectDestination()
         } else {
-//            activateAuthNavigation()
+            activateAuthNavigation()
 //             TODO: refactor these actions
-//            val action = WelcomeFragmentDirections.authDest()
-//            mainNavController.navigate(action)
+            val action = MainNavigationDirections.authNavigationDest()
+            mainNavController.navigate(action)
 
             // when authenticated successfully and side chosen (either from previously saved or by choosing for the first time)
             // consumer/provider  Navigation must be activated --> use mainNavController to redirect, because the the listener is attached to it
+        }
+
+
+        // initialize backStack with home page index
+        if (backStack.empty()) backStack.push(0)
+    }
+
+    fun navigateToCorrectDestination() {
+        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
+            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
+        }
+
+        if (currentSide == "consumer") {
+            val action = MainNavigationDirections.consumerSearchDest()
+            mainNavController.navigate(action)
+        } else {
+            val action = MainNavigationDirections.providerSearchDest()
+            mainNavController.navigate(action)
         }
     }
 
@@ -314,13 +309,16 @@ class MainActivity : AppCompatActivity(),
         val c = destination == R.id.provider_profile_nav_host
 
         mainWrapper.visibility = View.INVISIBLE
-        authWrapper.visibility = View.INVISIBLE
+//        authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.INVISIBLE
         providerWrapper.visibility = View.VISIBLE
 
         backStack.pop()
 
         val currentItem = providerPageToIndex[destination] ?: 0
+
+        // force viewPager to create all fragments
+        provider_pager.offscreenPageLimit = providerFragments.size
 
         consumer_pager.adapter = null
         consumer_pager.currentItem = -1
@@ -332,6 +330,10 @@ class MainActivity : AppCompatActivity(),
 
         consumer_pager.removeOnPageChangeListener(this)
         provider_pager.addOnPageChangeListener(this)
+
+        // check deeplink only after viewPager is setup
+        provider_pager.post(this::checkDeepLink)
+
         provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
 
 //
@@ -356,7 +358,7 @@ class MainActivity : AppCompatActivity(),
         currentSide = "consumer"
 
         mainWrapper.visibility = View.INVISIBLE
-        authWrapper.visibility = View.INVISIBLE
+//        authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.VISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
@@ -365,6 +367,9 @@ class MainActivity : AppCompatActivity(),
         val c = destination == R.id.consumer_profile_nav_host
 
         val currentItem = consumerPageToIndex[destination] ?: 0
+
+        // force viewPager to create all fragments
+        consumer_pager.offscreenPageLimit = consumerFragments.size
 
         // setup view pager
         provider_pager.adapter = null
@@ -376,6 +381,11 @@ class MainActivity : AppCompatActivity(),
         consumer_bottom_nav_view.selectedItemId = destination
 
         consumer_pager.addOnPageChangeListener(this)
+
+
+        // check deeplink only after viewPager is setup
+        val success = consumer_pager.post(this::checkDeepLink)
+
         consumer_bottom_nav_view.setOnNavigationItemSelectedListener(this)
 
 //        val toolbar = findViewById<Toolbar>(R.id.consumer_toolbar)
@@ -396,17 +406,60 @@ class MainActivity : AppCompatActivity(),
 
     fun activateAuthNavigation() {
         currentSide = null
-        currentController = authNavController
+//        currentController = authNavController
 
         mainWrapper.visibility = View.INVISIBLE
-        authWrapper.visibility = View.VISIBLE
+//        authWrapper.visibility = View.VISIBLE
         consumerWrapper.visibility = View.INVISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
-        currentConfig = AppBarConfiguration(authNavController.graph)
+//        currentConfig = AppBarConfiguration(authNavController.graph)
 
 //        setupActionBarWithNavController(authNavController, currentConfig)
 
         // the drawer when the height is too small
+    }
+
+    fun BottomNavigationView.uncheckAllItems() {
+        menu.setGroupCheckable(0, true, false)
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).isChecked = false
+        }
+        menu.setGroupCheckable(0, true, true)
+    }
+
+    override fun switchToNotificaitons() {
+        if (currentSide == "consumer") {
+            setItem(2)
+            consumer_bottom_nav_view.uncheckAllItems()
+        } else {
+
+        }
+    }
+
+    private fun checkDeepLink() {
+        if (currentSide == "consumer") {
+            consumerFragments.forEachIndexed { index, fragment ->
+                val hasDeepLink = fragment.handleDeepLink(intent)
+                if (hasDeepLink) setItem(index)
+            }
+        } else {
+            providerFragments.forEachIndexed { index, fragment ->
+                val hasDeepLink = fragment.handleDeepLink(intent)
+                if (hasDeepLink) setItem(index)
+            }
+        }
+    }
+
+    override fun onNavigationItemReselected(item: MenuItem) {
+        if (currentSide == "consumer") {
+            val position = indexToConsumerPage.values.indexOf(item.itemId)
+            val fragment = consumerFragments[position]
+            fragment.popToRoot()
+        } else {
+            val position = indexToProviderPage.values.indexOf(item.itemId)
+            val fragment = providerFragments[position]
+            fragment.popToRoot()
+        }
     }
 }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/auth_navigation">
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation">
+<!--    <fragment-->
+<!--        android:id="@+id/basicInfoFormFragment"-->
+<!--        android:name="com.example.allfavour.ui.BasicInfoFormFragment"-->
+<!--        android:label="basic_info_form_fragment"-->
+<!--        tools:layout="@layout/basic_info_form_fragment" />-->
 </navigation>
