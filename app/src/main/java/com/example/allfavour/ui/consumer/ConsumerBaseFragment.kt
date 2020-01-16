@@ -29,11 +29,11 @@ class ConsumerBaseFragment : Fragment() {
     // root destinations
     private val rootDestinations = setOf(
         R.id.consumer_search_dest,
-//        R.id.consumer_my_favours_dest,
-//        R.id.consumer_my_interests_dest,
-        R.id.consumer_profile_dest
+        R.id.consumer_my_favours_dest,
+        R.id.consumer_my_interests_dest,
+        R.id.consumer_profile_dest,
 //        R.id.consumer_notifications_dest
-//        R.id.consumer_messages_dest
+        R.id.consumer_messages_dest
     )
     // nav config with root destinations
     private val appBarConfig = AppBarConfiguration(rootDestinations)
@@ -41,6 +41,7 @@ class ConsumerBaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         // extract arguments from bundle
         arguments?.let {
             layoutRes = it.getInt(KEY_LAYOUT)
@@ -50,42 +51,27 @@ class ConsumerBaseFragment : Fragment() {
         } ?: return
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
+        (requireActivity() as WithBottomNavigationSwitcher).setToolbar(toolbar)
         toolbar.inflateMenu(R.menu.consumer_top_menu)
         toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
+
         super.onActivityCreated(savedInstanceState)
     }
 
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     fun onConsumerItemSelected(item: MenuItem): Boolean {
-//        val currentDestination = requireActivity().findNavController(navHostId).currentDestination?.id;
         val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
-
-
-//        val a = currentDestination == R.id.consumer_search_navigation
-//        val b = currentDestination == R.id.consumer_search_dest
-
-        var options = navOptions {
-            anim {
-                enter = R.anim.slide_in_up
-                exit = R.anim.slide_out_down
-                popEnter = R.anim.slide_in_up
-                popExit = R.anim.slide_out_down
-            }
-        }
 
         when (item.itemId) {
             R.id.consumer_notifications_dest -> {
                 (requireActivity() as WithBottomNavigationSwitcher).switchToNotificaitons()
-                mainNavController.navigate(
-                    MainNavigationDirections.consumerNotificationsDest(),
-                    options
-                )
             }
             R.id.consumer_to_provider_dest -> {
                 when (navHostId) {
@@ -95,6 +81,7 @@ class ConsumerBaseFragment : Fragment() {
                     R.id.consumer_profile_nav_host -> {
                         mainNavController.navigate(MainNavigationDirections.providerProfileDest())
                     }
+                    else -> mainNavController.navigate(MainNavigationDirections.providerSearchDest())
                 }
             }
         }
@@ -102,6 +89,9 @@ class ConsumerBaseFragment : Fragment() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

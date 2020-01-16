@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<!--    <item android:id="@+id/consumer_my_favours_dest"-->
-<!--        android:icon="@drawable/ic_home"-->
-<!--        android:title="@string/my_favours" />-->
+    <item
+        android:id="@+id/consumer_my_favours_dest"
+        android:icon="@drawable/ic_home"
+        android:title="@string/my_favours" />
 
-    <item android:id="@+id/consumer_search_dest"
+    <item
+        android:id="@+id/consumer_my_interests_dest"
+        android:icon="@drawable/ic_home"
+        android:title="@string/my_interests" />
+
+    <item
+        android:id="@+id/consumer_search_dest"
         android:icon="@drawable/ic_search"
         android:title="@string/search" />
 
-<!--    <item android:id="@+id/consumer_my_interests_dest"-->
-<!--        android:icon="@drawable/ic_home"-->
-<!--        android:title="@string/my_interests" />-->
+    <item
+        android:id="@+id/consumer_messages_dest"
+        android:icon="@drawable/ic_message"
+        android:title="@string/messages" />
 
-<!--    <item android:id="@+id/consumer_messages_dest"-->
-<!--        android:icon="@drawable/ic_message"-->
-<!--        android:title="@string/messages" />-->
-
-    <item android:id="@+id/consumer_profile_dest"
+    <item
+        android:id="@+id/consumer_profile_dest"
         android:icon="@drawable/ic_person"
         android:title="@string/profile" />
 </menu>

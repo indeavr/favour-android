@@ -37,6 +37,8 @@ class ProviderBaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
         // extract arguments from bundle
         arguments?.let {
             layoutRes = it.getInt(KEY_LAYOUT)
@@ -83,7 +85,8 @@ class ProviderBaseFragment : Fragment() {
 
 
     fun onProviderItemSelected(item: MenuItem): Boolean {
-        val currentDestination = requireActivity().findNavController(navHostId).currentDestination?.id;
+        val currentDestination =
+            requireActivity().findNavController(navHostId).currentDestination?.id;
         val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
 
 
@@ -99,9 +102,12 @@ class ProviderBaseFragment : Fragment() {
             }
         }
 
-        return when (item.itemId) {
+        when (item.itemId) {
             R.id.provider_notifications_dest -> {
-                mainNavController.navigate(MainNavigationDirections.consumerNotificationsDest(), options)
+                mainNavController.navigate(
+                    MainNavigationDirections.consumerNotificationsDest(),
+                    options
+                )
 
                 return super.onOptionsItemSelected(item)
             }
@@ -113,12 +119,12 @@ class ProviderBaseFragment : Fragment() {
                     R.id.provider_profile_nav_host -> {
                         mainNavController.navigate(MainNavigationDirections.consumerProfileDest())
                     }
+                    else -> mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
                 }
-
-                true
             }
-            else -> true
         }
+
+        return true
     }
 
     fun popToRoot() {
@@ -126,7 +132,8 @@ class ProviderBaseFragment : Fragment() {
             requireActivity().findNavController(navHostId)
         // navigate to the start destination
         navController.popBackStack(
-            navController.graph.startDestination, false)
+            navController.graph.startDestination, false
+        )
     }
 
     fun handleDeepLink(intent: Intent): Boolean =

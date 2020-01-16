@@ -2,10 +2,9 @@ package com.example.allfavour.ui.consumer.notifications
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 import com.example.allfavour.R
 import kotlinx.android.synthetic.main.main_nav_activity.*
@@ -28,10 +27,11 @@ class NotificationsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        consumer_bottom_nav_view.visibility = View.INVISIBLE
-
         viewModel = ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+    }
 }

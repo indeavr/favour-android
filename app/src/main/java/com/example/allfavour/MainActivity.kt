@@ -18,6 +18,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.navOptions
 
 
 val cFragments: List<Int> = listOf(
@@ -40,6 +43,7 @@ val authFragments: Set<Int> = setOf(R.id.login) // TODO
 
 interface WithBottomNavigationSwitcher {
     fun switchToNotificaitons()
+    fun setToolbar(toolbar: Toolbar)
 }
 
 @Suppress("DEPRECATION")
@@ -51,9 +55,24 @@ class MainActivity : AppCompatActivity(),
     // list of base destination containers
     private val consumerFragments = listOf(
         ConsumerBaseFragment.newInstance(
+            R.layout.consumer_my_favours_nav_host,
+            R.id.consumer_my_favours_toolbar,
+            R.id.consumer_my_favours_nav_host
+        ),
+        ConsumerBaseFragment.newInstance(
+            R.layout.consumer_my_interests_nav_host,
+            R.id.consumer_my_interests_toolbar,
+            R.id.consumer_my_interests_nav_host
+        ),
+        ConsumerBaseFragment.newInstance(
             R.layout.consumer_search_nav_host,
             R.id.consumer_search_toolbar,
             R.id.consumer_search_nav_host
+        ),
+        ConsumerBaseFragment.newInstance(
+            R.layout.consumer_messages_nav_host,
+            R.id.consumer_messages_toolbar,
+            R.id.consumer_messages_nav_host
         ),
         ConsumerBaseFragment.newInstance(
             R.layout.consumer_profile_nav_host,
@@ -86,15 +105,21 @@ class MainActivity : AppCompatActivity(),
     // maps of navigation_id to container index
     private val indexToConsumerPage =
         mapOf(
-            0 to R.id.consumer_search_dest,
-            1 to R.id.consumer_profile_dest,
-            2 to R.id.consumer_notifications_dest
+            0 to R.id.consumer_my_favours_dest,
+            1 to R.id.consumer_my_interests_dest,
+            2 to R.id.consumer_search_dest,
+            3 to R.id.consumer_messages_dest,
+            4 to R.id.consumer_profile_dest,
+            5 to R.id.consumer_notifications_dest
         )
     private val consumerPageToIndex =
         mapOf(
-            R.id.consumer_search_dest to 0,
-            R.id.consumer_profile_dest to 1,
-            R.id.consumer_notifications_dest to 2
+            R.id.consumer_my_favours_dest to 0,
+            R.id.consumer_my_interests_dest to 1,
+            R.id.consumer_search_dest to 2,
+            R.id.consumer_messages_dest to 3,
+            R.id.consumer_profile_dest to 4,
+            R.id.consumer_notifications_dest to 5
         )
 
 
@@ -111,7 +136,6 @@ class MainActivity : AppCompatActivity(),
 
     private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
 
-    private lateinit var currentController: NavController
     private lateinit var currentConfig: AppBarConfiguration
 
     var currentSide: String? = null
@@ -124,8 +148,9 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        currentController = mainNavController
-        intent.action == Intent.ACTION_VIEW
+        // initialize backStack with home page index
+        if (backStack.empty()) backStack.push(0)
+
         mainNavController.addOnDestinationChangedListener { _, destination, _ ->
             if (cFragments.contains(destination.id)) {
                 activateConsumerNavigation(destination.id)
@@ -133,6 +158,10 @@ class MainActivity : AppCompatActivity(),
             } else if (pFragments.contains(destination.id)) {
                 activateProviderNavigation(destination.id)
             }
+        }
+
+        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
+            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
         }
 
         if (true) { //logged in
@@ -156,10 +185,6 @@ class MainActivity : AppCompatActivity(),
             // when authenticated successfully and side chosen (either from previously saved or by choosing for the first time)
             // consumer/provider  Navigation must be activated --> use mainNavController to redirect, because the the listener is attached to it
         }
-
-
-        // initialize backStack with home page index
-        if (backStack.empty()) backStack.push(0)
     }
 
     fun navigateToCorrectDestination() {
@@ -359,7 +384,8 @@ class MainActivity : AppCompatActivity(),
         consumerWrapper.visibility = View.VISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
-        val currentItem = consumerPageToIndex[destination] ?: 0
+        val currentItem =
+            consumerPageToIndex[destination] ?: consumerPageToIndex[R.id.consumer_search_dest]!!
 
         // force viewPager to create all fragments
         consumer_pager.offscreenPageLimit = consumerFragments.size
@@ -426,12 +452,47 @@ class MainActivity : AppCompatActivity(),
 
     override fun switchToNotificaitons() {
         if (currentSide == "consumer") {
-            var position = consumerPageToIndex[R.id.consumer_notifications_dest]
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_up
+                    exit = R.anim.slide_out_down
+                    popEnter = R.anim.slide_in_up
+                    popExit = R.anim.slide_out_down
+                }
+            }
+            mainNavController.navigate(
+                MainNavigationDirections.consumerNotificationsDest(),
+                options
+            )
+            val position = consumerPageToIndex[R.id.consumer_notifications_dest]
             setItem(position!!)
             consumer_bottom_nav_view.uncheckAllItems()
         } else {
             // Todo
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val rootDestinations = setOf(
+            R.id.consumer_search_dest,
+            R.id.consumer_my_favours_dest,
+            R.id.consumer_my_interests_dest,
+            R.id.consumer_profile_dest,
+//        R.id.consumer_notifications_dest
+            R.id.consumer_messages_dest
+        )
+        // nav config with root destinations
+        val appBarConfig = AppBarConfiguration(rootDestinations)
+
+        return mainNavController.navigateUp(appBarConfig)
+    }
+
+    override fun onNavigateUp(): Boolean {
+        return super.onNavigateUp()
+    }
+
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        super.supportNavigateUpTo(upIntent)
     }
 
     private fun checkDeepLink() {
@@ -446,5 +507,9 @@ class MainActivity : AppCompatActivity(),
                 if (hasDeepLink) setItem(index)
             }
         }
+    }
+
+    public override fun setToolbar(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
     }
 }
