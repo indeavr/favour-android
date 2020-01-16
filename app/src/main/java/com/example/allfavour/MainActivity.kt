@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         if (true) { //logged in
-            if (false) { // hasPassedBasicForms
+            if (true) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return
             }
@@ -250,6 +250,32 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
+
+    override fun onNavigationItemReselected(item: MenuItem) {
+        if (currentSide == "consumer") {
+            val position = indexToConsumerPage.values.indexOf(item.itemId)
+
+            if (!item.isChecked) {
+                setItem(position)
+                item.isChecked = true
+                return
+            }
+            val fragment = consumerFragments[position]
+            fragment.popToRoot()
+        } else {
+            val position = indexToProviderPage.values.indexOf(item.itemId)
+
+            if (!item.isChecked) {
+                setItem(position)
+                item.isChecked = true
+                return
+            }
+
+            val fragment = providerFragments[position]
+            fragment.popToRoot()
+        }
+    }
+
     /// OnPageSelected Listener Implementation
     override fun onPageScrollStateChanged(state: Int) {}
 
@@ -264,18 +290,6 @@ class MainActivity : AppCompatActivity(),
             val itemId = indexToConsumerPage[page] ?: R.id.consumer_search_dest
             if (consumer_bottom_nav_view.selectedItemId != itemId)
                 consumer_bottom_nav_view.selectedItemId = itemId
-        }
-    }
-
-    override fun onNavigationItemReselected(item: MenuItem) {
-        if (currentSide == "consumer") {
-            val position = indexToConsumerPage.values.indexOf(item.itemId)
-            val fragment = consumerFragments[position]
-            fragment.popToRoot()
-        } else {
-            val position = indexToProviderPage.values.indexOf(item.itemId)
-            val fragment = providerFragments[position]
-            fragment.popToRoot()
         }
     }
 
@@ -318,7 +332,7 @@ class MainActivity : AppCompatActivity(),
             provider_bottom_nav_view.selectedItemId = destination
 
         provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
-//        provider_bottom_nav_view.setOnNavigationItemReselectedListener(this)
+        provider_bottom_nav_view.setOnNavigationItemReselectedListener(this)
 
 //
 //        val toolbar = findViewById<Toolbar>(R.id.provider_toolbar)
@@ -357,7 +371,7 @@ class MainActivity : AppCompatActivity(),
 
         consumer_pager.adapter = ViewPagerAdapter()
         setItem(currentItem)
-        
+
         if (consumer_bottom_nav_view.selectedItemId != destination) {
             consumer_bottom_nav_view.selectedItemId = destination
         }
@@ -412,7 +426,8 @@ class MainActivity : AppCompatActivity(),
 
     override fun switchToNotificaitons() {
         if (currentSide == "consumer") {
-            setItem(2)
+            var position = consumerPageToIndex[R.id.consumer_notifications_dest]
+            setItem(position!!)
             consumer_bottom_nav_view.uncheckAllItems()
         } else {
             // Todo
