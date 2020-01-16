@@ -21,6 +21,8 @@
 
     <include app:graph="@navigation/consumer_notifications" />
 
+    <include app:graph="@navigation/consumer_my_interests" />
+
     <fragment
         android:id="@+id/welcomeFragment"
         android:name="com.example.allfavour.ui.WelcomeFragment"
@@ -69,8 +71,13 @@
     <action
         android:id="@+id/consumer_profile_dest"
         app:destination="@id/consumer_profile_navigation" />
+
     <action
         android:id="@+id/auth_navigation_dest"
         app:destination="@id/auth_navigation" />
+
+    <action
+        android:id="@+id/consumer_my_interests_dest"
+        app:destination="@id/consumer_my_interests" />
 
 </navigation>

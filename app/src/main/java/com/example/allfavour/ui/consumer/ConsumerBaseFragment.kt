@@ -99,6 +99,13 @@ class ConsumerBaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        var a = R.layout.consumer_profile_nav_host == layoutRes
+        var b = R.layout.consumer_notifications_nav_host == layoutRes
+        var c = R.layout.consumer_messages_nav_host == layoutRes
+        var d = R.layout.consumer_search_nav_host == layoutRes
+        var da = R.layout.consumer_my_favours_nav_host == layoutRes
+        var k = R.layout.consumer_my_interests_nav_host == layoutRes
+
         return if (layoutRes == defaultInt) null
         else inflater.inflate(layoutRes, container, false)
     }

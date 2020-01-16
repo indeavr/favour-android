@@ -20,6 +20,7 @@ import java.util.*
 import android.content.Intent
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.navOptions
 
 
@@ -472,29 +473,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val rootDestinations = setOf(
-            R.id.consumer_search_dest,
-            R.id.consumer_my_favours_dest,
-            R.id.consumer_my_interests_dest,
-            R.id.consumer_profile_dest,
-//        R.id.consumer_notifications_dest
-            R.id.consumer_messages_dest
-        )
-        // nav config with root destinations
-        val appBarConfig = AppBarConfiguration(rootDestinations)
-
-        return mainNavController.navigateUp(appBarConfig)
-    }
-
-    override fun onNavigateUp(): Boolean {
-        return super.onNavigateUp()
-    }
-
-    override fun supportNavigateUpTo(upIntent: Intent) {
-        super.supportNavigateUpTo(upIntent)
-    }
-
     private fun checkDeepLink() {
         if (currentSide == "consumer") {
             consumerFragments.forEachIndexed { index, fragment ->
@@ -509,7 +487,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    public override fun setToolbar(toolbar: Toolbar) {
+    override fun setToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
     }
 }
