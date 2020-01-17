@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
@@ -39,8 +40,8 @@ object HandleNotifications {
         }
 
         return NavDeepLinkBuilder(context)
-            .setGraph(R.navigation.main_navigation)
-            .setDestination(R.id.consumer_profile_dest)
+            .setGraph(R.navigation.consumer_search)
+            .setDestination(R.id.consumer_search_dest)
             .setArguments(bundle)
             .createPendingIntent()
     }

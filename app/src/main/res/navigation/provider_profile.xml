@@ -24,4 +24,8 @@
         android:name="com.example.allfavour.ui.provider.profile.myAccount.MyAccountFragment"
         android:label="@string/my_account"
         tools:layout="@layout/provider_my_account_fragment" />
+    <include app:graph="@navigation/consumer_profile" />
+    <action
+        android:id="@+id/consumer_profile_nav_dest"
+        app:destination="@id/consumer_profile_navigation" />
 </navigation>

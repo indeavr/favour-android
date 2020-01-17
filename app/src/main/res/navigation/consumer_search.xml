@@ -11,4 +11,10 @@
         android:label="Search"
         tools:layout="@layout/consumer_search_fragment" />
 
+    <include app:graph="@navigation/provider_search" />
+
+    <action
+        android:id="@+id/provider_search_nav_dest"
+        app:destination="@id/provider_search" />
+
 </navigation>

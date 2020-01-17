@@ -14,8 +14,7 @@ import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import com.example.allfavour.MainNavigationDirections
-import com.example.allfavour.R
+import com.example.allfavour.*
 
 class ProviderBaseFragment : Fragment() {
 
@@ -85,41 +84,32 @@ class ProviderBaseFragment : Fragment() {
 
 
     fun onProviderItemSelected(item: MenuItem): Boolean {
-        val currentDestination =
-            requireActivity().findNavController(navHostId).currentDestination?.id;
-        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
-
-
-//        val a = currentDestination == R.id.consumer_search_navigation
-//        val b = currentDestination == R.id.consumer_search_dest
-
-        var options = navOptions {
-            anim {
-                enter = R.anim.slide_in_up
-                exit = R.anim.slide_out_down
-                popEnter = R.anim.slide_in_up
-                popExit = R.anim.slide_out_down
-            }
-        }
+        val activity = requireActivity() as WithBottomNavigationSwitcher
+        val controller = requireActivity().findNavController(navHostId)
 
         when (item.itemId) {
             R.id.provider_notifications_dest -> {
-                mainNavController.navigate(
-                    MainNavigationDirections.consumerNotificationsDest(),
-                    options
-                )
+//                controller.navigate(
+//                    MainNavigationDirections.consumerNotificationsDest(),
+//                    options
+//                )
 
                 return super.onOptionsItemSelected(item)
             }
             R.id.provider_to_consumer_dest -> {
                 when (navHostId) {
                     R.id.provider_search_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+                        activity.switchToConsumer(R.id.provider_search_dest)
+//                        controller.navigate(ProviderSearchNavigationDirections.consumerSearchNavDest())
                     }
                     R.id.provider_profile_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.consumerProfileDest())
+                        activity.switchToConsumer(R.id.provider_search_dest)
+                        controller.navigate(ProviderProfileDirections.consumerProfileNavDest())
                     }
-                    else -> mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+                    else -> {
+                        activity.switchToConsumer(R.id.provider_search_dest)
+//                        controller.navigate(ProviderSearchNavigationDirections.consumerSearchNavDest())
+                    }
                 }
             }
         }

@@ -45,6 +45,8 @@ val authFragments: Set<Int> = setOf(R.id.login) // TODO
 interface WithBottomNavigationSwitcher {
     fun switchToNotificaitons()
     fun setToolbar(toolbar: Toolbar)
+    fun switchToProvider(destination: Int = -1)
+    fun switchToConsumer(destination: Int = -1)
 }
 
 @Suppress("DEPRECATION")
@@ -135,7 +137,7 @@ class MainActivity : AppCompatActivity(),
     private val consumerWrapper: FrameLayout by lazy { consumer_wrapper }
     private val providerWrapper: FrameLayout by lazy { provider_wrapper }
 
-    private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
+//    private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
 
     private lateinit var currentConfig: AppBarConfiguration
 
@@ -152,55 +154,55 @@ class MainActivity : AppCompatActivity(),
         // initialize backStack with home page index
         if (backStack.empty()) backStack.push(0)
 
-        mainNavController.addOnDestinationChangedListener { _, destination, _ ->
-            if (cFragments.contains(destination.id)) {
-                activateConsumerNavigation(destination.id)
+//        mainNavController.addOnDestinationChangedListener { _, destination, _ ->
+//            if (cFragments.contains(destination.id)) {
+//                activateConsumerNavigation(destination.id)
+//
+//            } else if (pFragments.contains(destination.id)) {
+//                activateProviderNavigation(destination.id)
+//            }
+//        }
 
-            } else if (pFragments.contains(destination.id)) {
-                activateProviderNavigation(destination.id)
-            }
-        }
-
-        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
-            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
-        }
+//        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
+//            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
+//        }
 
         if (true) { //logged in
-            if (true) { // hasPassedBasicForms
-                mainNavController.navigate(R.id.basic_info_form_dest)
+            if (false) { // hasPassedBasicForms
+//                mainNavController.navigate(R.id.basic_info_form_dest)
                 return
             }
 
             if (true)  // consumer
-                activateConsumerNavigation()
+                activateConsumerNavigation(null)
             else if (true) //provider
-                activateProviderNavigation()
+                activateProviderNavigation(null)
 
-            navigateToCorrectDestination()
+//            navigateToCorrectDestination()
         } else {
             activateAuthNavigation()
 //             TODO: refactor these actions
-            val action = MainNavigationDirections.authNavigationDest()
-            mainNavController.navigate(action)
+//            val action = MainNavigationDirections.authNavigationDest()
+//            mainNavController.navigate(action)
 
             // when authenticated successfully and side chosen (either from previously saved or by choosing for the first time)
             // consumer/provider  Navigation must be activated --> use mainNavController to redirect, because the the listener is attached to it
         }
     }
 
-    fun navigateToCorrectDestination() {
-        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
-            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
-        }
-
-        if (currentSide == "consumer") {
-            val action = MainNavigationDirections.consumerSearchDest()
-            mainNavController.navigate(action)
-        } else {
-            val action = MainNavigationDirections.providerSearchDest()
-            mainNavController.navigate(action)
-        }
-    }
+//    fun navigateToCorrectDestination() {
+//        if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
+//            return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
+//        }
+//
+//        if (currentSide == "consumer") {
+//            val action = MainNavigationDirections.consumerSearchDest()
+//            mainNavController.navigate(action)
+//        } else {
+//            val action = MainNavigationDirections.providerSearchDest()
+//            mainNavController.navigate(action)
+//        }
+//    }
 
 
     inner class ViewPagerAdapter : FragmentPagerAdapter(supportFragmentManager) {
@@ -326,7 +328,7 @@ class MainActivity : AppCompatActivity(),
         backStack.push(position)
     }
 
-    fun activateProviderNavigation(destination: Int = -1) {
+    fun activateProviderNavigation(destination: Int?) {
         currentSide = "provider"
 
         mainWrapper.visibility = View.INVISIBLE
@@ -354,8 +356,7 @@ class MainActivity : AppCompatActivity(),
         // check deeplink only after viewPager is setup
         provider_pager.post(this::checkDeepLink)
 
-        if (provider_bottom_nav_view.selectedItemId != destination)
-            provider_bottom_nav_view.selectedItemId = destination
+            provider_bottom_nav_view.selectedItemId = destination ?: R.id.provider_search_dest
 
         provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
         provider_bottom_nav_view.setOnNavigationItemReselectedListener(this)
@@ -377,7 +378,7 @@ class MainActivity : AppCompatActivity(),
 //        bottomNav?.setupWithNavController(providerNavController)
     }
 
-    fun activateConsumerNavigation(destination: Int = -1) {
+    fun activateConsumerNavigation(destination: Int?) {
         currentSide = "consumer"
 
         mainWrapper.visibility = View.INVISIBLE
@@ -399,11 +400,10 @@ class MainActivity : AppCompatActivity(),
         consumer_pager.adapter = ViewPagerAdapter()
         setItem(currentItem)
 
-        if (consumer_bottom_nav_view.selectedItemId != destination) {
-            consumer_bottom_nav_view.selectedItemId = destination
-        }
+            consumer_bottom_nav_view.selectedItemId = destination ?: R.id.consumer_search_dest
 
         consumer_pager.addOnPageChangeListener(this)
+        consumer_pager.shouldDelayChildPressedState()
 
         // check deeplink only after viewPager is setup
         consumer_pager.post(this::checkDeepLink)
@@ -453,18 +453,18 @@ class MainActivity : AppCompatActivity(),
 
     override fun switchToNotificaitons() {
         if (currentSide == "consumer") {
-            val options = navOptions {
-                anim {
-                    enter = R.anim.slide_in_up
-                    exit = R.anim.slide_out_down
-                    popEnter = R.anim.slide_in_up
-                    popExit = R.anim.slide_out_down
-                }
-            }
-            mainNavController.navigate(
-                MainNavigationDirections.consumerNotificationsDest(),
-                options
-            )
+//            val options = navOptions {
+//                anim {
+//                    enter = R.anim.slide_in_up
+//                    exit = R.anim.slide_out_down
+//                    popEnter = R.anim.slide_in_up
+//                    popExit = R.anim.slide_out_down
+//                }
+//            }
+//            mainNavController.navigate(
+//                MainNavigationDirections.consumerNotificationsDest(),
+//                options
+//            )
             val position = consumerPageToIndex[R.id.consumer_notifications_dest]
             setItem(position!!)
             consumer_bottom_nav_view.uncheckAllItems()
@@ -489,5 +489,76 @@ class MainActivity : AppCompatActivity(),
 
     override fun setToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
+    }
+
+    override fun switchToConsumer(destination: Int) {
+        currentSide = "consumer"
+
+        mainWrapper.visibility = View.INVISIBLE
+//        authWrapper.visibility = View.INVISIBLE
+        consumerWrapper.visibility = View.VISIBLE
+        providerWrapper.visibility = View.INVISIBLE
+
+        val currentItem =
+            consumerPageToIndex[destination] ?: consumerPageToIndex[R.id.consumer_search_dest]!!
+
+        // force viewPager to create all fragments
+        consumer_pager.offscreenPageLimit = consumerFragments.size
+
+        // setup view pager
+        provider_pager.adapter = null
+        provider_pager.currentItem = -1
+        provider_pager.removeOnPageChangeListener(this)
+
+        consumer_pager.adapter = ViewPagerAdapter()
+        setItem(currentItem)
+
+        if (consumer_bottom_nav_view.selectedItemId != destination) {
+            consumer_bottom_nav_view.selectedItemId = destination
+        }
+
+        consumer_pager.addOnPageChangeListener(this)
+
+        // check deeplink only after viewPager is setup
+        consumer_pager.post(this::checkDeepLink)
+
+        consumer_bottom_nav_view.setOnNavigationItemSelectedListener(this)
+        consumer_bottom_nav_view.setOnNavigationItemReselectedListener(this)
+    }
+
+    override fun switchToProvider(destination: Int) {
+        currentSide = "provider"
+
+        mainWrapper.visibility = View.INVISIBLE
+//        authWrapper.visibility = View.INVISIBLE
+        consumerWrapper.visibility = View.INVISIBLE
+        providerWrapper.visibility = View.VISIBLE
+
+        backStack.pop()
+
+        val currentItem = providerPageToIndex[destination] ?: 0
+
+        // force viewPager to create all fragments
+        provider_pager.offscreenPageLimit = providerFragments.size
+
+        // clear consumer
+        consumer_pager.adapter = null
+        consumer_pager.currentItem = -1
+        consumer_pager.removeOnPageChangeListener(this)
+
+        // setup view pager
+        provider_pager.adapter = ViewPagerAdapter()
+        setItem(currentItem)
+        provider_pager.addOnPageChangeListener(this)
+
+        // check deeplink only after viewPager is setup
+        provider_pager.post(this::checkDeepLink)
+
+        if (provider_bottom_nav_view.selectedItemId != destination)
+            provider_bottom_nav_view.selectedItemId = destination
+
+        provider_bottom_nav_view.setOnNavigationItemSelectedListener(this)
+        provider_bottom_nav_view.setOnNavigationItemReselectedListener(this)
+
     }
 }

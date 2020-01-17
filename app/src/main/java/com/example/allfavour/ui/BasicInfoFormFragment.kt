@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.basic_info_form_fragment.*
 
 class BasicInfoFormFragment : Fragment() {
 
-    val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
+//    val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
 
     companion object {
         fun newInstance() = BasicInfoFormFragment()
@@ -35,10 +35,10 @@ class BasicInfoFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        basic_forms_submit_button.setOnClickListener {
-            val action = MainNavigationDirections.consumerSearchDest()
-            mainNavController?.navigate(action)
-        }
+//        basic_forms_submit_button.setOnClickListener {
+//            val action = MainNavigationDirections.consumerSearchDest()
+//            mainNavController?.navigate(action)
+//        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

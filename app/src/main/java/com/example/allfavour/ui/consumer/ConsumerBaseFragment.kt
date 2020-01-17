@@ -4,21 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.onNavDestinationSelected
+import com.example.allfavour.ConsumerSearchNavigationDirections
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 import com.example.allfavour.WithBottomNavigationSwitcher
-import kotlinx.android.synthetic.main.consumer_notifications_nav_host.*
-import kotlinx.android.synthetic.main.main_nav_activity.*
+import com.example.allfavour.ui.provider.ProviderBaseFragmentDirections
 
 class ConsumerBaseFragment : Fragment() {
 
@@ -61,27 +56,32 @@ class ConsumerBaseFragment : Fragment() {
     }
 
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     fun onConsumerItemSelected(item: MenuItem): Boolean {
-        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
+        val activity = requireActivity() as WithBottomNavigationSwitcher
+        val controller = requireActivity().findNavController(navHostId)
 
         when (item.itemId) {
             R.id.consumer_notifications_dest -> {
-                (requireActivity() as WithBottomNavigationSwitcher).switchToNotificaitons()
+                activity.switchToNotificaitons()
             }
             R.id.consumer_to_provider_dest -> {
                 when (navHostId) {
                     R.id.consumer_search_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.providerSearchDest())
+                        activity.switchToProvider(R.id.provider_search_dest)
+                        controller.navigate(ConsumerSearchNavigationDirections.providerSearchNavDest())
                     }
                     R.id.consumer_profile_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.providerProfileDest())
+                        activity.switchToProvider(R.id.provider_search_dest)
+                        controller.navigate(ProviderBaseFragmentDirections.providerProfileNavDest2())
                     }
-                    else -> mainNavController.navigate(MainNavigationDirections.providerSearchDest())
+                    else ->{
+                        activity.switchToProvider(R.id.provider_search_dest)
+                        controller.navigate(ConsumerSearchNavigationDirections.providerSearchNavDest())
+                    }
                 }
             }
         }
@@ -100,11 +100,11 @@ class ConsumerBaseFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var a = R.layout.consumer_profile_nav_host == layoutRes
-        var b = R.layout.consumer_notifications_nav_host == layoutRes
-        var c = R.layout.consumer_messages_nav_host == layoutRes
+//        var b = R.layout.consumer_notifications_nav_host == layoutRes
+//        var c = R.layout.consumer_messages_nav_host == layoutRes
         var d = R.layout.consumer_search_nav_host == layoutRes
-        var da = R.layout.consumer_my_favours_nav_host == layoutRes
-        var k = R.layout.consumer_my_interests_nav_host == layoutRes
+//        var da = R.layout.consumer_my_favours_nav_host == layoutRes
+//        var k = R.layout.consumer_my_interests_nav_host == layoutRes
 
         return if (layoutRes == defaultInt) null
         else inflater.inflate(layoutRes, container, false)

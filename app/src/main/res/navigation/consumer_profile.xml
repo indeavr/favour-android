@@ -25,4 +25,14 @@
         android:label="@string/my_account"
         tools:layout="@layout/consumer_my_account_fragment" />
 
+    <fragment
+        android:id="@+id/providerBaseFragment"
+        android:name="com.example.allfavour.ui.provider.ProviderBaseFragment"
+        android:label="provider_profile_nav_host"
+        tools:layout="@layout/provider_profile_nav_host" >
+    </fragment>
+    <action
+        android:id="@+id/provider_profile_nav_dest2"
+        app:destination="@id/providerBaseFragment" />
+
 </navigation>
