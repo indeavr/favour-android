@@ -27,7 +27,7 @@ class ConsumerBaseFragment : Fragment() {
         R.id.consumer_my_favours_dest,
         R.id.consumer_my_interests_dest,
         R.id.consumer_profile_dest,
-//        R.id.consumer_notifications_dest
+        R.id.consumer_notifications_dest,
         R.id.consumer_messages_dest
     )
     // nav config with root destinations
