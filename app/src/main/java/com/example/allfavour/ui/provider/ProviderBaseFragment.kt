@@ -103,7 +103,7 @@ class ProviderBaseFragment : Fragment() {
 //                        controller.navigate(ProviderSearchNavigationDirections.consumerSearchNavDest())
                     }
                     R.id.provider_profile_nav_host -> {
-                        activity.switchToConsumer(R.id.provider_search_dest)
+                        activity.switchToConsumer(R.id.consumer_profile_dest)
                         controller.navigate(ProviderProfileDirections.consumerProfileNavDest())
                     }
                     else -> {
