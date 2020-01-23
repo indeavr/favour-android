@@ -26,6 +26,20 @@ class BasicFormModel : BaseObservable() {
         }
 
     @Bindable
+    var age: String? = null
+        set(age) {
+            field = age
+            notifyPropertyChanged(BR.valid)
+        }
+
+    @Bindable
+    var location: String? = null
+        set(location) {
+            field = location
+            notifyPropertyChanged(BR.valid)
+        }
+
+    @Bindable
     var phoneNumber: String? = null
         set(phoneNumber) {
             field = phoneNumber
