@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.apollographql.android'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -23,6 +24,9 @@ android {
             minifyEnabled false
             testCoverageEnabled false
         }
+    }
+    dataBinding {
+        enabled = true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
