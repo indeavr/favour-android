@@ -13,9 +13,12 @@ object GraphqlConnector {
     lateinit var client: ApolloClient
 
     fun setup(context: Context) {
+        val unsafeHttpClient = this.getUnsafeOkHttpClient(context)
+
+        unsafeHttpClient.interceptors().add(AuthenticationInterceptor(context))
         this.client = ApolloClient.builder()
             .serverUrl(baseUrl)
-            .okHttpClient(this.getUnsafeOkHttpClient(context))
+            .okHttpClient(unsafeHttpClient)
             .build()
     }
 

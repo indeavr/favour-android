@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.*
 import com.example.allfavour.graphql.GraphqlConnector
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.example.allfavour.ui.WelcomeFragmentDirections
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -84,8 +85,9 @@ class MainActivity : AppCompatActivity() {
                 println("Destination changed to provider")
             }
         }
+        val authToken = AuthenticationProvider.getAuthToken(this.applicationContext)
 
-        if (true) { //logged in
+        if (authToken != null) { //logged in
             if (true) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return

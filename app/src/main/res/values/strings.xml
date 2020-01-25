@@ -12,6 +12,7 @@
     <string name="action_switch_to_register">Don\'t have an account click here</string>
     <string name="register_button_text">Register</string>
     <string name="action_switch_to_login">Already have an account click here</string>
+    <string name="account_type">WorkFavour</string>
 
     <!--    Consumer-->
     <string name="my_favours">My Favours</string>

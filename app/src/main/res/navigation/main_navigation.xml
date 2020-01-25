@@ -40,5 +40,8 @@
             app:destination="@id/consumer_navigation" />
 
     </fragment>
+    <action
+            android:id="@+id/action_global_welcomeFragment"
+            app:destination="@+id/consumer_navigation" />
 
 </navigation>
