@@ -33,8 +33,8 @@ class ProfileFragment : Fragment() {
 
 
         view.findViewById<Button>(R.id.provider_my_account_button)?.setOnClickListener {
-            val action = ProfileFragmentDirections.myAccountDestAction()
-            findNavController().navigate(action)
+//            val action = ProfileFragmentDirections.myAccountDestAction()
+//            findNavController().navigate(action)
             // Doesn't work for some reason
             // Navigation.createNavigateOnClickListener(R.id.my_account_dest_action, null)
         }

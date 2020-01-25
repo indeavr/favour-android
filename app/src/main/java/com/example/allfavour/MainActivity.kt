@@ -14,13 +14,12 @@ import androidx.viewpager.widget.ViewPager
 import com.example.allfavour.graphql.GraphqlConnector
 import com.example.allfavour.ui.consumer.ConsumerBaseFragment
 import com.example.allfavour.ui.provider.ProviderBaseFragment
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.navOptions
 
 
@@ -160,12 +159,13 @@ class MainActivity : AppCompatActivity(),
                 activateProviderNavigation(destination.id)
             }
         }
+        val authToken = AuthenticationProvider.getAuthToken(this.applicationContext)
 
         if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
             return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
         }
 
-        if (true) { //logged in
+        if (authToken != null) { //logged in
             if (true) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return

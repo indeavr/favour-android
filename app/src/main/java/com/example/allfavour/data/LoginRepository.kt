@@ -23,13 +23,13 @@ class LoginRepository {
         val mutation = LoginMutation(username, password)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
-        return LoggedInUser(result.data()!!.login!!.userId, username)
+        return LoggedInUser(result.data()!!.login!!.userId, username, result.data()!!.login!!.token)
     }
 
     suspend fun register(username: String, password: String): LoggedInUser {
         val mutation = RegisterMutation(username, password)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
-        return LoggedInUser(result.data()!!.register!!.userId, username)
+        return LoggedInUser(result.data()!!.register!!.userId, username, result.data()!!.register!!.token)
     }
 }

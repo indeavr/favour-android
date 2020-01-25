@@ -8,4 +8,17 @@
 <!--        android:name="com.example.allfavour.ui.BasicInfoFormFragment"-->
 <!--        android:label="basic_info_form_fragment"-->
 <!--        tools:layout="@layout/basic_info_form_fragment" />-->
+  <fragment
+            android:id="@+id/registerFragment"
+            android:name="com.example.allfavour.ui.auth.RegisterFragment"
+            android:label="register_fragment"
+            tools:layout="@layout/register_fragment" >
+        <action
+                android:id="@+id/action_registerFragment_to_welcomeFragment2"
+                app:destination="@+id/welcomeFragment2" />
+    </fragment>
+    <fragment
+            android:id="@+id/welcomeFragment2"
+            android:name="com.example.allfavour.ui.WelcomeFragment"
+            android:label="WelcomeFragment" />
 </navigation>

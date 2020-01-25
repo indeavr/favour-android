@@ -1,4 +1,4 @@
-package com.example.allfavour.ui.auth
+package com.example.allfavour.ui.oldauth
 
 /**
  * Data validation state of the login form.
