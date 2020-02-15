@@ -33,5 +33,6 @@
 
     <!--    Error-->
     <string name="phoneNumber_wrong">Wrong format of phoneNumber</string>
+    <string name="title_activity_google_sign_in_activty">GoogleSignInActivty</string>
 
 </resources>

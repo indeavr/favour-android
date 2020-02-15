@@ -4,21 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.onNavDestinationSelected
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
-import com.example.allfavour.WithBottomNavigationSwitcher
-import kotlinx.android.synthetic.main.consumer_notifications_nav_host.*
-import kotlinx.android.synthetic.main.main_nav_activity.*
+import com.example.allfavour.DecoratedActivity
 
 class ConsumerBaseFragment : Fragment() {
 
@@ -53,7 +46,7 @@ class ConsumerBaseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
-        (requireActivity() as WithBottomNavigationSwitcher).setToolbar(toolbar)
+        (requireActivity() as DecoratedActivity).setToolbar(toolbar)
         toolbar.inflateMenu(R.menu.consumer_top_menu)
         toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
 
@@ -71,7 +64,7 @@ class ConsumerBaseFragment : Fragment() {
 
         when (item.itemId) {
             R.id.consumer_notifications_dest -> {
-                (requireActivity() as WithBottomNavigationSwitcher).switchToNotificaitons()
+                (requireActivity() as DecoratedActivity).switchToNotificaitons()
             }
             R.id.consumer_to_provider_dest -> {
                 when (navHostId) {

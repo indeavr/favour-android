@@ -15,7 +15,6 @@ object GraphqlConnector {
     fun setup(context: Context) {
         val unsafeHttpClient = this.getUnsafeOkHttpClient(context)
 
-        unsafeHttpClient.interceptors().add(AuthenticationInterceptor(context))
         this.client = ApolloClient.builder()
             .serverUrl(baseUrl)
             .okHttpClient(unsafeHttpClient)
@@ -56,6 +55,7 @@ object GraphqlConnector {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
             val builder = OkHttpClient.Builder().apply {
+                this.addInterceptor(AuthenticationInterceptor(context))
                 this.addInterceptor(loggingInterceptor)
                 // this.addInterceptor(ApiHeadersInterceptor(context))
                 // this.authenticator(ApiAuthenticator(context))

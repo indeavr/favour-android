@@ -2,7 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/auth_navigation">
+    android:id="@+id/auth_navigation"
+    app:startDestination="@id/loginWithFragment">
 <!--    <fragment-->
 <!--        android:id="@+id/basicInfoFormFragment"-->
 <!--        android:name="com.example.allfavour.ui.BasicInfoFormFragment"-->
@@ -21,4 +22,21 @@
             android:id="@+id/welcomeFragment2"
             android:name="com.example.allfavour.ui.WelcomeFragment"
             android:label="WelcomeFragment" />
+    <fragment
+        android:id="@+id/loginWithFragment"
+        android:name="com.example.allfavour.ui.auth.LoginWithFragment"
+        android:label="login_with_fragment"
+        tools:layout="@layout/login_with_fragment" >
+        <action
+            android:id="@+id/action_loginWithFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginWithFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.allfavour.ui.auth.SignInFragment"
+        android:label="sign_in_fragment"
+        tools:layout="@layout/sign_in_fragment" />
 </navigation>

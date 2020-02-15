@@ -19,8 +19,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.android.synthetic.main.welcome_fragment.*
 
 
 val cFragments: List<Int> = listOf(
@@ -41,9 +47,10 @@ val pFragments: List<Int> = listOf(
 
 val authFragments: Set<Int> = setOf(R.id.login) // TODO
 
-interface WithBottomNavigationSwitcher {
+interface DecoratedActivity {
     fun switchToNotificaitons()
     fun setToolbar(toolbar: Toolbar)
+    fun handleGoogleLogin(account: GoogleSignInAccount?)
 }
 
 @Suppress("DEPRECATION")
@@ -51,8 +58,9 @@ class MainActivity : AppCompatActivity(),
     ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemReselectedListener,
-    WithBottomNavigationSwitcher {
+    DecoratedActivity {
     // list of base destination containers
+    // TODO lazy load
     private val consumerFragments = listOf(
         ConsumerBaseFragment.newInstance(
             R.layout.consumer_my_favours_nav_host,
@@ -130,7 +138,7 @@ class MainActivity : AppCompatActivity(),
         mapOf(R.id.provider_search_dest to 0, R.id.provider_profile_dest to 1)
 
     private val mainWrapper: FrameLayout by lazy { main_wrapper }
-    //    private val authWrapper: FrameLayout by lazy { auth_wrapper }
+    private val authWrapper: FrameLayout by lazy { auth_wrapper }
     private val consumerWrapper: FrameLayout by lazy { consumer_wrapper }
     private val providerWrapper: FrameLayout by lazy { provider_wrapper }
 
@@ -143,10 +151,15 @@ class MainActivity : AppCompatActivity(),
     val hasStartedFromAWebDeepLink: Boolean by lazy { intent.action == Intent.ACTION_VIEW && intent.data != null }
     val hasStartedFromAPendingDeepLink: Boolean by lazy { intent.action == null && intent.data == null }
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
+
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
 
         // initialize backStack with home page index
         if (backStack.empty()) backStack.push(0)
@@ -159,6 +172,7 @@ class MainActivity : AppCompatActivity(),
                 activateProviderNavigation(destination.id)
             }
         }
+
         val authToken = AuthenticationProvider.getAuthToken(this.applicationContext)
 
         if (hasStartedFromAWebDeepLink || hasStartedFromAPendingDeepLink) {
@@ -330,7 +344,7 @@ class MainActivity : AppCompatActivity(),
         currentSide = "provider"
 
         mainWrapper.visibility = View.INVISIBLE
-//        authWrapper.visibility = View.INVISIBLE
+        authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.INVISIBLE
         providerWrapper.visibility = View.VISIBLE
 
@@ -381,7 +395,7 @@ class MainActivity : AppCompatActivity(),
         currentSide = "consumer"
 
         mainWrapper.visibility = View.INVISIBLE
-//        authWrapper.visibility = View.INVISIBLE
+        authWrapper.visibility = View.INVISIBLE
         consumerWrapper.visibility = View.VISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
@@ -432,7 +446,7 @@ class MainActivity : AppCompatActivity(),
 //        currentController = authNavController
 
         mainWrapper.visibility = View.INVISIBLE
-//        authWrapper.visibility = View.VISIBLE
+        authWrapper.visibility = View.VISIBLE
         consumerWrapper.visibility = View.INVISIBLE
         providerWrapper.visibility = View.INVISIBLE
 
@@ -490,4 +504,39 @@ class MainActivity : AppCompatActivity(),
     override fun setToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
     }
+
+    override fun handleGoogleLogin(account: GoogleSignInAccount?) {
+        firebaseAuthWithGoogle(account!!)
+    }
+
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+
+                    navigateToConsumerOrProvider();
+                } else {
+                }
+
+                // ...
+            }
+    }
+
+    private fun navigateToConsumerOrProvider(){
+        if (currentSide == "provider") {
+            activateProviderNavigation()
+            val action = MainNavigationDirections.providerSearchDest()
+            mainNavController.navigate(action)
+        } else {
+            activateConsumerNavigation()
+            val action = MainNavigationDirections.consumerSearchDest()
+            mainNavController.navigate(action)
+        }
+    }
+
 }
+

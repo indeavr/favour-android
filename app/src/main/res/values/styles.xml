@@ -9,5 +9,11 @@
         <item name="colorAccent">@color/secondaryDarkColor</item>
 <!--        <item name="color">@color/primaryTextColor</item>-->
     </style>
+    <style name="AllFavour.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AllFavour.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AllFavour.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

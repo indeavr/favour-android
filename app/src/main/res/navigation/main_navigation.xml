@@ -5,7 +5,7 @@
     android:id="@+id/main_navigation"
     app:startDestination="@id/welcomeFragment">
 
-<!--    <include app:graph="@navigation/auth_navigation" />-->
+    <include app:graph="@navigation/auth_navigation" />
 
     <!--    <include app:graph="@navigation/consumer_navigation" />-->
 

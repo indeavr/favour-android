@@ -7,9 +7,9 @@
 
     <dist:module dist:instant="true" />
 
-<uses-permission
-            android:name="android.permission.AUTHENTICATE_ACCOUNTS"
-            android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -25,16 +25,16 @@
         android:supportsRtl="true"
         android:theme="@style/AllFavour"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".ui.ChatActivity" />
-        <activity android:name=".ui.register.RegisterActivity" />
         <activity
-            android:name=".ui.auth.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".MainActivity"
+            android:name="com.example.allfavour.ui.auth.GoogleSignInActivty"
+            android:label="@string/title_activity_google_sign_in_activty"
+            android:theme="@style/AllFavour.NoActionBar"/>
+        <activity android:name=".ui.ChatActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:excludeFromRecents="true">
+            android:taskAffinity="">
 
             <nav-graph android:value="@navigation/consumer_notifications" />
 
@@ -52,15 +52,34 @@
             </intent-filter>
         </activity>
 
-            <service android:name="com.example.allwork.services.authentication.AuthenticationService">
+        <service android:name="com.example.allwork.services.authentication.AuthenticationService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.accounts.AccountAuthenticator"
-                    android:resource="@xml/auth" />
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/auth" />
         </service>
+        <!--        <service-->
+        <!--            android:name="com.example.allfavour.gcm.GcmIntentService"-->
+        <!--            android:exported="false">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
+
+        <!--        <service-->
+        <!--            android:name="com.example.allfavour.gcm.GcmIDListenerService"-->
+        <!--            android:exported="false">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.android.gms.iid.InstanceID" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
+
+        <!--        <service-->
+        <!--            android:name="com.example.allfavour.gcm.RegistrationIntentService"-->
+        <!--            android:exported="false" />-->
     </application>
 
 </manifest>
