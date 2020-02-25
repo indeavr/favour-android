@@ -27,6 +27,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.welcome_fragment.*
+import com.google.firebase.database.DatabaseReference
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.example.allfavour.ui.ChatActivity
 
 
 val cFragments: List<Int> = listOf(
@@ -518,7 +523,10 @@ class MainActivity : AppCompatActivity(),
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
 
-                    navigateToConsumerOrProvider();
+//                    navigateToConsumerOrProvider();
+
+                    val intent = Intent(this, ChatActivity::class.java)
+                    startActivity(intent)
                 } else {
                 }
 
@@ -526,7 +534,7 @@ class MainActivity : AppCompatActivity(),
             }
     }
 
-    private fun navigateToConsumerOrProvider(){
+    private fun navigateToConsumerOrProvider() {
         if (currentSide == "provider") {
             activateProviderNavigation()
             val action = MainNavigationDirections.providerSearchDest()
@@ -537,6 +545,5 @@ class MainActivity : AppCompatActivity(),
             mainNavController.navigate(action)
         }
     }
-
 }
 

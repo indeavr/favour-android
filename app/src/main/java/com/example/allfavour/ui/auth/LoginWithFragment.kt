@@ -49,7 +49,7 @@ class LoginWithFragment : Fragment() {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
-//        mGoogleSignInClient.signOut()
+        mGoogleSignInClient.signOut()
 
         return inflater.inflate(
             com.example.allfavour.R.layout.login_with_fragment,
