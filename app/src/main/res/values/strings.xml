@@ -13,6 +13,8 @@
     <string name="register_button_text">Register</string>
     <string name="action_switch_to_login">Already have an account click here</string>
     <string name="account_type">WorkFavour</string>
+    <string name="login_button_label">Login</string>
+    <string name="login_fragmetn_label">Login</string>
 
     <!--    Consumer-->
     <string name="my_favours">My Favours</string>

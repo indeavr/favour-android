@@ -2,49 +2,48 @@ package com.example.allfavour.ui.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
-import kotlinx.android.synthetic.main.register_fragment.*
+import kotlinx.android.synthetic.main.login_fragment.*
 
-class RegisterFragment : Fragment() {
-    private lateinit var viewModel: RegisterViewModel
-    private lateinit var accountManager: AccountManager
+class LoginFragment: Fragment() {
+    private lateinit var viewModel: LoginViewModel
+    private lateinit var accountManager: AccountManager;
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
-    private  val authNavController: NavController? by lazy { activity?.findNavController(R.id.auth_navigation) }
+    private val authControler: NavController? by lazy { activity?.findNavController(R.id.auth_navigation) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.register_fragment, container, false)
+        return inflater.inflate(R.layout.login_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, AuthViewModelFactory())
-            .get(RegisterViewModel::class.java)
+            .get(LoginViewModel::class.java)
         accountManager = AccountManager.get(context)
 
-        registerButton.setOnClickListener {
+        loginButton.setOnClickListener {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
 
-            viewModel.register(email, password)
+            viewModel.login(email, password)
         }
 
-        switchToLoginLabel.setOnClickListener {
-            authNavController!!.navigate(R.id.action_registerFragment_to_loginFragment)
+        switchToRegister.setOnClickListener {
+            authControler!!.navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
         viewModel.registeredUser.observe(this) {
