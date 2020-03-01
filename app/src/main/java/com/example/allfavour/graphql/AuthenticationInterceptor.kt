@@ -10,7 +10,7 @@ class AuthenticationInterceptor(val context: Context) : Interceptor {
     val accountManager = AccountManager.get(context)
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val accounts = accountManager.getAccountsByType("WorkFavour")
+        val accounts = accountManager.getAccountsByType("AllFavour")
 
         val original = chain.request()
 
@@ -26,7 +26,7 @@ class AuthenticationInterceptor(val context: Context) : Interceptor {
                 .newBuilder()
 
             modifiedRequest.header("UserId", userId)
-            val tokenType = accountManager.getUserData(accounts[0], "WorkFavour")
+            val tokenType = accountManager.getUserData(accounts[0], "AllFavour")
             val account = accounts[0]
             val token =
                 AuthenticationProvider.getAuthToken(context) //accountManager.peekAuthToken(account, tokenType)

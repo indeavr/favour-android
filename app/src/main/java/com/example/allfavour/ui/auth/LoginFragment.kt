@@ -11,13 +11,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.login_fragment.*
 
 class LoginFragment: Fragment() {
     private lateinit var viewModel: LoginViewModel
-    private lateinit var accountManager: AccountManager;
+    private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
     private val authControler: NavController? by lazy { activity?.findNavController(R.id.auth_navigation) }
@@ -43,7 +44,7 @@ class LoginFragment: Fragment() {
         }
 
         switchToRegister.setOnClickListener {
-            authControler!!.navigate(R.id.action_loginFragment_to_registerFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
         viewModel.registeredUser.observe(this) {
@@ -65,11 +66,11 @@ class LoginFragment: Fragment() {
     }
 
     private fun addOrFindAccount(email: String, password: String): Account {
-        val accounts = accountManager.getAccountsByType("WorkFavour")
+        val accounts = accountManager.getAccountsByType("AllFavour")
         val account = if (accounts.isNotEmpty())
             accounts[0]
         else
-            Account(email, "WorkFavour")
+            Account(email, "AllFavour")
 
         if (accounts.isEmpty()) {
             accountManager.addAccountExplicitly(account, password, null)

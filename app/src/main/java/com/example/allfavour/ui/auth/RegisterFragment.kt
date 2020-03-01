@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
@@ -44,7 +45,8 @@ class RegisterFragment : Fragment() {
         }
 
         switchToLoginLabel.setOnClickListener {
-            authNavController!!.navigate(R.id.action_registerFragment_to_loginFragment)
+            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+            findNavController().navigate(action )
         }
 
         viewModel.registeredUser.observe(this) {
@@ -66,11 +68,11 @@ class RegisterFragment : Fragment() {
     }
 
     private fun addOrFindAccount(email: String, password: String): Account {
-        val accounts = accountManager.getAccountsByType("WorkFavour")
+        val accounts = accountManager.getAccountsByType("AllFavour")
         val account = if (accounts.isNotEmpty())
             accounts[0]
         else
-            Account(email, "WorkFavour")
+            Account(email, "AllFavour")
 
         if (accounts.isEmpty()) {
             accountManager.addAccountExplicitly(account, password, null)
