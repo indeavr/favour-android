@@ -19,19 +19,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.welcome_fragment.*
-import com.google.firebase.database.DatabaseReference
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.example.allfavour.ui.ChatActivity
 
 
 val cFragments: List<Int> = listOf(
@@ -58,7 +50,6 @@ interface DecoratedActivity {
     fun handleGoogleLogin(account: GoogleSignInAccount?)
 }
 
-@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(),
     ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener,
@@ -523,10 +514,7 @@ class MainActivity : AppCompatActivity(),
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
 
-//                    navigateToConsumerOrProvider();
-
-                    val intent = Intent(this, ChatActivity::class.java)
-                    startActivity(intent)
+                    navigateToConsumerOrProvider()
                 } else {
                 }
 

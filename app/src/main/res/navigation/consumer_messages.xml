@@ -9,5 +9,23 @@
         android:id="@+id/consumer_messages_dest"
         android:name="com.example.allfavour.ui.consumer.MessagesFragment"
         android:label="Messages"
-        tools:layout="@layout/consumer_messages_fragment" />
+        tools:layout="@layout/consumer_messages_fragment">
+
+        <action
+            android:id="@+id/action_consumer_messages_dest_to_chatFragment"
+            app:destination="@id/chatFragment">
+
+            <argument
+                android:name="personName"
+                app:argType="string" />
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.allfavour.ui.ChatFragment"
+        android:label="ChatFragment" />
+
 </navigation>

@@ -1,5 +1,6 @@
 package com.example.allfavour.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -23,7 +24,10 @@ import android.widget.ProgressBar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import com.bumptech.glide.Glide
+import com.example.allfavour.ui.consumer.MessagesFragmentDirections
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions.Builder
 import com.firebase.ui.database.SnapshotParser
@@ -37,7 +41,7 @@ import com.google.firebase.storage.UploadTask
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class ChatActivity : AppCompatActivity() {
+class ChatFragment : Fragment() {
 
     class MessageViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         internal var messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
@@ -56,42 +60,48 @@ class ChatActivity : AppCompatActivity() {
     val DEFAULT_MSG_LENGTH_LIMIT = 10
     val ANONYMOUS = "anonymous"
     private val MESSAGE_SENT_EVENT = "message_sent"
-    private var mUsername: String? = null
+    private var username: String? = null
     private val mPhotoUrl: String? = null
     private var mSharedPreferences: SharedPreferences? = null
     private val MESSAGE_URL = "http://friendlychat.firebase.google.com/message/"
 
-    private lateinit var mSendButton: Button
-    private lateinit var mMessageRecyclerView: RecyclerView
-    private lateinit var mLinearLayoutManager: LinearLayoutManager
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mMessageEditText: EditText
-    private lateinit var mAddMessageImageView: ImageView
+    private lateinit var viewManager: LinearLayoutManager
+
+    private lateinit var messageEditText: EditText
+    private lateinit var addMessageImageView: ImageView
+    private lateinit var messageRecyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var sendButton: Button
 
     /** Firebase */
-    private lateinit var mFirebaseDatabaseReference: DatabaseReference
-    private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
+    private lateinit var firebaseDB: DatabaseReference
+    private lateinit var firebaseListAdapter: FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.chat_activity, container, false)
+        messageRecyclerView = view.findViewById(R.id.message_recycler_view)
+        progressBar = view.findViewById(R.id.progress_bar)
+        addMessageImageView = view.findViewById(R.id.add_message_image_view)
+        messageEditText = view.findViewById(R.id.message_edit_text)
+        sendButton = view.findViewById(R.id.send_button)
 
-        setContentView(R.layout.chat_activity)
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        // Set default username is anonymous.
-        mUsername = ANONYMOUS
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
 
         // Initialize ProgressBar and RecyclerView.
-        mProgressBar = findViewById(R.id.progressBar) as ProgressBar
-        mMessageRecyclerView = findViewById(R.id.messageRecyclerView) as RecyclerView
-        mLinearLayoutManager = LinearLayoutManager(this)
-        mLinearLayoutManager.setStackFromEnd(true)
-        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager)
+        viewManager = LinearLayoutManager(this.context)
+        viewManager.stackFromEnd = true
+        messageRecyclerView.layoutManager = viewManager
 
+        val user = FirebaseAuth.getInstance().currentUser
+        username = user?.displayName ?: ANONYMOUS
 
         // New child entries
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().reference
+        firebaseDB = FirebaseDatabase.getInstance().reference
 
         val parser: SnapshotParser<FriendlyMessage> = SnapshotParser { dataSnapshot ->
             val friendlyMessage =
@@ -102,14 +112,15 @@ class ChatActivity : AppCompatActivity() {
             friendlyMessage!!
         }
 
-        val messagesRef = mFirebaseDatabaseReference.child(MESSAGES_CHILD)
+        val messagesRef = firebaseDB.child(MESSAGES_CHILD)
         val options = Builder<FriendlyMessage>()
             .setQuery(messagesRef, parser)
             .build()
 
-        val activity = this
+        val activity = this.requireActivity()
 
-        mFirebaseAdapter =
+        // Adapter
+        firebaseListAdapter =
             object : FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>(options) {
                 override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): MessageViewHolder {
                     val inflater = LayoutInflater.from(viewGroup.context)
@@ -127,7 +138,7 @@ class ChatActivity : AppCompatActivity() {
                     position: Int,
                     friendlyMessage: FriendlyMessage
                 ) {
-                    mProgressBar.visibility = ProgressBar.INVISIBLE
+                    progressBar.visibility = ProgressBar.INVISIBLE
                     if (friendlyMessage.text != null) {
                         viewHolder.messageTextView.setText(friendlyMessage.text)
                         viewHolder.messageTextView.visibility = TextView.VISIBLE
@@ -178,67 +189,68 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
 
-        mFirebaseAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        firebaseListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 super.onItemRangeInserted(positionStart, itemCount)
-                val friendlyMessageCount = mFirebaseAdapter.getItemCount()
+                val friendlyMessageCount = firebaseListAdapter.itemCount
                 val lastVisiblePosition =
-                    mLinearLayoutManager.findLastCompletelyVisibleItemPosition()
+                    viewManager.findLastCompletelyVisibleItemPosition()
                 // If the recycler view is initially being loaded or the
                 // user is at the bottom of the list, scroll to the bottom
                 // of the list to show the newly added message.
                 if (lastVisiblePosition == -1 || positionStart >= friendlyMessageCount - 1 && lastVisiblePosition == positionStart - 1) {
-                    mMessageRecyclerView.scrollToPosition(positionStart)
+                    messageRecyclerView.scrollToPosition(positionStart)
                 }
             }
         })
 
-        mMessageRecyclerView.adapter = mFirebaseAdapter
+        messageRecyclerView.adapter = firebaseListAdapter
 
-        mMessageEditText = messageEditText as EditText
-        mMessageEditText.addTextChangedListener(object : TextWatcher {
+        messageEditText = messageEditText as EditText
+        messageEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                mSendButton.isEnabled = charSequence.toString().trim { it <= ' ' }.isNotEmpty()
+                sendButton.isEnabled = charSequence.toString().trim { it <= ' ' }.isNotEmpty()
             }
 
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        mSendButton = sendButton
-        mSendButton.setOnClickListener {
+        sendButton.setOnClickListener {
             // Send messages on click.
             val friendlyMessage = FriendlyMessage(
-                mMessageEditText.text.toString(),
-                mUsername.toString(),
+                messageEditText.text.toString(),
+                username.toString(),
                 mPhotoUrl,
                 null /* no image */
             )
-            mFirebaseDatabaseReference.child(MESSAGES_CHILD)
+            firebaseDB.child(MESSAGES_CHILD)
                 .push().setValue(friendlyMessage)
-            mMessageEditText.setText("")
+            messageEditText.setText("")
         }
 
-        mAddMessageImageView = addMessageImageView as ImageView
-        mAddMessageImageView.setOnClickListener {
+        addMessageImageView = addMessageImageView as ImageView
+        addMessageImageView.setOnClickListener {
             // Select image for image message on click.
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_IMAGE)
         }
+
+        return view
     }
 
     override fun onPause() {
-        mFirebaseAdapter.stopListening()
+        firebaseListAdapter.stopListening()
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
 
-        mFirebaseAdapter.startListening()
+        firebaseListAdapter.startListening()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -252,13 +264,11 @@ class ChatActivity : AppCompatActivity() {
                     Log.d(TAG, "Uri: " + uri!!.toString())
 
                     val tempMessage = FriendlyMessage(
-                        null, mUsername, mPhotoUrl,
+                        null, username, mPhotoUrl,
                         LOADING_IMAGE_URL
                     )
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
-                        .setValue(
-                            tempMessage
-                        ) { databaseError, databaseReference ->
+                    firebaseDB.child(MESSAGES_CHILD).push()
+                        .setValue(tempMessage) { databaseError, databaseReference ->
                             if (databaseError == null) {
                                 val key = databaseReference.key
                                 val storageReference = FirebaseStorage.getInstance()
@@ -280,32 +290,29 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun putImageInStorage(storageReference: StorageReference, uri: Uri?, key: String?) {
-        val activity = this
+        val activity = this.requireActivity()
 
-        storageReference.putFile(uri!!).addOnCompleteListener(
-            this
-        ) { task ->
-            if (task.isSuccessful) {
-                task.result!!.metadata!!.reference!!.downloadUrl
-                    .addOnCompleteListener(
-                        activity
-                    ) { task ->
-                        if (task.isSuccessful) {
-                            val friendlyMessage = FriendlyMessage(
-                                null, mUsername, mPhotoUrl,
-                                task.result!!.toString()
-                            )
-                            mFirebaseDatabaseReference.child(MESSAGES_CHILD)
-                                .child(key!!)
-                                .setValue(friendlyMessage)
+        storageReference.putFile(uri!!)
+            .addOnCompleteListener(activity) { task ->
+                if (task.isSuccessful) {
+                    task.result!!.metadata!!.reference!!.downloadUrl
+                        .addOnCompleteListener(activity) { task ->
+                            if (task.isSuccessful) {
+                                val friendlyMessage = FriendlyMessage(
+                                    null, username, mPhotoUrl,
+                                    task.result!!.toString()
+                                )
+                                firebaseDB.child(MESSAGES_CHILD)
+                                    .child(key!!)
+                                    .setValue(friendlyMessage)
+                            }
                         }
-                    }
-            } else {
-                Log.w(
-                    TAG, "Image upload task was not successful.",
-                    task.exception
-                )
+                } else {
+                    Log.w(
+                        TAG, "Image upload task was not successful.",
+                        task.exception
+                    )
+                }
             }
-        }
     }
 }
