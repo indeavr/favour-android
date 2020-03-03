@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
@@ -16,28 +15,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.allfavour.R
 import com.google.firebase.database.DatabaseReference
-import kotlinx.android.synthetic.main.chat_activity.*
 import androidx.core.content.ContextCompat
 import android.widget.TextView
 import com.google.firebase.storage.FirebaseStorage
 import android.widget.ProgressBar
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.allfavour.ui.consumer.MessagesFragmentDirections
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions.Builder
 import com.firebase.ui.database.SnapshotParser
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import de.hdodenhof.circleimageview.CircleImageView
 
 
@@ -52,8 +44,12 @@ class ChatFragment : Fragment() {
 
     }
 
-    private val TAG = "MainActivity"
+    private val TAG = "ChatFragment"
+
+    val USER_CHILD = "users"
+    val CHAT_CHILD = "chats"
     val MESSAGES_CHILD = "messages"
+
     private val REQUEST_INVITE = 1
     private val REQUEST_IMAGE = 2
     private val LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif"
@@ -112,7 +108,12 @@ class ChatFragment : Fragment() {
             friendlyMessage!!
         }
 
+        val chatId = arguments?.getString("chatId")
+            ?: return view // TODO: return better feedback that something went wrong
+
         val messagesRef = firebaseDB.child(MESSAGES_CHILD)
+            .child(chatId)
+
         val options = Builder<FriendlyMessage>()
             .setQuery(messagesRef, parser)
             .build()
@@ -189,7 +190,8 @@ class ChatFragment : Fragment() {
                 }
             }
 
-        firebaseListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        firebaseListAdapter.registerAdapterDataObserver(object :
+            RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 super.onItemRangeInserted(positionStart, itemCount)
                 val friendlyMessageCount = firebaseListAdapter.itemCount

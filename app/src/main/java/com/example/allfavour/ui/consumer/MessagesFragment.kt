@@ -1,11 +1,14 @@
 package com.example.allfavour.ui.consumer
 
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -15,7 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.allfavour.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.consumer_messages_fragment.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -24,6 +31,12 @@ class MessagesFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     val navController: NavController by lazy { findNavController(this) }
+    private val firebaseDB: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
+
+    private lateinit var myUserId: String
+    private lateinit var myUsername: String
+    val USERS_CHILD = "users"
+    val CHAT_CHILD = "chats"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +46,50 @@ class MessagesFragment : Fragment() {
 
         val activity = this.requireActivity()
         viewManager = LinearLayoutManager(activity)
-        val arr = Array(2) { "Pesho"; "Gosho" }
-        viewAdapter = PeopleListAdapter(arr, navController)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        myUserId = user!!.uid
+        firebaseDB.child(USERS_CHILD)
+            .child(myUserId)
+            .child("username")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    myUsername = snapshot.getValue(String::class.java)!!
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+            })
+
+        val data = ArrayList<String>()
+        viewAdapter = PeopleListAdapter(data, navController)
+        view.findViewById<Button>(R.id.new_chat)
+            .setOnClickListener(::showPeopleList)
+
+
+//        firebaseDB.child(USERS_CHILD)
+//            .child(userId)
+//            .child("chats")
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(dataSnap: DataSnapshot) {
+//                    val activeChats = dataSnap.children
+//                    val chatIds = ArrayList<String>()
+//                    activeChats.forEach {
+//                        chatIds.add(it.getValue(String::class.java)!!)
+//                    }
+//
+//                    data.clear()
+//                    data.addAll(chatIds)
+//                    // notify adapter
+//                    viewAdapter.notifyDataSetChanged()
+//                }
+//
+//                override fun onCancelled(p0: DatabaseError) {
+//
+//                }
+//            })
+
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.chat_people_recycle_list)
 
@@ -46,9 +101,64 @@ class MessagesFragment : Fragment() {
         return view
     }
 
+    fun showPeopleList(it: View) {
+        firebaseDB.child(USERS_CHILD)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val users = snapshot.children
+
+                    val usernames = ArrayList<String>()
+                    val userToId = mutableMapOf<String, String>()
+
+                    users.forEach {
+                        val id = it.key
+                        if(id != myUserId){
+                            val username = it.child("username").getValue(String::class.java)
+                            usernames.add(username!!)
+                            userToId[username] = id!!
+                        }
+                    }
+
+                    val array = arrayOfNulls<String>(usernames.size)
+                    usernames.toArray<String>(array)
+
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle("Choose a Person")
+                        .setItems(array) { dialog: DialogInterface, which: Int ->
+                            val user = usernames[which]
+                            startNewChat(userToId[user]!!, user)
+                        }
+                        .setPositiveButton("Ok", null)
+                        .show()
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                }
+            })
+    }
+
+    fun startNewChat(userId: String, username: String) {
+        val chatId = firebaseDB.child(CHAT_CHILD)
+            .push()
+            .key
+
+        val userIdToUsername = mapOf(userId to username, myUserId to myUsername)
+
+        val chatItem = ChatItem(userIdToUsername)
+        val chatItemValues = chatItem.toMap()
+
+
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/chats/$chatId"] = chatItemValues
+        childUpdates["/users/$userId/chats/$chatId"] = true
+        childUpdates["/users/$myUserId/chats/$chatId"] = true
+        childUpdates["/messages/$chatId"] = {}
+
+        firebaseDB.updateChildren(childUpdates)
+    }
 
     class PeopleListAdapter(
-        private val myDataset: Array<String>,
+        private val myDataset: ArrayList<String>,
         private val navController: NavController
     ) :
         RecyclerView.Adapter<PeopleListAdapter.ViewHolder>() {
@@ -79,19 +189,41 @@ class MessagesFragment : Fragment() {
             // - get element from your dataset at this position
             // - replace the contents of the view wi
             // th that element
-            holder.view.findViewById<TextView>(R.id.personName).text = myDataset[position]
+            if (myDataset.isNullOrEmpty()) {
 
-            holder.view.setOnClickListener {
-                val personName = it.findViewById<TextView>(R.id.personName).text.toString()
+            } else {
+                holder.view.findViewById<TextView>(R.id.personName).text = myDataset[position]
+
+                holder.view.setOnClickListener {
+                    val personName = it.findViewById<TextView>(R.id.personName).text.toString()
 //                val args = bundleOf("personName" to personName)
 
-                val action =
-                    MessagesFragmentDirections.actionConsumerMessagesDestToChatFragment(personName)
-                navController.navigate(action)
+                    val action =
+                        MessagesFragmentDirections.actionConsumerMessagesDestToChatFragment(
+                            personName
+                        )
+                    navController.navigate(action)
+                }
             }
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = myDataset.size
+    }
+
+    @IgnoreExtraProperties
+    data class ChatItem(
+        var users: Map<String, String>,
+        var lastMessage: String = "",
+        var lastMessageTime: String = ""
+    ) {
+        @Exclude
+        fun toMap(): Map<String, Any?> {
+            return mapOf(
+                "users" to users,
+                "lastMessage" to lastMessage,
+                "lastMessageTime" to lastMessageTime
+            )
+        }
     }
 }
