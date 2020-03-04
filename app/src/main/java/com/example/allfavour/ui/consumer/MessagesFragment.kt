@@ -122,22 +122,23 @@ class MessagesFragment : Fragment() {
     }
 
     private fun getMyUsername() {
-        firebaseDB.child(USERS_CHILD)
-            .child(myUserId)
-            .child("username")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    myUsername = snapshot.getValue(String::class.java)!!
-
-                    firebaseDB.child(USERS_CHILD)
-                        .child(myUserId)
-                        .removeEventListener(this)
-                }
-
-                override fun onCancelled(p0: DatabaseError) {
-
-                }
-            })
+//        firebaseDB.child(USERS_CHILD)
+//            .child(myUserId)
+//            .child("username")
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    myUsername = snapshot.getValue(String::class.java)!!
+//
+//                    firebaseDB.child(USERS_CHILD)
+//                        .child(myUserId)
+//                        .removeEventListener(this)
+//                }
+//
+//                override fun onCancelled(p0: DatabaseError) {
+//
+//                }
+//            })
+        myUsername = "Svetlozar Mateeev"
     }
 
     private fun showPeopleList(it: View) {
