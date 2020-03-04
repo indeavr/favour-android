@@ -19,6 +19,7 @@ import com.example.allfavour.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.lang.Exception
 
 
 /**
@@ -47,14 +48,16 @@ class MessagesFragment : Fragment() {
         firebaseDB.child(USERS_CHILD)
             .child(myUserId)
             .child("chats")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnap: DataSnapshot) {
                     val activeChats = dataSnap.children
                     val chatIds = ArrayList<String>()
                     activeChats.forEach {
                         chatIds.add(it.key!!)
                     }
+                    chatData.clear()
 
+                    viewAdapter.notifyDataSetChanged()
                     getFullChatData(chatIds)
                 }
 
@@ -135,7 +138,6 @@ class MessagesFragment : Fragment() {
 
                 }
             })
-
     }
 
     private fun showPeopleList(it: View) {
