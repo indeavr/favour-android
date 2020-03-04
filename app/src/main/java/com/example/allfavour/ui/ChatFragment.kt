@@ -22,8 +22,9 @@ import android.widget.ProgressBar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.allfavour.DecoratedActivity
+import com.example.allfavour.ui.consumer.MessagesFragment
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions.Builder
 import com.firebase.ui.database.SnapshotParser
@@ -61,6 +62,9 @@ class ChatFragment : Fragment() {
     private var mSharedPreferences: SharedPreferences? = null
     private val MESSAGE_URL = "http://friendlychat.firebase.google.com/message/"
 
+    private lateinit var chatId: String
+
+
     private lateinit var viewManager: LinearLayoutManager
 
     private lateinit var messageEditText: EditText
@@ -73,12 +77,25 @@ class ChatFragment : Fragment() {
     private lateinit var firebaseDB: DatabaseReference
     private lateinit var firebaseListAdapter: FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val id = arguments?.getString("chatId")
+
+        if (id == null) {
+            return
+        } else
+            chatId = id
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.chat_activity, container, false)
+        val view = inflater.inflate(R.layout.chat_fragment, container, false)
+        (requireActivity() as DecoratedActivity).toggleBottomNavVisibility(false)
+
+
         messageRecyclerView = view.findViewById(R.id.message_recycler_view)
         progressBar = view.findViewById(R.id.progress_bar)
         addMessageImageView = view.findViewById(R.id.add_message_image_view)
@@ -105,11 +122,8 @@ class ChatFragment : Fragment() {
             if (friendlyMessage != null) {
                 friendlyMessage.id = dataSnapshot.key
             }
-            friendlyMessage!!
+            friendlyMessage ?: FriendlyMessage("No messages")
         }
-
-        val chatId = arguments?.getString("chatId")
-            ?: return view // TODO: return better feedback that something went wrong
 
         val messagesRef = firebaseDB.child(MESSAGES_CHILD)
             .child(chatId)
@@ -208,7 +222,6 @@ class ChatFragment : Fragment() {
 
         messageRecyclerView.adapter = firebaseListAdapter
 
-        messageEditText = messageEditText as EditText
         messageEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
@@ -227,8 +240,8 @@ class ChatFragment : Fragment() {
                 mPhotoUrl,
                 null /* no image */
             )
-            firebaseDB.child(MESSAGES_CHILD)
-                .push().setValue(friendlyMessage)
+            saveMessageToDb(friendlyMessage)
+
             messageEditText.setText("")
         }
 
@@ -242,6 +255,22 @@ class ChatFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun saveMessageToDb(friendlyMessage: FriendlyMessage) {
+        val msgId = firebaseDB.child(MESSAGES_CHILD)
+            .child(chatId)
+            .push()
+            .key
+
+        val messageValues = friendlyMessage.toMap()
+
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/messages/$chatId/$msgId"] = messageValues
+        childUpdates["/chats/$chatId/lastMessage"] = friendlyMessage.text.toString()
+        childUpdates["/chats/$chatId/lastMessageTime"] = friendlyMessage.time.toString()
+
+        firebaseDB.updateChildren(childUpdates)
     }
 
     override fun onPause() {
@@ -269,7 +298,9 @@ class ChatFragment : Fragment() {
                         null, username, mPhotoUrl,
                         LOADING_IMAGE_URL
                     )
-                    firebaseDB.child(MESSAGES_CHILD).push()
+                    firebaseDB.child(MESSAGES_CHILD)
+                        .child(chatId)
+                        .push()
                         .setValue(tempMessage) { databaseError, databaseReference ->
                             if (databaseError == null) {
                                 val key = databaseReference.key
@@ -305,6 +336,7 @@ class ChatFragment : Fragment() {
                                     task.result!!.toString()
                                 )
                                 firebaseDB.child(MESSAGES_CHILD)
+                                    .child(chatId)
                                     .child(key!!)
                                     .setValue(friendlyMessage)
                             }

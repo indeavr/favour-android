@@ -48,6 +48,7 @@ interface DecoratedActivity {
     fun switchToNotificaitons()
     fun setToolbar(toolbar: Toolbar)
     fun handleGoogleLogin(account: GoogleSignInAccount?)
+    fun toggleBottomNavVisibility(show: Boolean)
 }
 
 class MainActivity : AppCompatActivity(),
@@ -216,8 +217,14 @@ class MainActivity : AppCompatActivity(),
     inner class ViewPagerAdapter : FragmentPagerAdapter(supportFragmentManager) {
 
         override fun getItem(position: Int): Fragment {
-            return if (currentSide == "provider") providerFragments[position]
-            else consumerFragments[position]
+            return if (currentSide == "provider") {
+                val fragment = supportFragmentManager.findFragmentByTag(position.toString())
+                fragment ?: providerFragments[position]
+            } else {
+                val fragment = supportFragmentManager.findFragmentByTag(position.toString())
+                fragment ?: consumerFragments[position]
+
+            }
         }
 
         override fun getCount(): Int {
@@ -278,6 +285,7 @@ class MainActivity : AppCompatActivity(),
 
             if (provider_pager.currentItem != position) setItem(position)
         } else {
+            consumer_bottom_nav_view.visibility = View.VISIBLE
             val position = indexToConsumerPage.values.indexOf(item.itemId)
 
             if (consumer_pager.currentItem != position) setItem(position)
@@ -532,6 +540,10 @@ class MainActivity : AppCompatActivity(),
             val action = MainNavigationDirections.consumerSearchDest()
             mainNavController.navigate(action)
         }
+    }
+
+    override fun toggleBottomNavVisibility(show: Boolean) {
+        consumer_bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
     }
 }
 

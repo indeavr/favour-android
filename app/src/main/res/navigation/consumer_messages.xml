@@ -16,7 +16,7 @@
             app:destination="@id/chatFragment">
 
             <argument
-                android:name="personName"
+                android:name="chatId"
                 app:argType="string" />
 
         </action>

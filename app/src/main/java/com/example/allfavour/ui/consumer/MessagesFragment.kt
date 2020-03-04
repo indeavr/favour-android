@@ -1,7 +1,6 @@
 package com.example.allfavour.ui.consumer
 
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,23 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
-import com.example.allfavour.ui.ChatFragment
-import com.example.allfavour.ui.FriendlyMessage
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.firebase.ui.database.SnapshotParser
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.consumer_messages_fragment.*
 
 
 /**
@@ -45,23 +37,12 @@ class MessagesFragment : Fragment() {
     val USERS_CHILD = "users"
     val CHAT_CHILD = "chats"
 
-    private lateinit var firebaseListAdapter: FirebaseRecyclerAdapter<FriendlyMessage, ChatFragment.MessageViewHolder>
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.consumer_messages_fragment, container, false)
-
-        val activity = this.requireActivity()
-        viewManager = LinearLayoutManager(activity)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         val user = FirebaseAuth.getInstance().currentUser
         myUserId = user!!.uid
         getMyUsername()
-
-        viewAdapter = PeopleListAdapter(chatData, myUserId, navController)
-
 
         firebaseDB.child(USERS_CHILD)
             .child(myUserId)
@@ -81,10 +62,24 @@ class MessagesFragment : Fragment() {
 
                 }
             })
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.consumer_messages_fragment, container, false)
 
         view.findViewById<Button>(R.id.new_chat)
             .setOnClickListener(::showPeopleList)
 
+        val activity = this.requireActivity()
+        (activity as DecoratedActivity).toggleBottomNavVisibility(true)
+
+
+        viewManager = LinearLayoutManager(activity)
+
+        viewAdapter = PeopleListAdapter(chatData, myUserId, navController)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.chat_people_recycle_list)
 
@@ -105,6 +100,7 @@ class MessagesFragment : Fragment() {
                         val chatItem = snapshot.getValue(ChatItem::class.java)
 
                         if (chatItem != null) {
+                            chatItem.id = snapshot.key
                             val index = chatData.size
                             chatData.add(index, chatItem)
 
@@ -122,7 +118,7 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    fun getMyUsername() {
+    private fun getMyUsername() {
         firebaseDB.child(USERS_CHILD)
             .child(myUserId)
             .child("username")
@@ -142,7 +138,7 @@ class MessagesFragment : Fragment() {
 
     }
 
-    fun showPeopleList(it: View) {
+    private fun showPeopleList(it: View) {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val users = snapshot.children
@@ -197,7 +193,6 @@ class MessagesFragment : Fragment() {
         childUpdates["/chats/$chatId"] = chatItemValues
         childUpdates["/users/$userId/chats/$chatId"] = true
         childUpdates["/users/$myUserId/chats/$chatId"] = true
-        childUpdates["/messages/$chatId"] = {}
 
         firebaseDB.updateChildren(childUpdates)
     }
@@ -244,13 +239,9 @@ class MessagesFragment : Fragment() {
                     myDataset[position].users[notMyId]
 
                 holder.view.setOnClickListener {
-                    val personName = it.findViewById<TextView>(R.id.personName).text.toString()
-//                val args = bundleOf("personName" to personName)
-
+                    val chatId = myDataset[position].id
                     val action =
-                        MessagesFragmentDirections.actionConsumerMessagesDestToChatFragment(
-                            personName
-                        )
+                        MessagesFragmentDirections.actionConsumerMessagesDestToChatFragment(chatId!!)
                     navController.navigate(action)
                 }
             }
@@ -266,6 +257,9 @@ class MessagesFragment : Fragment() {
         var lastMessage: String? = "",
         var lastMessageTime: String? = ""
     ) {
+
+        var id: String? = null
+
         @Exclude
         fun toMap(): Map<String, Any?> {
             return mapOf(
