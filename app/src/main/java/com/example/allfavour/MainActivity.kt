@@ -510,11 +510,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun handleGoogleLogin(account: GoogleSignInAccount?) {
-        firebaseAuthWithGoogle(account!!)
-    }
-
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+        val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
