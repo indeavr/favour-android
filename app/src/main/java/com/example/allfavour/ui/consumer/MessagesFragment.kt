@@ -19,16 +19,15 @@ import com.example.allfavour.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import java.lang.Exception
 
 
 /**
  * A simple [Fragment] subclass.
  */
 class MessagesFragment : Fragment() {
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
-    val navController: NavController by lazy { findNavController(this) }
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private val navController: NavController by lazy { findNavController(this) }
     private val firebaseDB: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
     private val chatData = ArrayList<ChatItem>()
@@ -57,7 +56,7 @@ class MessagesFragment : Fragment() {
                     }
                     chatData.clear()
 
-                    viewAdapter.notifyDataSetChanged()
+                    adapter.notifyDataSetChanged()
                     getFullChatData(chatIds)
                 }
 
@@ -80,14 +79,14 @@ class MessagesFragment : Fragment() {
         (activity as DecoratedActivity).toggleBottomNavVisibility(true)
 
 
-        viewManager = LinearLayoutManager(activity)
+        layoutManager = LinearLayoutManager(activity)
 
-        viewAdapter = PeopleListAdapter(chatData, myUserId, navController)
+        adapter = PeopleListAdapter(chatData, myUserId, navController)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.chat_people_recycle_list)
 
-        recyclerView.layoutManager = viewManager
-        recyclerView.adapter = viewAdapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
 
         recyclerView.hasFixedSize()
 
@@ -107,7 +106,7 @@ class MessagesFragment : Fragment() {
                             val index = chatData.size
                             chatData.add(index, chatItem)
 
-                            viewAdapter.notifyItemInserted(index)
+                            adapter.notifyItemInserted(index)
                         }
 
                         firebaseDB.child(CHAT_CHILD)

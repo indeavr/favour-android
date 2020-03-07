@@ -1,0 +1,7 @@
+query FavoursQuery {
+    favours {
+        id,
+        title,
+        money
+    }
+}
