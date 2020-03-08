@@ -23,6 +23,15 @@ import android.location.Address
 import android.location.Geocoder
 import android.view.Window
 import androidx.appcompat.widget.Toolbar
+import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import java.util.*
 
 
 class AddFavourFragment : DialogFragment() {
@@ -32,7 +41,8 @@ class AddFavourFragment : DialogFragment() {
     }
 
     private val navController: NavController by lazy { NavHostFragment.findNavController(this) }
-
+    private val apiKey: String by lazy { getString(R.string.google_api_key) }
+    private val placesClient: PlacesClient by lazy { Places.createClient(this.context!!) }
 
     private val viewModel: AddFavourViewModel by lazy {
         ViewModelProviders.of(
@@ -43,6 +53,13 @@ class AddFavourFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!Places.isInitialized()) {
+            Places.initialize(
+                requireActivity().applicationContext,
+                apiKey
+            )
+        }
 
         viewModel.status.observe(this, Observer<String> {
             if (it == "success") {
@@ -67,6 +84,7 @@ class AddFavourFragment : DialogFragment() {
 
         return view
     }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -98,6 +116,37 @@ class AddFavourFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        val autocompleteFragment =
+            activity!!.supportFragmentManager.findFragmentById(R.id.maps_autocomplete_fragment) as AutocompleteSupportFragment
+
+        autocompleteFragment.setPlaceFields(
+            listOf(
+                Place.Field.ADDRESS,
+                Place.Field.ADDRESS_COMPONENTS,
+                Place.Field.ID,
+                Place.Field.NAME
+            )
+        )
+
+//        autocompleteFragment
+//            .setTypeFilter(TypeFilter.ADDRESS)
+
+        autocompleteFragment
+            .setCountry("BG")
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+
+            }
+
+            override fun onError(status: Status) {
+
+            }
+        })
+
+
 
         submit_add_favour.setOnClickListener {
             val title = title_favour_input.editText!!.text.toString()

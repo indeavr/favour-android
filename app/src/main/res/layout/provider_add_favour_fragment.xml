@@ -114,6 +114,21 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <fragment
+        android:id="@+id/maps_autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit_add_favour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adress_favour_input"
+        app:layout_constraintVertical_bias="0.188" />
+
     <Button
         android:id="@+id/submit_add_favour"
         android:layout_width="0dp"
