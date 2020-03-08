@@ -2,13 +2,7 @@ package com.example.allfavour.data
 
 import LoginMutation
 import RegisterMutation
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
-import com.apollographql.apollo.exception.ApolloException
 import com.example.allfavour.data.model.LoggedInUser
 import com.example.allfavour.graphql.GraphqlConnector
 

@@ -7,22 +7,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
 import com.example.allfavour.data.model.Favour
-import com.example.allfavour.ui.auth.RegisterViewModel
-import com.example.allfavour.ui.auth.RegisterViewModelFactory
 import com.example.allfavour.ui.auth.SearchViewModelFactory
-import com.example.allfavour.utility.HandleNotifications
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.basic_info_form_fragment.*
-import kotlinx.android.synthetic.main.consumer_search_fragment.*
-import kotlinx.android.synthetic.main.main_nav_activity.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
 
 class SearchFragment : Fragment() {
 
@@ -33,6 +26,7 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var listData: ArrayList<Favour>
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private val navController: NavController by lazy { NavHostFragment.findNavController(this) }
 
@@ -46,11 +40,13 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getFavours()
+//        viewModel.getFavours()
 
         viewModel.favoursList.observe(this, Observer<ArrayList<Favour>> { favours ->
+            swipeRefreshLayout.isRefreshing = false
+
             listData.clear()
-            listData = favours
+            listData.addAll(favours)
 
             adapter.notifyDataSetChanged()
         })
@@ -62,13 +58,40 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.consumer_search_fragment, container, false)
+
+        swipeRefreshLayout =
+            view.findViewById(R.id.consumer_search_swipe_container) as SwipeRefreshLayout
+
+        swipeRefreshLayout.setOnRefreshListener {
+            swipeRefreshLayout.isRefreshing = true
+
+            viewModel.getFavours()
+        }
+
+        swipeRefreshLayout.setColorSchemeResources(
+            R.color.primaryColor,
+            android.R.color.holo_green_dark,
+            android.R.color.holo_orange_dark,
+            android.R.color.holo_blue_dark
+        )
+
+        swipeRefreshLayout.post {
+            swipeRefreshLayout.isRefreshing = true
+
+            viewModel.getFavours()
+        }
+
+
         val activity = this.requireActivity()
 
-        listData = arrayListOf()
+        listData = viewModel.favoursList.value ?: arrayListOf()
 
         val favourRecycleList = view.findViewById<RecyclerView>(R.id.favours_recycle_list)
-        favourRecycleList.layoutManager = LinearLayoutManager(activity)
-        favourRecycleList.adapter = FavoursAdapter(this.listData, navController)
+        layoutManager = LinearLayoutManager(activity)
+        adapter = FavoursAdapter(this.listData, navController)
+
+        favourRecycleList.adapter = adapter
+        favourRecycleList.layoutManager = layoutManager
 
         return view
     }
@@ -111,20 +134,14 @@ class SearchFragment : Fragment() {
             parent: ViewGroup,
             viewType: Int
         ): ViewHolder {
-            // create a new view
             val textView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.favour_item, parent, false)
-
-            // set the view's size, margins, paddings and layout parameters
 
             return ViewHolder(textView)
         }
 
-        // Replace the contents of a view (invoked by the layout manager)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // - get element from your dataset at this position
-            // - replace the contents of the view wi
-            // th that element
+
             if (myDataset.isNullOrEmpty()) {
 
             } else {
@@ -134,9 +151,13 @@ class SearchFragment : Fragment() {
                 holder.view.findViewById<TextView>(R.id.money).text = favour.money.toString()
 
                 holder.view.setOnClickListener {
-                    //                    val action =
-//                        MessagesFragmentDirections.actionConsumerMessagesDestToChatFragment(chatId!!)
-//                    navController.navigate(action)
+                    if (favour.id != null) {
+                        navController.navigate(
+                            SearchFragmentDirections.actionConsumerSearchDestToFavourFragment(
+                                favour.id!!
+                            )
+                        )
+                    }
                 }
             }
         }

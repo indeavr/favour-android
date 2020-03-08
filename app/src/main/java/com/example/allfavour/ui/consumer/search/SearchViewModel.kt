@@ -12,11 +12,17 @@ import kotlinx.coroutines.launch
 class SearchViewModel(private val favourRepository: FavourRepository) : ViewModel() {
     private val _favoursList = MutableLiveData<ArrayList<Favour>>()
     val favoursList: LiveData<ArrayList<Favour>> = this._favoursList
+    var currentFavour: Favour? = null
+
 
     fun getFavours() {
         viewModelScope.launch {
             val result = favourRepository.getFavours()
             _favoursList.value = result
         }
+    }
+
+    fun setCurrentFavour(id: String) {
+        currentFavour = favoursList.value!!.find { it.id == id }
     }
 }

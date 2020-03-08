@@ -26,15 +26,12 @@
         android:theme="@style/AllFavour"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.example.allfavour.ui.auth.GoogleSignInActivty"
-            android:label="@string/title_activity_google_sign_in_activty"
-            android:theme="@style/AllFavour.NoActionBar"/>
-        <activity android:name=".ui.ChatActivity" />
-        <activity
             android:name=".MainActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity="">
+            android:taskAffinity=""
+
+            >
 
             <nav-graph android:value="@navigation/consumer_notifications" />
 

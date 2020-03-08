@@ -539,7 +539,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun toggleBottomNavVisibility(show: Boolean) {
-        consumer_bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
+        if (currentSide == "provider") {
+            provider_bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
+        } else {
+            consumer_bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
+        }
     }
 }
 

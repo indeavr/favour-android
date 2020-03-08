@@ -1,0 +1,3 @@
+mutation CreateFavour($favour: FavourInputType!) {
+    createFavour(userId: "2939671F-BC98-4BBB-52B7-08D75DC8C537", favour: $favour)
+}

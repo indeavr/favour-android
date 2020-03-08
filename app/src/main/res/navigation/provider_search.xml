@@ -9,6 +9,15 @@
         android:id="@+id/provider_search_dest"
         android:name="com.example.allfavour.ui.provider.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/provider_search_fragment" />
+        tools:layout="@layout/provider_search_fragment" >
+        <action
+            android:id="@+id/action_provider_add_favour"
+            app:destination="@id/addFavourFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFavourFragment"
+        android:name="com.example.allfavour.ui.provider.addFavour.AddFavourFragment"
+        android:label="provider_add_favour_fragment"
+        tools:layout="@layout/provider_add_favour_fragment" />
 
 </navigation>

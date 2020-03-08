@@ -1,10 +1,11 @@
 package com.example.allfavour.data
 
-import FavourQuery
+import CreateFavourMutation
 import FavoursQuery
 import com.apollographql.apollo.coroutines.toDeferred
 import com.example.allfavour.data.model.Favour
 import com.example.allfavour.graphql.GraphqlConnector
+import type.FavourInputType
 
 class FavourRepository {
 
@@ -21,11 +22,21 @@ class FavourRepository {
                 Favour(
                     it!!.id,
                     it.title,
+                    it.description,
                     it.money
                 )
             )
         }
 
         return favours
+    }
+
+    // maybe this will be an inputType
+    suspend fun addFavour(favour: Favour) {
+        val input = FavourInputType("", favour.title, "", favour.money, "", "")
+        val mutation = CreateFavourMutation(input)
+        val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
+
+        print(result.data())
     }
 }
