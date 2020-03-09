@@ -5,6 +5,7 @@ import RegisterMutation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.allfavour.graphql.api.LoginWithGoogleMutation
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
@@ -31,5 +32,16 @@ class LoginRepository {
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         return LoggedInUser(result.data()!!.register!!.userId, username, result.data()!!.register!!.token)
+    }
+
+    suspend fun loginWithGoogle(username: String, serverToken: String): LoggedInUser {
+        val mutation = LoginWithGoogleMutation(serverToken)
+        val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
+
+        return LoggedInUser(
+            result.data()!!.loginWithGoogle!!.userId,
+            username,
+            result.data()!!.loginWithGoogle!!.token
+        )
     }
 }
