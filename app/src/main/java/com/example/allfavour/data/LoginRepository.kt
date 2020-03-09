@@ -1,7 +1,7 @@
 package com.example.allfavour.data
 
-import LoginMutation
-import RegisterMutation
+import com.allfavour.graphql.api.LoginMutation
+import com.allfavour.graphql.api.RegisterMutation
 import com.apollographql.apollo.coroutines.toDeferred
 import com.example.allfavour.data.model.LoggedInUser
 import com.example.allfavour.graphql.GraphqlConnector

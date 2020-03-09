@@ -3,6 +3,14 @@ query FavoursQuery {
     id
     title
     description
-    money
+    money,
+    location {
+        id,
+        address,
+        country,
+        town,
+        longitude,
+        latitude
+    }
   }
 }

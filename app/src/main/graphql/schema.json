@@ -95,7 +95,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Favour",
+                "name": "FavourType",
                 "ofType": null
               }
             },
@@ -710,6 +710,22 @@
         "description": null,
         "fields": [
           {
+            "name": "address",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "country",
             "description": null,
             "args": [],
@@ -726,7 +742,39 @@
             "deprecationReason": null
           },
           {
-            "name": "streetAddress",
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "latitude",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "longitude",
             "description": null,
             "args": [],
             "type": {
@@ -1608,7 +1656,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Favour",
+        "name": "FavourType",
         "description": null,
         "fields": [
           {
@@ -1648,13 +1696,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "LocationType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1671,62 +1715,6 @@
                 "name": "Float",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "periods",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "PeriodType",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "provider",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CompanyProviderType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "requiredSkills",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "SkillType",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "timePosted",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2550,7 +2538,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "town",
+            "name": "id",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -2578,7 +2566,7 @@
             "defaultValue": null
           },
           {
-            "name": "street",
+            "name": "address",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -2592,7 +2580,35 @@
             "defaultValue": null
           },
           {
-            "name": "zip",
+            "name": "town",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "latitude",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "longitude",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -3300,7 +3316,7 @@
             "defaultValue": null
           },
           {
-            "name": "location",
+            "name": "state",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -3314,14 +3330,14 @@
             "defaultValue": null
           },
           {
-            "name": "state",
+            "name": "location",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "INPUT_OBJECT",
+                "name": "LocationInput",
                 "ofType": null
               }
             },

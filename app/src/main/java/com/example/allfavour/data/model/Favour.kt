@@ -5,5 +5,8 @@ data class Favour(
     var id: String?,
     var title: String,
     var description: String,
-    var money: Double
-)
+    var money: Double,
+    var location: LocationModel
+) {
+
+}
