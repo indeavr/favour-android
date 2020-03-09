@@ -6,7 +6,7 @@ data class Favour(
     var title: String,
     var description: String,
     var money: Double,
-    var location: LocationModel
+    var location: LocationModel?
 ) {
 
 }

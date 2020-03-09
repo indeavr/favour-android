@@ -20,6 +20,7 @@ class FavourRepository {
 
         val favours = arrayListOf<Favour>()
 
+        // TODO: handle null location
         receivedFavours.forEach {
             favours.add(
                 Favour(
@@ -27,14 +28,7 @@ class FavourRepository {
                     it.title,
                     it.description,
                     it.money,
-                    LocationModel(
-                        id = it.id,
-                        country = it.location!!.country,
-                        town = it.location.town!!,
-                        address = it.location.address!!,
-                        latitude = it.location.latitude.toDouble(),
-                        longitude = it.location.longitude.toDouble()
-                    )
+                   null
                 )
             )
         }
@@ -45,12 +39,12 @@ class FavourRepository {
     // maybe this will be an inputType
     suspend fun addFavour(favour: Favour) {
         val locationInput = LocationInput(
-            id = favour.id!!,
-            country = favour.location.country!!,
-            town = favour.location.town!!,
-            address = favour.location.address!!,
-            latitude = favour.location.latitude.toString(),
-            longitude = favour.location.longitude.toString()
+            id = favour.location!!.id!!,
+            country = favour.location!!.country!!,
+            town = favour.location!!.town!!,
+            address = favour.location!!.address!!,
+            latitude = favour.location!!.latitude.toString(),
+            longitude = favour.location!!.longitude.toString()
         )
 
         val input = FavourInputType("", favour.title, "", favour.money, "", locationInput)
