@@ -4,9 +4,9 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search" />
 
-    <item android:id="@+id/provider_messages_dest"
-        android:icon="@drawable/ic_message"
-        android:title="@string/messages" />
+<!--    <item android:id="@+id/provider_messages_dest"-->
+<!--        android:icon="@drawable/ic_message"-->
+<!--        android:title="@string/messages" />-->
 
     <item android:id="@+id/provider_profile_dest"
         android:icon="@drawable/ic_person"

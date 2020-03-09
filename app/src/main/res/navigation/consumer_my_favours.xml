@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consumer_my_favours"
+    app:startDestination="@id/consumer_my_favours_dest">
+
+    <fragment
+        android:id="@+id/consumer_my_favours_dest"
+        android:name="com.example.allfavour.ui.consumer.myFavours.MyFavoursFragment"
+        android:label="My Favours"
+        tools:layout="@layout/consumer_my_favours_fragment" />
+</navigation>

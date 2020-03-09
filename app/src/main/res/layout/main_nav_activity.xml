@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +23,7 @@
             app:navGraph="@navigation/main_navigation" />
     </FrameLayout>
 
-    <!--    Auth-->
+<!--        Auth-->
     <FrameLayout
         android:id="@+id/auth_wrapper"
         android:layout_width="match_parent"
@@ -39,54 +38,107 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/main_navigation" />
+            app:navGraph="@navigation/auth_navigation" />
     </FrameLayout>
 
     <!--    Consumer-->
     <FrameLayout
         android:id="@+id/consumer_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/consumer_drawer_layout"
+        <!--            <androidx.appcompat.widget.Toolbar-->
+        <!--                android:id="@+id/consumer_toolbar"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="?attr/actionBarSize"-->
+        <!--                android:background="@color/primaryColor"-->
+        <!--                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"-->
+        <!--                app:menu="@menu/consumer_top_menu" />-->
+        <!--            <fragment-->
+        <!--                android:id="@+id/consumer_nav_host"-->
+        <!--                android:name="androidx.navigation.fragment.NavHostFragment"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="0dp"-->
+        <!--                android:layout_weight="1"-->
+        <!--                app:defaultNavHost="true"-->
+        <!--                app:navGraph="@navigation/consumer_navigation" />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <!--            <androidx.appcompat.widget.Toolbar-->
+            <!--                android:id="@+id/consumer_toolbar"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@color/primaryColor"-->
+            <!--                android:minHeight="?attr/actionBarSize"-->
+            <!--                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:menu="@menu/consumer_top_menu" />-->
+
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/consumer_profile_wrapper"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:visibility="invisible"-->
+            <!--                app:layout_constraintBottom_toTopOf="@id/consumer_bottom_nav_view"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/consumer_toolbar"-->
+            <!--                >-->
+
+            <!--                <fragment-->
+            <!--                    android:id="@+id/consumer_profile_nav_host"-->
+            <!--                    android:name="androidx.navigation.fragment.NavHostFragment"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    app:defaultNavHost="true"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/consumer_toolbar"-->
+            <!--                    app:navGraph="@navigation/consumer_profile" />-->
+
+            <!--            </FrameLayout>-->
+
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/consumer_search_wrapper"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                app:layout_constraintBottom_toTopOf="@id/consumer_bottom_nav_view"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/consumer_toolbar">-->
+
+            <!--                <fragment-->
+            <!--                    android:id="@+id/consumer_search_nav_host"-->
+            <!--                    android:name="androidx.navigation.fragment.NavHostFragment"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    app:defaultNavHost="true"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/consumer_toolbar"-->
+            <!--                    app:navGraph="@navigation/consumer_search" />-->
+
+            <!--            </FrameLayout>-->
+
+            <com.example.allfavour.NonSwipingViewPager
+                android:id="@+id/consumer_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent" />
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/consumer_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/primaryColor"
-                    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/consumer_bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:labelVisibilityMode="labeled"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/consumer_bottom_nav" />
 
-                <fragment
-                    android:id="@+id/consumer_nav_host"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/consumer_navigation" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
-
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/consumer_nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:menu="@menu/consumer_drawer_nav" />
-
-        </androidx.drawerlayout.widget.DrawerLayout>
     </FrameLayout>
 
     <!--    Provider-->
@@ -98,41 +150,78 @@
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/provider_drawer_layout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.example.allfavour.ui.provider.ProviderFragment">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <!--            <androidx.appcompat.widget.Toolbar-->
+            <!--                android:id="@+id/provider_toolbar"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@color/primaryColor"-->
+            <!--                android:minHeight="?attr/actionBarSize"-->
+            <!--                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:menu="@menu/provider_top_menu" />-->
+
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/provider_profile_wrapper"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:visibility="invisible"-->
+            <!--                app:layout_constraintBottom_toTopOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+            <!--                <fragment-->
+            <!--                    android:id="@+id/provider_search_nav_host"-->
+            <!--                    android:name="androidx.navigation.fragment.NavHostFragment"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    app:defaultNavHost="true"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/provider_toolbar"-->
+            <!--                    app:navGraph="@navigation/provider_search" />-->
+
+            <!--            </FrameLayout>-->
+
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/provider_search_wrapper"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                app:layout_constraintBottom_toTopOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+
+            <!--                <fragment-->
+            <!--                    android:id="@+id/provider_profile_nav_host"-->
+            <!--                    android:name="androidx.navigation.fragment.NavHostFragment"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    app:defaultNavHost="true"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/provider_toolbar"-->
+            <!--                    app:navGraph="@navigation/provider_profile" />-->
+
+            <!--            </FrameLayout>-->
+
+            <com.example.allfavour.NonSwipingViewPager
+                android:id="@+id/provider_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent" />
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/provider_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/primaryColor"
-                    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/provider_bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:labelVisibilityMode="labeled"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/provider_bottom_nav" />
 
-                <fragment
-                    android:id="@+id/provider_nav_host"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/provider_navigation" />
-            </LinearLayout>
-
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/provider_nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:menu="@menu/provider_drawer_nav" />
-
-        </androidx.drawerlayout.widget.DrawerLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 

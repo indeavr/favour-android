@@ -16,7 +16,6 @@ import com.example.allfavour.MainActivity
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
-import com.example.allfavour.ui.WelcomeFragmentDirections
 
 class ProfileFragment : Fragment() {
 

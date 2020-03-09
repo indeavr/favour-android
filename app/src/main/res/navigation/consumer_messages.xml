@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consumer_messages"
+    app:startDestination="@id/consumer_messages_dest">
+
+    <fragment
+        android:id="@+id/consumer_messages_dest"
+        android:name="com.example.allfavour.ui.consumer.MessagesFragment"
+        android:label="Messages"
+        tools:layout="@layout/consumer_messages_fragment">
+
+        <action
+            android:id="@+id/action_consumer_messages_dest_to_chatFragment"
+            app:destination="@id/chatFragment">
+
+            <argument
+                android:name="personName"
+                app:argType="string" />
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.allfavour.ui.ChatFragment"
+        android:label="ChatFragment" />
+
+</navigation>

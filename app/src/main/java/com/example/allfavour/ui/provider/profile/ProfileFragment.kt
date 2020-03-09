@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 
 import com.example.allfavour.R
+import com.example.allfavour.ui.consumer.profile.ProfileFragmentDirections
 
 class ProfileFragment : Fragment() {
 

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/auth_navigation"
-        app:startDestination="@id/registerFragment">
-
-
-    <fragment
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation"
+    app:startDestination="@id/loginWithFragment">
+<!--    <fragment-->
+<!--        android:id="@+id/basicInfoFormFragment"-->
+<!--        android:name="com.example.allfavour.ui.BasicInfoFormFragment"-->
+<!--        android:label="basic_info_form_fragment"-->
+<!--        tools:layout="@layout/basic_info_form_fragment" />-->
+  <fragment
             android:id="@+id/registerFragment"
             android:name="com.example.allfavour.ui.auth.RegisterFragment"
             android:label="register_fragment"
@@ -17,11 +20,27 @@
         <action
                 android:id="@+id/action_registerFragment_to_loginFragment"
                 app:destination="@id/loginFragment" />
-    </fragment>
+      <action
+              android:id="@+id/action_registerFragment_to_loginFragment2"
+              app:destination="@id/loginFragment" />
+  </fragment>
     <fragment
             android:id="@+id/welcomeFragment2"
             android:name="com.example.allfavour.ui.WelcomeFragment"
             android:label="WelcomeFragment" />
+    <fragment
+        android:id="@+id/loginWithFragment"
+        android:name="com.example.allfavour.ui.auth.LoginWithFragment"
+        android:label="login_with_fragment"
+        tools:layout="@layout/login_with_fragment" >
+        <action
+            android:id="@+id/action_loginWithFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+                android:id="@+id/action_loginWithFragment_to_loginFragment2"
+                app:destination="@id/loginFragment" />
+
+    </fragment>
     <fragment
             android:id="@+id/loginFragment"
             android:name="com.example.allfavour.ui.auth.LoginFragment"
@@ -29,8 +48,5 @@
         <action
                 android:id="@+id/action_loginFragment_to_registerFragment"
                 app:destination="@id/registerFragment" />
-        <action
-                android:id="@+id/action_loginFragment_to_welcomeFragment2"
-                app:destination="@id/welcomeFragment2" />
     </fragment>
 </navigation>
