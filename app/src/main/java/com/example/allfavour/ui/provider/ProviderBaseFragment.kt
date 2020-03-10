@@ -2,20 +2,16 @@ package com.example.allfavour.ui.provider
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
+import com.example.allfavour.DecoratedActivity
 
 class ProviderBaseFragment : Fragment() {
 
@@ -26,10 +22,11 @@ class ProviderBaseFragment : Fragment() {
     // root destinations
     private val rootDestinations = setOf(
         R.id.provider_search_dest,
-//        R.id.consumer_my_favours_dest,
-//        R.id.consumer_my_interests_dest,
-        R.id.provider_profile_dest
-//        R.id.consumer_messages_dest
+        R.id.provider_my_favours_dest,
+        R.id.provider_my_interests_dest,
+        R.id.provider_profile_dest,
+//        R.id.provider_notifications_dest
+        R.id.provider_messages_dest
     )
     // nav config with root destinations
     private val appBarConfig = AppBarConfiguration(rootDestinations)
@@ -38,7 +35,6 @@ class ProviderBaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
         // extract arguments from bundle
         arguments?.let {
             layoutRes = it.getInt(KEY_LAYOUT)
@@ -48,12 +44,61 @@ class ProviderBaseFragment : Fragment() {
         } ?: return
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
+        (requireActivity() as DecoratedActivity).setToolbar(toolbar)
+        toolbar.inflateMenu(R.menu.provider_top_menu)
+        toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
+
+        super.onActivityCreated(savedInstanceState)
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    fun onConsumerItemSelected(item: MenuItem): Boolean {
+        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
+
+        when (item.itemId) {
+            R.id.consumer_notifications_dest -> {
+                (requireActivity() as DecoratedActivity).switchToNotificaitons()
+            }
+            R.id.consumer_to_provider_dest -> {
+                when (navHostId) {
+                    R.id.provider_search_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+                    }
+                    R.id.provider_profile_nav_host -> {
+                        mainNavController.navigate(MainNavigationDirections.providerProfileDest())
+                    }
+                    else -> mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+                }
+            }
+        }
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        var a = R.layout.provider_profile_nav_host == layoutRes
+        var b = R.layout.provider_notifications_nav_host == layoutRes
+        var c = R.layout.provider_messages_nav_host == layoutRes
+        var d = R.layout.provider_search_nav_host == layoutRes
+        var da = R.layout.provider_my_favours_nav_host == layoutRes
+        var k = R.layout.provider_my_interests_nav_host == layoutRes
+
         return if (layoutRes == defaultInt) null
         else inflater.inflate(layoutRes, container, false)
     }
@@ -75,58 +120,6 @@ class ProviderBaseFragment : Fragment() {
             .navigateUp(appBarConfig)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
-        toolbar.inflateMenu(R.menu.provider_top_menu)
-        toolbar.setOnMenuItemClickListener(this::onProviderItemSelected)
-
-        super.onActivityCreated(savedInstanceState)
-    }
-
-
-    fun onProviderItemSelected(item: MenuItem): Boolean {
-        val currentDestination =
-            requireActivity().findNavController(navHostId).currentDestination?.id;
-        val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
-
-
-//        val a = currentDestination == R.id.consumer_search_navigation
-//        val b = currentDestination == R.id.consumer_search_dest
-
-        var options = navOptions {
-            anim {
-                enter = R.anim.slide_in_up
-                exit = R.anim.slide_out_down
-                popEnter = R.anim.slide_in_up
-                popExit = R.anim.slide_out_down
-            }
-        }
-
-        when (item.itemId) {
-            R.id.provider_notifications_dest -> {
-                mainNavController.navigate(
-                    MainNavigationDirections.consumerNotificationsDest(),
-                    options
-                )
-
-                return super.onOptionsItemSelected(item)
-            }
-            R.id.provider_to_consumer_dest -> {
-                when (navHostId) {
-                    R.id.provider_search_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
-                    }
-                    R.id.provider_profile_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.consumerProfileDest())
-                    }
-                    else -> mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
-                }
-            }
-        }
-
-        return true
-    }
-
     fun popToRoot() {
         val navController =
             requireActivity().findNavController(navHostId)
@@ -136,8 +129,18 @@ class ProviderBaseFragment : Fragment() {
         )
     }
 
-    fun handleDeepLink(intent: Intent): Boolean =
-        false
+    fun handleDeepLink(intent: Intent): Boolean {
+        var res = false
+        try {
+            res = requireActivity()
+                .findNavController(navHostId)
+                .handleDeepLink(intent)
+        } catch (e: IllegalStateException) {
+            println("tui kat stane")
+        }
+
+        return res
+    }
 
     companion object {
 

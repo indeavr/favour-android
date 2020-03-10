@@ -14,7 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 import com.example.allfavour.R
-import com.example.allfavour.services.authentication.AuthenticationProvider
+import com.example.allfavour.services.authentication.AuthenticationConsumer
 import com.example.allfavour.ui.WelcomeFragmentDirections
 import com.example.allfavour.ui.auth.RegisterViewModelFactory
 import kotlinx.android.synthetic.main.register_fragment.*
@@ -57,7 +57,7 @@ class RegisterFragment : Fragment() {
             val account: Account = addOrFindAccount(email, password)
 
             with(accountManager) {
-                AuthenticationProvider.setAuthToken("FavourToken", context!!)
+                AuthenticationConsumer.setAuthToken("FavourToken", context!!)
                 setAuthToken(account, "FavourToken", it.token)
                 setPassword(account, password)
                 setUserData(account, "FavourToken", "FavourToken")

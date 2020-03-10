@@ -48,7 +48,7 @@ class BasicInfoFormFragment : Fragment() {
 
     private fun setupSubmit() {
         viewModel.submittedSuccessfully.observe(this, Observer<Boolean> {
-            val action = MainNavigationDirections.consumerSearchDest()
+            val action = MainNavigationDirections.providerSearchDest()
             mainNavController?.navigate(action)
         })
     }

@@ -2,29 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/consumer_search_navigation"
+    android:id="@+id/consumer_search"
     app:startDestination="@+id/consumer_search_dest">
 
     <fragment
         android:id="@+id/consumer_search_dest"
         android:name="com.example.allfavour.ui.consumer.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/consumer_search_fragment">
+        tools:layout="@layout/consumer_search_fragment" >
         <action
-            android:id="@+id/action_consumer_search_dest_to_favourFragment"
-            app:destination="@id/favourFragment">
-
-            <argument
-                android:name="fragmentId"
-                app:argType="string" />
-
-        </action>
+            android:id="@+id/action_consumer_add_favour"
+            app:destination="@id/addFavourFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/favourFragment"
-        android:name="com.example.allfavour.ui.consumer.favour.FavourFragment"
-        android:label="consumer_favour_fragment"
-        tools:layout="@layout/consumer_favour_fragment" />
+        android:id="@+id/addFavourFragment"
+        android:name="com.example.allfavour.ui.consumer.addFavour.AddFavourFragment"
+        android:label="consumer_add_favour_fragment"
+        tools:layout="@layout/consumer_add_favour_fragment" />
 
 </navigation>

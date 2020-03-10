@@ -21,12 +21,12 @@
     <string name="messages">Messages</string>
     <string name="profile">Profile</string>
     <string name="notifications">Notifications</string>
-    <string name="consumer_switch">Switch To Provider</string>
+    <string name="provider_switch">Switch To Consumer</string>
     <string name="my_account">My Account</string>
 
 
-    <!--    Provider-->
-    <string name="provider_switch">Switch To Consumer</string>
+    <!--    Consumer-->
+    <string name="consumer_switch">Switch To Consumer</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

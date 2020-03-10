@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/provider_my_interests"
+    app:startDestination="@id/provider_my_interests_dest">
+
+    <fragment
+        android:id="@+id/provider_my_interests_dest"
+        android:name="com.example.allfavour.ui.provider.myInterests.MyInterestsFragment"
+        android:label="My Interests"
+        tools:layout="@layout/provider_my_interests_fragment" />
+</navigation>

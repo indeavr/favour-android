@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.allfavour.DecoratedActivity
-import com.example.allfavour.ui.consumer.MessagesFragment
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions.Builder
 import com.firebase.ui.database.SnapshotParser

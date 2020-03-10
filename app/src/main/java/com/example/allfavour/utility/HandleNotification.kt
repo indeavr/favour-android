@@ -40,7 +40,7 @@ object HandleNotifications {
 
         return NavDeepLinkBuilder(context)
             .setGraph(R.navigation.main_navigation)
-            .setDestination(R.id.consumer_profile_dest)
+            .setDestination(R.id.provider_profile_dest)
             .setArguments(bundle)
             .createPendingIntent()
     }

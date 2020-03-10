@@ -2,7 +2,7 @@ package com.example.allfavour.graphql
 
 import android.accounts.AccountManager
 import android.content.Context
-import com.example.allfavour.services.authentication.AuthenticationProvider
+import com.example.allfavour.services.authentication.AuthenticationConsumer
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -29,7 +29,7 @@ class AuthenticationInterceptor(val context: Context) : Interceptor {
             val tokenType = accountManager.getUserData(accounts[0], "WorkFavour")
             val account = accounts[0]
             val token =
-                AuthenticationProvider.getAuthToken(context) //accountManager.peekAuthToken(account, tokenType)
+                AuthenticationConsumer.getAuthToken(context) //accountManager.peekAuthToken(account, tokenType)
             if (token != null) {
                 modifiedRequest
                     .header("Authorization", "Bearer $token")

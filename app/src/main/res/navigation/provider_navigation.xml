@@ -5,40 +5,59 @@
     android:id="@+id/provider_navigation"
     app:startDestination="@id/provider_search_dest">
 
-    <include app:graph="@navigation/provider_profile"/>
+    <fragment
+        android:id="@+id/provider_search_dest"
+        android:name="com.example.allfavour.ui.provider.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/provider_search_fragment" />
 
-    <include app:graph="@navigation/provider_search"/>
+    <fragment
+        android:id="@+id/provider_my_favours_dest"
+        android:name="com.example.allfavour.ui.provider.myFavours.MyFavoursFragment"
+        android:label="My Favours"
+        tools:layout="@layout/provider_my_favours_fragment" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/provider_search_dest"-->
-<!--        android:name="com.example.allfavour.ui.provider.search.SearchFragment"-->
-<!--        android:label="Search"-->
-<!--        tools:layout="@layout/provider_search_fragment" />-->
+    <fragment
+        android:id="@+id/provider_my_interests_dest"
+        android:name="com.example.allfavour.ui.provider.myInterests.MyInterestsFragment"
+        android:label="My Interests"
+        tools:layout="@layout/provider_my_interests_fragment" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/provider_notifications_dest"-->
-<!--        android:name="com.example.allfavour.ui.provider.notifications.NotificationsFragment"-->
-<!--        android:label="Notifications"-->
-<!--        tools:layout="@layout/provider_notifications_fragment" />-->
+    <fragment
+        android:id="@+id/provider_notifications_dest"
+        android:name="com.example.allfavour.ui.provider.notifications.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/provider_notifications_fragment" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/provider_profile_dest"-->
-<!--        android:name="com.example.allfavour.ui.provider.profile.ProfileFragment"-->
-<!--        android:label="Profile"-->
-<!--        tools:layout="@layout/provider_profile_fragment">-->
-<!--        <action-->
-<!--            android:id="@+id/my_account_dest_action"-->
-<!--            app:destination="@id/provider_my_account_dest"-->
-<!--            app:enterAnim="@anim/slide_in_left"-->
-<!--            app:exitAnim="@anim/slide_out_right"-->
-<!--            app:popEnterAnim="@anim/slide_in_left"-->
-<!--            app:popExitAnim="@anim/slide_out_right" />-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/provider_profile_dest"
+        android:name="com.example.allfavour.ui.provider.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/provider_profile_fragment">
+        <action
+            android:id="@+id/my_account_dest_action"
+            app:destination="@id/provider_my_account_dest"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/provider_my_account_dest"-->
-<!--        android:name="com.example.allfavour.ui.provider.profile.myAccount.MyAccountFragment"-->
-<!--        android:label="@string/my_account"-->
-<!--        tools:layout="@layout/provider_my_account_fragment" />-->
+    <fragment
+        android:id="@+id/provider_my_account_dest"
+        android:name="com.example.allfavour.ui.provider.profile.myAccount.MyAccountFragment"
+        android:label="@string/my_account"
+        tools:layout="@layout/provider_my_account_fragment" />
+
+    <!--    <activity-->
+    <!--        android:id="@+id/provider_to_provider_dest"-->
+    <!--        android:name="com.example.allfavour.ui.provider.providerActivity"-->
+    <!--        android:label="provider_nav_activity"-->
+    <!--        tools:layout="@layout/provider_nav_host" >-->
+    <!--        <argument-->
+    <!--            android:name="currentDest"-->
+    <!--            app:argType="string"-->
+    <!--            android:defaultValue="1" />-->
+    <!--    </activity>-->
 
 </navigation>

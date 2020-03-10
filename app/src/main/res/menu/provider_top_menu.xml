@@ -10,6 +10,6 @@
     <item
         android:id="@+id/provider_to_consumer_dest"
         android:icon="@drawable/ic_refresh"
-        android:title="@string/provider_switch"
+        android:title="@string/consumer_switch"
         app:showAsAction="ifRoom" />
 </menu>

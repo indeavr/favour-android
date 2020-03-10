@@ -3,7 +3,7 @@ package com.example.allfavour.services.authentication
 import android.accounts.AccountManager
 import android.content.Context
 
-object AuthenticationProvider {
+object AuthenticationConsumer {
     private var authToken: String? = null
 
     fun getUserId(context: Context): String {

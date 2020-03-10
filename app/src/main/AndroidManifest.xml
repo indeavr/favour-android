@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="com.google.android.consumers.gsf.permission.READ_GSERVICES"/>
 
     <application
         android:allowBackup="true"
@@ -34,7 +34,7 @@
 
             >
 
-            <nav-graph android:value="@navigation/consumer_notifications" />
+            <nav-graph android:value="@navigation/provider_notifications" />
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

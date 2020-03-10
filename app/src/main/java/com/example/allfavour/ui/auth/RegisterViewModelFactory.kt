@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.allfavour.data.LoginRepository
 
 /**
- * ViewModel provider factory to instantiate LoginViewModel.
+ * ViewModel consumer factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
 class RegisterViewModelFactory : ViewModelProvider.Factory {

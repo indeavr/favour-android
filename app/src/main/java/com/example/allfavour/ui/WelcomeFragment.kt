@@ -36,13 +36,13 @@ class WelcomeFragment : Fragment() {
 //            findNavController().navigate(action)
 //        }
 //
-//        provider_button.setOnClickListener {
-//            val action = WelcomeFragmentDirections.providerDest()
+//        consumer_button.setOnClickListener {
+//            val action = WelcomeFragmentDirections.consumerDest()
 //            findNavController().navigate(action)
 //        }
 //
-//        consumer_button.setOnClickListener {
-//            val action = WelcomeFragmentDirections.consumerDest()
+//        provider_button.setOnClickListener {
+//            val action = WelcomeFragmentDirections.providerDest()
 //            findNavController().navigate(action)
 //        }
     }
