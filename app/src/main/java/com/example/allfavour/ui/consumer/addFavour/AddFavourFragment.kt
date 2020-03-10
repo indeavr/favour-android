@@ -166,7 +166,8 @@ class AddFavourFragment : DialogFragment() {
                 )
 
                 val location = LocationModel(
-                    id = place.id!!,
+                    id = null,
+                    mapsId = place.id!!,
                     address = place.address!!,
                     country = addresses[0].countryName,
                     latitude = coordinates.latitude,

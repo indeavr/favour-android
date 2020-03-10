@@ -23,7 +23,7 @@
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/provider_profile_toolbar"
-        app:navGraph="@navigation/consumer_profile"
+        app:navGraph="@navigation/provider_profile"
         tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

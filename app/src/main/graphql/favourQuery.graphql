@@ -6,6 +6,7 @@ query FavoursQuery {
     money,
     location {
         id,
+        mapsId,
         address,
         country,
         town,

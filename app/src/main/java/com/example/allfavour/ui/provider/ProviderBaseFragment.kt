@@ -48,7 +48,7 @@ class ProviderBaseFragment : Fragment() {
         val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
         (requireActivity() as DecoratedActivity).setToolbar(toolbar)
         toolbar.inflateMenu(R.menu.provider_top_menu)
-        toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
+        toolbar.setOnMenuItemClickListener(this::onProviderItemSelected)
 
         super.onActivityCreated(savedInstanceState)
     }
@@ -59,20 +59,20 @@ class ProviderBaseFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    fun onConsumerItemSelected(item: MenuItem): Boolean {
+    fun onProviderItemSelected(item: MenuItem): Boolean {
         val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
 
         when (item.itemId) {
-            R.id.consumer_notifications_dest -> {
+            R.id.provider_notifications_dest -> {
                 (requireActivity() as DecoratedActivity).switchToNotificaitons()
             }
-            R.id.consumer_to_provider_dest -> {
+            R.id.provider_to_consumer_dest -> {
                 when (navHostId) {
                     R.id.provider_search_nav_host -> {
                         mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
                     }
                     R.id.provider_profile_nav_host -> {
-                        mainNavController.navigate(MainNavigationDirections.providerProfileDest())
+                        mainNavController.navigate(MainNavigationDirections.consumerProfileDest())
                     }
                     else -> mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
                 }

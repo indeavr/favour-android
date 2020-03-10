@@ -77,13 +77,13 @@ class ConsumerBaseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         val toolbar = requireActivity().findViewById<Toolbar>(toolbarId)
         toolbar.inflateMenu(R.menu.consumer_top_menu)
-        toolbar.setOnMenuItemClickListener(this::onProviderItemSelected)
+        toolbar.setOnMenuItemClickListener(this::onConsumerItemSelected)
 
         super.onActivityCreated(savedInstanceState)
     }
 
 
-    fun onProviderItemSelected(item: MenuItem): Boolean {
+    fun onConsumerItemSelected(item: MenuItem): Boolean {
         val currentDestination =
             requireActivity().findNavController(navHostId).currentDestination?.id;
         val mainNavController = requireActivity().findNavController(R.id.main_nav_activity)
