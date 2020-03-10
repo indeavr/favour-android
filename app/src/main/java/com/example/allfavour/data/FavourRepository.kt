@@ -39,7 +39,8 @@ class FavourRepository {
     // maybe this will be an inputType
     suspend fun addFavour(favour: Favour) {
         val locationInput = LocationInput(
-            id = favour.location!!.id!!,
+            mapsId = favour.location!!.mapsId,
+            id = "",
             country = favour.location!!.country!!,
             town = favour.location!!.town!!,
             address = favour.location!!.address!!,

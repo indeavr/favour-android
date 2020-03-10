@@ -135,7 +135,7 @@
             "deprecationReason": null
           },
           {
-            "name": "consumer",
+            "name": "provider",
             "description": null,
             "args": [
               {
@@ -151,7 +151,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -508,12 +508,12 @@
             "deprecationReason": null
           },
           {
-            "name": "consumer",
+            "name": "provider",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -539,7 +539,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Consumer",
+        "name": "Provider",
         "description": null,
         "fields": [
           {
@@ -790,6 +790,22 @@
             "deprecationReason": null
           },
           {
+            "name": "mapsId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "town",
             "description": null,
             "args": [],
@@ -845,7 +861,7 @@
             "deprecationReason": null
           },
           {
-            "name": "consumers",
+            "name": "providers",
             "description": null,
             "args": [],
             "type": {
@@ -853,7 +869,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Consumer",
+                "name": "Provider",
                 "ofType": null
               }
             },
@@ -1135,12 +1151,12 @@
         "description": null,
         "fields": [
           {
-            "name": "provider",
+            "name": "consumer",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1539,12 +1555,12 @@
             "deprecationReason": null
           },
           {
-            "name": "provider",
+            "name": "consumer",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1807,12 +1823,12 @@
             "deprecationReason": null
           },
           {
-            "name": "consumer",
+            "name": "provider",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1963,18 +1979,18 @@
             "deprecationReason": null
           },
           {
-            "name": "createConsumer",
+            "name": "createProvider",
             "description": null,
             "args": [
               {
-                "name": "consumer",
+                "name": "provider",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "ConsumerInput",
+                    "name": "ProviderInput",
                     "ofType": null
                   }
                 },
@@ -1997,7 +2013,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "Consumer",
+              "name": "Provider",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2430,6 +2446,20 @@
             "defaultValue": null
           },
           {
+            "name": "mapsId",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
             "name": "country",
             "description": null,
             "type": {
@@ -2735,7 +2765,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "ConsumerInput",
+        "name": "ProviderInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -3045,11 +3075,11 @@
             "defaultValue": "null"
           },
           {
-            "name": "consumer",
+            "name": "provider",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ConsumerInput",
+              "name": "ProviderInput",
               "ofType": null
             },
             "defaultValue": "null"
@@ -3216,7 +3246,7 @@
             "defaultValue": null
           },
           {
-            "name": "reviewForConsumer",
+            "name": "reviewForProvider",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -3244,11 +3274,11 @@
             "defaultValue": null
           },
           {
-            "name": "provider",
+            "name": "consumer",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ConsumerInput",
+              "name": "ProviderInput",
               "ofType": null
             },
             "defaultValue": "null"
@@ -3275,11 +3305,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "provider",
+            "name": "consumer",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ConsumerInput",
+              "name": "ProviderInput",
               "ofType": null
             },
             "defaultValue": "null"
@@ -3289,7 +3319,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ConsumerInput",
+              "name": "ProviderInput",
               "ofType": null
             },
             "defaultValue": "null"
@@ -3320,14 +3350,14 @@
             "defaultValue": null
           },
           {
-            "name": "consumers",
+            "name": "providers",
             "description": null,
             "type": {
               "kind": "LIST",
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "ConsumerInput",
+                "name": "ProviderInput",
                 "ofType": null
               }
             },
