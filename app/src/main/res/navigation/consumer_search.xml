@@ -13,11 +13,20 @@
         <action
             android:id="@+id/action_consumer_add_favour"
             app:destination="@id/addFavourFragment" />
+        <action
+            android:id="@+id/action_consumer_search_dest_to_aroundMeFragment"
+            app:destination="@id/aroundMeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addFavourFragment"
         android:name="com.example.allfavour.ui.consumer.addFavour.AddFavourFragment"
         android:label="consumer_add_favour_fragment"
         tools:layout="@layout/consumer_add_favour_fragment" />
+    <dialog
+        android:id="@+id/aroundMeFragment"
+        android:name="com.example.allfavour.ui.consumer.search.aroundMe.AroundMeFragment"
+        android:label="offerings_around_me_fragment"
+        tools:layout="@layout/offerings_around_me_fragment" />
 
 </navigation>

@@ -97,6 +97,15 @@ class AddOfferingFragment : DialogFragment() {
         activity.toggleBottomNavVisibility(true)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val fm = activity!!.supportFragmentManager
+        val frag = fm.findFragmentById(R.id.maps_autocomplete_fragment)
+
+        if (frag != null)
+            fm.beginTransaction().remove(frag).commit()
+    }
+
     override fun onStart() {
         super.onStart()
 

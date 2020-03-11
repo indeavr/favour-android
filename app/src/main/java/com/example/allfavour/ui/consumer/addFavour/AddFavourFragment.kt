@@ -74,14 +74,18 @@ class AddFavourFragment : DialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.consumer_add_favour_fragment, container, false)
 
+        setupView(view)
+
+        return view
+    }
+
+    fun setupView(view: View) {
         view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             dialog!!.dismiss()
         }
 
         val activity = requireActivity() as DecoratedActivity
         activity.toggleBottomNavVisibility(false)
-
-        return view
     }
 
 
@@ -97,6 +101,15 @@ class AddFavourFragment : DialogFragment() {
 
         val activity = requireActivity() as DecoratedActivity
         activity.toggleBottomNavVisibility(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val fm = activity!!.supportFragmentManager
+        val frag = fm.findFragmentById(R.id.maps_autocomplete_fragment)
+
+        if (frag != null)
+            fm.beginTransaction().remove(frag).commit()
     }
 
     override fun onStart() {

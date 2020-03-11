@@ -16,6 +16,7 @@ import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.R
 import com.example.allfavour.data.model.Offering
 import com.example.allfavour.ui.consumer.addFavour.AddFavourFragment
+import com.example.allfavour.ui.consumer.search.aroundMe.AroundMeFragment
 import com.example.allfavour.ui.provider.search.SearchViewModelFactory
 import kotlinx.android.synthetic.main.consumer_search_fragment.*
 
@@ -111,16 +112,13 @@ class OfferingsSearchFragment : Fragment() {
         add_favour_button.setOnClickListener {
             //            navController.navigate(SearchFragmentDirections.actionConsumerAddFavour())
 
-            val newFragment = AddFavourFragment.newInstance()
+            val addFavourFragment = AddFavourFragment.newInstance()
 //
-            newFragment.show(fragmentManager, null)
+            addFavourFragment.show(fragmentManager, null)
         }
 
         offerings_arround_me_button.setOnClickListener {
-
-            val newFragment = AddFavourFragment.newInstance()
-//
-            newFragment.show(fragmentManager, null)
+            navController.navigate(OfferingsSearchFragmentDirections.actionConsumerSearchDestToAroundMeFragment())
         }
     }
 
