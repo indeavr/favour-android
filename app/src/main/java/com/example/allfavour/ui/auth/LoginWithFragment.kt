@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task
 import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.MainNavigationDirections
@@ -36,6 +37,7 @@ class LoginWithFragment : Fragment() {
 
     private lateinit var viewModel: LoginWithViewModel
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private val navController: NavController by lazy { findNavController() }
 
 
     override fun onCreateView(
@@ -63,6 +65,11 @@ class LoginWithFragment : Fragment() {
         google_sign_in_button.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+
+        register_button.setOnClickListener {
+
+            navController.navigate(LoginWithFragmentDirections.actionLoginWithFragmentToRegisterFragment())
         }
     }
 

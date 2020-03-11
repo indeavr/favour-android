@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/consumer_search"
+    android:id="@+id/consumer_search_navigation"
     app:startDestination="@+id/consumer_search_dest">
 
     <fragment
         android:id="@+id/consumer_search_dest"
-        android:name="com.example.allfavour.ui.consumer.search.SearchFragment"
+        android:name="com.example.allfavour.ui.consumer.search.OfferingsSearchFragment"
         android:label="Search"
         tools:layout="@layout/consumer_search_fragment" >
         <action

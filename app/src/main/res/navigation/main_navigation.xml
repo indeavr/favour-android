@@ -62,7 +62,7 @@
 
     <action
         android:id="@+id/consumer_search_dest"
-        app:destination="@id/consumer_search" />
+        app:destination="@id/consumer_search_navigation" />
 
     <action
         android:id="@+id/provider_notifications_dest"

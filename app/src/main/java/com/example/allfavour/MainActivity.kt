@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(),
             return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
         }
 
-        if (authToken != null) { //logged in
+        if (false && authToken != null) { //logged in
             if (true) { // hasPassedBasicForms
                 mainNavController.navigate(R.id.basic_info_form_dest)
                 return

@@ -41,7 +41,7 @@ apollo {
         generateKotlinModels = true
         generateModelBuilder = true
         customTypeMapping = [
-                'Date': "java.util.Date",
+                'Date'        : "java.util.Date",
                 'LocationType': "com.allfavour.data.model.LocationModel"
         ]
 //        schemaFile = ".\\src\\main\\java\\com\\example\\allfavour\\graphql\\schema.json"
