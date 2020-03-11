@@ -1,5 +1,7 @@
 package com.example.allfavour
 
+import android.accounts.Account
+import android.accounts.AccountManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -20,6 +22,8 @@ import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.navOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
@@ -139,6 +143,7 @@ class MainActivity : AppCompatActivity(),
     private val providerWrapper: FrameLayout by lazy { provider_wrapper }
 
     private val mainNavController: NavController by lazy { findNavController(R.id.main_nav_activity) }
+    private lateinit var accountManager: AccountManager
 
     private lateinit var currentConfig: AppBarConfiguration
 
@@ -148,13 +153,18 @@ class MainActivity : AppCompatActivity(),
     val hasStartedFromAPendingDeepLink: Boolean by lazy { intent.action == null && intent.data == null }
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
+        viewModel = ViewModelProviders.of(this, MainViewModelFactory())
+            .get(MainActivityViewModel::class.java)
+
         auth = FirebaseAuth.getInstance()
+        accountManager = AccountManager.get(this)
         val currentUser = auth.currentUser
 
         // initialize backStack with home page index
@@ -513,13 +523,50 @@ class MainActivity : AppCompatActivity(),
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
+                    user!!.getIdToken(false).addOnCompleteListener {
+                        val token = it.result!!.token!!
 
-                    navigateToConsumerOrProvider()
+                        viewModel.loginWithGoogle(user.email!!, token)
+
+                        viewModel.registeredUser.observe(this) {
+                            val email = it.email
+                            val password = ""
+
+                            val account: Account = addOrFindAccount(email, password)
+                            val context = this
+                            with(accountManager) {
+                                AuthenticationProvider.setAuthToken("FavourToken", context)
+                                setAuthToken(account, "FavourToken", it.token)
+                                setPassword(account, password)
+                                setUserData(account, "FavourToken", "FavourToken")
+                                setUserData(account, "userId", it.userId)
+                            }
+
+                            navigateToConsumerOrProvider()
+                        }
+                    }
+
+
                 } else {
                 }
 
                 // ...
             }
+    }
+
+    private fun addOrFindAccount(email: String, password: String): Account {
+        val accounts = accountManager.getAccountsByType("AllFavour")
+        val account = if (accounts.isNotEmpty())
+            accounts[0]
+        else
+            Account(email, "AllFavour")
+
+        if (accounts.isEmpty()) {
+            accountManager.addAccountExplicitly(account, password, null)
+        } else {
+            accountManager.setPassword(accounts[0], password)
+        }
+        return account
     }
 
     private fun navigateToConsumerOrProvider() {

@@ -35,9 +35,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        logout()
 
         view.findViewById<Button>(R.id.consumer_my_account_button)?.setOnClickListener {
+            logout()
+
             //            val action = ProfileFragmentDirections.myAccountDestAction()
 //            findNavController().navigate(action)
             // Doesn't work for some reason
