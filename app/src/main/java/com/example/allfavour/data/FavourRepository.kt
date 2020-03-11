@@ -22,13 +22,24 @@ class FavourRepository {
 
         // TODO: handle null location
         receivedFavours.forEach {
+            val inputLocation = it!!.location!!
+
+            val location = LocationModel(
+                id = null,
+                mapsId = inputLocation.id,
+                address = inputLocation.address,
+                country = inputLocation.country,
+                latitude = inputLocation.latitude.toDouble(),
+                longitude = inputLocation.longitude.toDouble(),
+                town = inputLocation.town
+            )
             favours.add(
                 Favour(
-                    it!!.id,
+                    it.id,
                     it.title,
                     it.description,
                     it.money,
-                   null
+                    location
                 )
             )
         }

@@ -1,5 +1,7 @@
 package com.example.allfavour
 
+import android.Manifest
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -17,13 +19,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import java.util.*
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.navOptions
 import com.example.allfavour.ui.consumer.ConsumerBaseFragment
 import com.example.allfavour.ui.provider.ProviderBaseFragment
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import android.net.Uri.fromParts
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
+import android.content.Context.BIND_AUTO_CREATE
+import com.google.android.libraries.places.internal.i
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
 
 
 val pFragments: List<Int> = listOf(
