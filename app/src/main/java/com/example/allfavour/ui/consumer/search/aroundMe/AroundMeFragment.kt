@@ -3,6 +3,7 @@ package com.example.allfavour.ui.consumer.search.aroundMe
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
@@ -27,9 +28,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Looper
 import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -38,6 +43,8 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.offering_bottom_sheet_fragment.*
 
 
 class AroundMeFragment : DialogFragment(),
@@ -75,8 +82,8 @@ class AroundMeFragment : DialogFragment(),
 
     private val locationRequest: LocationRequest by lazy {
         LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 1000
+            fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
@@ -183,10 +190,6 @@ class AroundMeFragment : DialogFragment(),
         enableLocationSetting()
     }
 
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        return true
-    }
-
     private fun updateLocationUI() {
         if (this.map == null) {
             return
@@ -223,7 +226,7 @@ class AroundMeFragment : DialogFragment(),
                 this.map.addMarker(
                     MarkerOptions()
                         .position(coordinates)
-                        .title(it.location!!.address)
+                        .icon(bitmapDescriptorFromVector(this.context!!, R.drawable.ic_pet_store))
                 )
             }
         })
@@ -277,6 +280,7 @@ class AroundMeFragment : DialogFragment(),
     private fun enableLocationSetting() {
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
+            .setAlwaysShow(false)
 
         val client: SettingsClient = LocationServices.getSettingsClient(this.requireActivity())
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
@@ -397,5 +401,57 @@ class AroundMeFragment : DialogFragment(),
 
     override fun onMyLocationClick(p0: Location) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+
+        val sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
+
+        if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            btn_bottom_sheet.setText("Close sheet");
+        } else {
+            sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//            btn_bottom_sheet.setText("Expand sheet");
+        }
+
+        val bottomSheetFragment = OfferingBottomSheet()
+        bottomSheetFragment.show(
+            this.requireActivity().supportFragmentManager,
+            bottomSheetFragment.tag
+        );
+
+        return true
+    }
+
+
+    private fun bitmapDescriptorFromVector(
+        context: Context,
+        @DrawableRes
+        vectorDrawableResourceId: Int
+    ): BitmapDescriptor {
+        val background: Drawable = ContextCompat.getDrawable(context, R.drawable.ic_map_pin)!!
+
+        background.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
+
+        val vectorDrawable: Drawable =
+            ContextCompat.getDrawable(context, vectorDrawableResourceId)!!
+
+        vectorDrawable.setBounds(
+            40,
+            20,
+            vectorDrawable.intrinsicWidth + 40,
+            vectorDrawable.intrinsicHeight + 20
+        )
+
+        val bitmap: Bitmap = Bitmap.createBitmap(
+            background.intrinsicWidth,
+            background.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        );
+        val canvas = Canvas(bitmap)
+        background.draw(canvas)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }
