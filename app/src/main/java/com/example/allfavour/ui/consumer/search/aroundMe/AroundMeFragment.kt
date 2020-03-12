@@ -40,8 +40,11 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 
 
-class AroundMeFragment : DialogFragment(), GoogleMap.OnMarkerClickListener,
-    OnMapReadyCallback {
+class AroundMeFragment : DialogFragment(),
+    OnMapReadyCallback,
+    GoogleMap.OnMarkerClickListener,
+    GoogleMap.OnMyLocationButtonClickListener,
+    GoogleMap.OnMyLocationClickListener {
 
     private val TAG: String = AroundMeFragment::class.java.simpleName
 
@@ -386,5 +389,13 @@ class AroundMeFragment : DialogFragment(), GoogleMap.OnMarkerClickListener,
             }
         }
         updateLocationUI()
+    }
+
+    override fun onMyLocationButtonClick(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onMyLocationClick(p0: Location) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
