@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,12 +29,13 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/offering_sheet_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dandelion"
                 android:textColor="#000000"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Dandelion" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -69,10 +71,11 @@
                 android:background="#5d5d5d" />
 
             <TextView
+                android:id="@+id/offering_sheet_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12 min away"
-                android:textColor="#5692F5" />
+                android:textColor="#5692F5"
+                tools:text="12 min away" />
 
             <View
                 android:layout_width="match_parent"
@@ -86,12 +89,13 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/offering_sheet_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:drawableLeft="@drawable/ic_local_phone"
         android:drawablePadding="16dp"
-        android:text="Edison 43 Sofia" />
+        tools:text="Edison 43 Sofia" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -102,19 +106,12 @@
         android:text="(415) 349-0942" />
 
     <TextView
+        android:id="@+id/offering_sheet_dates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:drawableLeft="@drawable/ic_local_phone"
         android:drawablePadding="16dp"
-        android:text="Wed, 10 AM - 9 PM" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#000"
-        android:text="PROCEED PAYMENT"
-        android:textColor="#fff" />
+        tools:text="Wed, 10 AM - 9 PM" />
 
 </LinearLayout>

@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 class OfferingsSearchViewModel(private val offeringRepository: OfferingRepository) : ViewModel() {
     private val _offeringsList = MutableLiveData<ArrayList<Offering>>()
     val offeringsList: LiveData<ArrayList<Offering>> = this._offeringsList
-    var currentOffering: Offering? = null
 
+    private val _currentOffering = MutableLiveData<Offering>()
+    val currentOffering: LiveData<Offering> = this._currentOffering
 
     fun getOfferings() {
         viewModelScope.launch {
@@ -22,6 +23,10 @@ class OfferingsSearchViewModel(private val offeringRepository: OfferingRepositor
     }
 
     fun setCurrentOffering(id: String) {
-        currentOffering = offeringsList.value!!.find { it.id == id }
+        if (id.isEmpty()) {
+            return
+        }
+
+        _currentOffering.value = _offeringsList.value!!.find { it.id == id }
     }
 }

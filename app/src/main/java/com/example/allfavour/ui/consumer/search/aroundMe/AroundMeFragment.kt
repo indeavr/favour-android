@@ -45,6 +45,11 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.offering_bottom_sheet_fragment.*
+import java.text.DecimalFormat
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 class AroundMeFragment : DialogFragment(),
@@ -90,6 +95,10 @@ class AroundMeFragment : DialogFragment(),
 
     private var isLocationPermissionGranted: Boolean = false
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+    private val markerToOfferring = mutableMapOf<String, String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -100,6 +109,8 @@ class AroundMeFragment : DialogFragment(),
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.offerings_around_me_fragment, container, false)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottom_sheet))
 
         initMaps()
 
@@ -188,6 +199,8 @@ class AroundMeFragment : DialogFragment(),
         updateLocationUI()
 
         enableLocationSetting()
+
+        attachBottomSheetCurrentOfferingListener()
     }
 
     private fun updateLocationUI() {
@@ -223,12 +236,16 @@ class AroundMeFragment : DialogFragment(),
                     it.location!!.longitude
                 )
 
-                this.map.addMarker(
+                val marker = map.addMarker(
                     MarkerOptions()
                         .position(coordinates)
                         .icon(bitmapDescriptorFromVector(this.context!!, R.drawable.ic_pet_store))
                 )
+
+                markerToOfferring[marker.id] = it.id!!
             }
+
+            viewModel.setCurrentOffering(offerings[0].id!!)
         })
     }
 
@@ -405,25 +422,55 @@ class AroundMeFragment : DialogFragment(),
 
     override fun onMarkerClick(marker: Marker?): Boolean {
 
-        val sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
+        val markerId = marker!!.id
 
-        if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-            sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            btn_bottom_sheet.setText("Close sheet");
-        } else {
-            sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//            btn_bottom_sheet.setText("Expand sheet");
+        val offeringId = markerToOfferring[markerId]
+
+        if (offeringId != null) {
+            viewModel.setCurrentOffering(offeringId)
         }
 
-        val bottomSheetFragment = OfferingBottomSheet()
-        bottomSheetFragment.show(
-            this.requireActivity().supportFragmentManager,
-            bottomSheetFragment.tag
-        );
+//        if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+////            btn_bottom_sheet.setText("Close sheet");
+//        } else {
+//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+////            btn_bottom_sheet.setText("Expand sheet");
+//        }
+
+//        val bottomSheetFragment = OfferingBottomSheet()
+//        bottomSheetFragment.show(
+//            this.requireActivity().supportFragmentManager,
+//            bottomSheetFragment.tag
+//        );
 
         return true
     }
 
+    fun attachBottomSheetCurrentOfferingListener() {
+        viewModel.currentOffering.observe(viewLifecycleOwner, Observer<Offering> {
+            if (it != null) {
+                offering_sheet_title.text = it.title
+                offering_sheet_address.text = it.location!!.address
+
+                if (lastKnownLocation != null) {
+                    val currentLatLng =
+                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    val markerLatLng = LatLng(it.location!!.latitude, it.location!!.longitude)
+
+                    val distance = floatArrayOf(1f)
+                    Location.distanceBetween(
+                        lastKnownLocation!!.latitude, lastKnownLocation!!.longitude,
+                        it.location!!.latitude, it.location!!.longitude, distance
+                    )
+
+                    offering_sheet_distance.text = distance[0].roundToInt().toString() + " m"
+
+                }
+            }
+        })
+
+    }
 
     private fun bitmapDescriptorFromVector(
         context: Context,
