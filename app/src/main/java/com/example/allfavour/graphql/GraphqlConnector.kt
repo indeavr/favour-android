@@ -7,6 +7,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
+import android.provider.Settings.System.DATE_FORMAT
+import com.apollographql.apollo.response.CustomTypeValue
+import com.apollographql.apollo.response.CustomTypeAdapter
+import com.example.allfavour.data.model.LocationModel
+
 
 object GraphqlConnector {
     private const val baseUrl = "https://10.0.2.2:44334/graphql"

@@ -37,8 +37,15 @@ android {
 apollo {
     generateKotlinModels = true
     sourceSet {
+        schemaFilePath = "/src/main/graphql/schema.json"
+        generateKotlinModels = true
+        generateModelBuilder = true
+        customTypeMapping = [
+                'Date'        : "java.util.Date",
+                'LocationType': "com.allfavour.data.model.LocationModel"
+        ]
 //        schemaFile = ".\\src\\main\\java\\com\\example\\allfavour\\graphql\\schema.json"
-//        outputPackageName = "com.allfavour.graphql.api"
+        outputPackageName = "com.allfavour.graphql.api"
     }
 }
 
@@ -87,4 +94,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     // FirebaseUI for Firebase Realtime Database
     implementation 'com.firebaseui:firebase-ui-database:6.2.0'
+
+    implementation 'com.google.android.libraries.places:places:1.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    implementation 'com.android.support:design:28.0.0'
 }

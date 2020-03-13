@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 
 import com.example.allfavour.R
-import com.example.allfavour.ui.consumer.profile.ProfileFragmentDirections
+import com.example.allfavour.ui.consumer.addFavour.AddFavourFragment
+import com.example.allfavour.ui.provider.profile.addOffering.AddOfferingFragment
+import kotlinx.android.synthetic.main.consumer_search_fragment.*
+import kotlinx.android.synthetic.main.provider_profile_fragment.*
 
 class ProfileFragment : Fragment() {
 
@@ -32,11 +33,18 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        view.findViewById<Button>(R.id.provider_my_account_button)?.setOnClickListener {
+        provider_my_account_button.setOnClickListener {
 //            val action = ProfileFragmentDirections.myAccountDestAction()
 //            findNavController().navigate(action)
             // Doesn't work for some reason
             // Navigation.createNavigateOnClickListener(R.id.my_account_dest_action, null)
+        }
+        add_offering_button.setOnClickListener {
+            //            navController.navigate(SearchFragmentDirections.actionConsumerAddFavour())
+
+            val newFragment = AddOfferingFragment.newInstance()
+//
+            newFragment.show(fragmentManager!!, null)
         }
     }
 
@@ -45,5 +53,4 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         // TODO: Use the ViewModel
     }
-
 }

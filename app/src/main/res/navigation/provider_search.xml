@@ -2,13 +2,29 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/provider_search"
+    android:id="@+id/provider_search_navigation"
     app:startDestination="@+id/provider_search_dest">
 
     <fragment
         android:id="@+id/provider_search_dest"
         android:name="com.example.allfavour.ui.provider.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/provider_search_fragment" />
+        tools:layout="@layout/provider_search_fragment">
+        <action
+            android:id="@+id/action_provider_search_dest_to_favourFragment"
+            app:destination="@id/favourFragment">
+
+            <argument
+                android:name="fragmentId"
+                app:argType="string" />
+
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/favourFragment"
+        android:name="com.example.allfavour.ui.provider.favour.FavourFragment"
+        android:label="provider_favour_fragment"
+        tools:layout="@layout/provider_favour_fragment" />
 
 </navigation>

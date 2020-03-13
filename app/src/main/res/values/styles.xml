@@ -2,18 +2,25 @@
 
     <style name="AllFavour" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
-<!--        <item name="colorPrimaryDark">@color/primaryLightColor</item>-->
+        <!--        <item name="colorPrimaryDark">@color/primaryLightColor</item>-->
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/secondaryColor</item>
-<!--        <item name="secondaryLightColor">@color/secondaryLightColor</item>-->
+        <!--        <item name="secondaryLightColor">@color/secondaryLightColor</item>-->
         <item name="colorAccent">@color/secondaryDarkColor</item>
-<!--        <item name="color">@color/primaryTextColor</item>-->
+        <!--        <item name="color">@color/primaryTextColor</item>-->
     </style>
+
     <style name="AllFavour.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AllFavour.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AllFavour.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AllFavour.SlideDialog">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
 </resources>

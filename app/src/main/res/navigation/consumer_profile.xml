@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/consumer_profile_navigation"
-    app:startDestination="@id/consumer_profile_dest">
+    android:id="@+id/consumer_profile"
+    app:startDestination="@+id/consumer_profile_dest">
 
     <fragment
         android:id="@+id/consumer_profile_dest"
@@ -24,5 +24,4 @@
         android:name="com.example.allfavour.ui.consumer.profile.myAccount.MyAccountFragment"
         android:label="@string/my_account"
         tools:layout="@layout/consumer_my_account_fragment" />
-
 </navigation>

@@ -1,0 +1,17 @@
+query FavoursQuery {
+  favours {
+    id
+    title
+    description
+    money,
+    location {
+        id,
+        mapsId,
+        address,
+        country,
+        town,
+        longitude,
+        latitude
+    }
+  }
+}

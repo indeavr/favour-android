@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.consumers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -26,17 +28,14 @@
         android:theme="@style/AllFavour"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.example.allfavour.ui.auth.GoogleSignInActivty"
-            android:label="@string/title_activity_google_sign_in_activty"
-            android:theme="@style/AllFavour.NoActionBar"/>
-        <activity android:name=".ui.ChatActivity" />
-        <activity
             android:name=".MainActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity="">
+            android:taskAffinity=""
 
-            <nav-graph android:value="@navigation/consumer_notifications" />
+            >
+
+            <nav-graph android:value="@navigation/provider_notifications" />
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -80,6 +79,14 @@
         <!--        <service-->
         <!--            android:name="com.example.allfavour.gcm.RegistrationIntentService"-->
         <!--            android:exported="false" />-->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 
 </manifest>

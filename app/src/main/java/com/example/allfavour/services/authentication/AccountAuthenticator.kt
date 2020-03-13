@@ -48,7 +48,7 @@ class FavourAccountAuthenticator(
         options: Bundle?
     ): Bundle? {
         val am = AccountManager.get(application)
-        var authToken = AuthenticationProvider.getAuthToken(context)
+        var authToken = AuthenticationConsumer.getAuthToken(context)
 
         var bundle = Bundle()
 

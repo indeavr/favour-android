@@ -9,19 +9,19 @@
 
     <!--    <include app:graph="@navigation/consumer_navigation" />-->
 
-    <!--    <include app:graph="@navigation/provider_navigation" />-->
+    <!--    <include app:graph="@navigation/consumerP_navigation" />-->
 
     <include app:graph="@navigation/provider_profile" />
 
     <include app:graph="@navigation/provider_search" />
 
+    <include app:graph="@navigation/provider_notifications" />
+
+    <include app:graph="@navigation/provider_my_interests" />
+
     <include app:graph="@navigation/consumer_search" />
 
     <include app:graph="@navigation/consumer_profile" />
-
-    <include app:graph="@navigation/consumer_notifications" />
-
-    <include app:graph="@navigation/consumer_my_interests" />
 
     <fragment
         android:id="@+id/welcomeFragment"
@@ -33,12 +33,12 @@
         <!--            app:destination="@id/auth_navigation" />-->
 
         <!--        <action-->
-        <!--            android:id="@+id/consumer_dest"-->
+        <!--            android:id="@+id/provider_dest"-->
         <!--            app:destination="@id/consumer_navigation" />-->
 
         <!--        <action-->
-        <!--            android:id="@+id/provider_dest"-->
-        <!--            app:destination="@id/provider_navigation" />-->
+        <!--            android:id="@+id/consumer_dest"-->
+        <!--            app:destination="@id/consumerP_navigation" />-->
 
     </fragment>
     <fragment
@@ -48,39 +48,39 @@
         tools:layout="@layout/basic_info_form_fragment">
 
         <!--        <action-->
-        <!--            android:id="@+id/consumer_dest"-->
+        <!--            android:id="@+id/provider_dest"-->
         <!--            app:destination="@id/consumer_navigation" />-->
 
     </fragment>
     <action
             android:id="@+id/action_global_welcomeFragment"
-            app:destination="@+id/consumer_navigation" />
+            app:destination="@+id/provider_navigation" />
+
+    <action
+        android:id="@+id/provider_search_dest"
+        app:destination="@id/provider_search_navigation" />
 
     <action
         android:id="@+id/consumer_search_dest"
         app:destination="@id/consumer_search_navigation" />
 
     <action
-        android:id="@+id/provider_search_dest"
-        app:destination="@id/provider_search" />
-
-    <action
-        android:id="@+id/consumer_notifications_dest"
-        app:destination="@id/consumer_notifications_navigation" />
-    <action
-        android:id="@+id/provider_profile_dest"
-        app:destination="@id/provider_profile" />
-
+        android:id="@+id/provider_notifications_dest"
+        app:destination="@id/provider_notifications_navigation" />
     <action
         android:id="@+id/consumer_profile_dest"
-        app:destination="@id/consumer_profile_navigation" />
+        app:destination="@id/consumer_profile" />
+
+    <action
+        android:id="@+id/provider_profile_dest"
+        app:destination="@id/provider_profile_navigation" />
 
     <action
         android:id="@+id/auth_navigation_dest"
         app:destination="@id/auth_navigation" />
 
     <action
-        android:id="@+id/consumer_my_interests_dest"
-        app:destination="@id/consumer_my_interests" />
+        android:id="@+id/provider_my_interests_dest"
+        app:destination="@id/provider_my_interests" />
 
 </navigation>

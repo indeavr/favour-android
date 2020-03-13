@@ -1,14 +1,14 @@
 //package com.example.allfavour.ui.oldauth
 //
 //import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.ViewModelProvider
+//import androidx.lifecycle.ViewModelProviders
 //import com.example.allfavour.data.LoginRepository
 //
 ///**
-// * ViewModel provider factory to instantiate LoginViewModel.
+// * ViewModel consumer factory to instantiate LoginViewModel.
 // * Required given LoginViewModel has a non-empty constructor
 // */
-//class RegisterViewModelFactory1 : ViewModelProvider.Factory {
+//class RegisterViewModelFactory1 : ViewModelProviders.Factory {
 //
 //    @Suppress("UNCHECKED_CAST")
 //    override fun <T : ViewModel> create(modelClass: Class<T>): T {
