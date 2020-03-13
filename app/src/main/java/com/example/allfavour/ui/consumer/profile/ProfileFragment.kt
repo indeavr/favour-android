@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.example.allfavour.MainActivity
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider

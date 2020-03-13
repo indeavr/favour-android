@@ -12,6 +12,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -60,7 +61,7 @@ class LoginFragment: Fragment() {
                 setUserData(account, "FavourToken", "FavourToken")
                 setUserData(account, "userId", it.userId)
             }
-            mainNavController!!.navigate(R.id.action_global_welcomeFragment)
+            mainNavController!!.navigate(MainNavigationDirections.consumerSearchDest())
         }
 
     }

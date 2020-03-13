@@ -1,6 +1,5 @@
 package com.example.allfavour.data
 
-import com.allfavour.graphql.api.CreateFavourMutation
 import com.allfavour.graphql.api.CreateOfferingMutation
 import com.allfavour.graphql.api.OfferingsQuery
 import com.allfavour.graphql.api.type.LocationInput

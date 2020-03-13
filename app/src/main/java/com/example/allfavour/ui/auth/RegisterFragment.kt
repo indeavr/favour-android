@@ -12,19 +12,18 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
-import com.example.allfavour.services.authentication.AuthenticationConsumer
-import com.example.allfavour.ui.WelcomeFragmentDirections
-import com.example.allfavour.ui.auth.RegisterViewModelFactory
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment : Fragment() {
     private lateinit var viewModel: RegisterViewModel
     private lateinit var accountManager: AccountManager
 
-    private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
-    private  val authNavController: NavController? by lazy { activity?.findNavController(R.id.auth_navigation) }
+    private val mainNavController: NavController by lazy { requireActivity().findNavController(R.id.main_nav_activity) }
+    private  val authNavController: NavController by lazy { findNavController() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,13 +57,14 @@ class RegisterFragment : Fragment() {
             val account: Account = addOrFindAccount(email, password)
 
             with(accountManager) {
-                AuthenticationConsumer.setAuthToken("FavourToken", context!!)
+                AuthenticationProvider.setAuthToken("FavourToken", context!!)
                 setAuthToken(account, "FavourToken", it.token)
                 setPassword(account, password)
                 setUserData(account, "FavourToken", "FavourToken")
                 setUserData(account, "userId", it.userId)
             }
-            mainNavController!!.navigate(R.id.action_global_welcomeFragment)
+
+            mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
         }
 
     }

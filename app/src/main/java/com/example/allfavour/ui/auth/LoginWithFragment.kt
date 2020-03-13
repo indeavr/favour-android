@@ -72,10 +72,10 @@ class LoginWithFragment : Fragment() {
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
-        register_button.setOnClickListener {
-
-            navController.navigate(LoginWithFragmentDirections.actionLoginWithFragmentToRegisterFragment())
-        }
+//        register_button.setOnClickListener {
+//
+//            navController.navigate(LoginWithFragmentDirections.actionLoginWithFragmentToRegisterFragment())
+//        }
     }
 
     override fun onStart() {
