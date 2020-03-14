@@ -35,6 +35,7 @@
 
     <!--    Error-->
     <string name="phoneNumber_wrong">Wrong format of phoneNumber</string>
+    <string name="age_wrong">Wrong age</string>
     <string name="title_activity_google_sign_in_activty">GoogleSignInActivty</string>
 
 <!--    <string name="google_api_key">AIzaSyCHoTuB1Qw2idM9fsgWgOVDIhpiT1HSd7A</string>-->

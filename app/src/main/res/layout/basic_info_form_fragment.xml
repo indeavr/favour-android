@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -10,10 +11,11 @@
             type="com.example.allfavour.ui.BasicInfoFormViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/secondaryColor"
         tools:context=".ui.BasicInfoFormFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,107 +26,79 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toTopOf="@+id/basic_forms_submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:focusableInTouchMode="true"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--        First Name-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/first_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="First Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/first_name_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={viewmodel.fields.firstName}" />
-
-                <!--                    app:error="@{model.errorFirstName}"-->
-                <!--                    app:onFocus="@{model.getFirstNameOnFocusChangeListener()}"-->
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--        Last Name-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Last Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/first_name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/last_name_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--                    Age-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Age"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/last_name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/age_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--        Location-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/location"
+            <fragment
+                android:id="@+id/maps_autocomplete_fragment_basic_forms"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:hint="Location"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintVertical_bias="0.113"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/age">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/location_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!--        Phone Number-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Phone Number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/location">
+                app:layout_constraintTop_toBottomOf="@+id/maps_autocomplete_fragment_basic_forms">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phone_number_input"
-                    android:inputType="phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789+"
+                    android:inputType="phone"
                     android:text="@={viewmodel.fields.phoneNumber}"
                     app:error="@{viewmodel.fields.phoneNumberError}"
-                    android:digits="0123456789+"
                     app:onFocus="@{viewmodel.onFocusPhoneNumber}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+<!--            Sex-->
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone_number"
+                app:layout_constraintVertical_bias="0.0"
+                android:onCheckedChanged="@{viewmodel.onGenderChanged}"
+                >
+
+                <RadioButton
+                    android:id="@+id/female_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+
+                <RadioButton
+                    android:id="@+id/male_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male" />
+            </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

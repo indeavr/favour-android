@@ -1,41 +1,27 @@
 package com.example.allfavour.ui
 
-import android.util.Patterns
 import androidx.databinding.ObservableField
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import com.example.allfavour.R
+import com.google.android.libraries.places.api.model.Place
 import java.util.regex.Pattern
 
 
 class BasicFormModel : BaseObservable() {
 
     @Bindable
-    var firstName: String? = null
-        set(firstName) {
-            field = firstName
+    var sex: String? = null
+        set(sex) {
+            field = sex
             notifyPropertyChanged(BR.valid)
         }
 
     @Bindable
-    var lastName: String? = null
-        set(lastName) {
-            field = lastName
-            notifyPropertyChanged(BR.valid)
-        }
-
-    @Bindable
-    var age: String? = null
-        set(age) {
-            field = age
-            notifyPropertyChanged(BR.valid)
-        }
-
-    @Bindable
-    var location: String? = null
-        set(location) {
-            field = location
+    var place: Place? = null
+        set(place) {
+            field = place
             notifyPropertyChanged(BR.valid)
         }
 
@@ -46,13 +32,18 @@ class BasicFormModel : BaseObservable() {
             notifyPropertyChanged(BR.valid)
         }
 
+    var ageError = ObservableField<Int>()
     var phoneNumberError = ObservableField<Int>()
 
     @Bindable
     var valid: Boolean = false
         get() {
-            var valid = isPhoneNumberValid(false)
-            return valid
+            val placeValid = place != null
+            val sexValid = sex != null
+
+            return (isPhoneNumberValid(false)
+                    && sexValid
+                    && placeValid)
         }
 
     fun isPhoneNumberValid(setMessage: Boolean): Boolean {
@@ -71,4 +62,18 @@ class BasicFormModel : BaseObservable() {
 
         return isValid
     }
+
+//    fun isAgeValid(setMessage: Boolean): Boolean {
+//        if (age == null) {
+//            return false
+//        }
+//
+//        if (age!! < 0 || age!! > 100) {
+//            if (setMessage) ageError.set(R.string.age_wrong)
+//
+//            return false
+//        }
+//
+//        return true
+//    }
 }

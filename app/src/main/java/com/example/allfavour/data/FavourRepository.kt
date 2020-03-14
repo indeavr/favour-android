@@ -49,18 +49,7 @@ class FavourRepository {
 
     // maybe this will be an inputType
     suspend fun addFavour(favour: Favour) {
-        val locationInput = LocationInput(
-            mapsId = favour.location!!.mapsId,
-            id = "",
-            country = favour.location!!.country!!,
-            town = favour.location!!.town!!,
-            address = favour.location!!.address!!,
-            latitude = favour.location!!.latitude.toString(),
-            longitude = favour.location!!.longitude.toString()
-        )
-
-        val input = FavourInputType("", favour.title, "", favour.money, "", locationInput)
-        val mutation = CreateFavourMutation(input)
+        val mutation = CreateFavourMutation(favour.toInputType())
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         print(result.data())

@@ -27,7 +27,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.lifecycle.ViewModelProviders
+import com.example.allfavour.ui.BasicInfoFormFragment
 import com.example.allfavour.ui.auth.LoggedUser
+import com.example.allfavour.ui.consumer.addFavour.AddFavourFragment
 import java.util.*
 
 
@@ -582,9 +584,19 @@ class MainActivity : AppCompatActivity(),
             mainNavController.navigate(action)
         } else {
             activateProviderNavigation()
-            val action = MainNavigationDirections.providerSearchDest()
-            mainNavController.navigate(action)
+
+            if (false) { // has taken basic info form
+                val action = MainNavigationDirections.providerSearchDest()
+                mainNavController.navigate(action)
+            } else {
+                showBasicInfoForm()
+            }
         }
+    }
+
+    private fun showBasicInfoForm() {
+        val basicInfoFormFragment = BasicInfoFormFragment.newInstance()
+        basicInfoFormFragment.show(supportFragmentManager, null)
     }
 
     override fun toggleBottomNavVisibility(show: Boolean) {

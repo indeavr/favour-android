@@ -1,0 +1,3 @@
+mutation CreateProvider($userId: String!, $provider: ProviderInput!) {
+    createProvider(userId: $userId, provider: $provider)
+}

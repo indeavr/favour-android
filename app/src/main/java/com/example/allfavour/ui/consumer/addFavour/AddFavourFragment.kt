@@ -129,36 +129,7 @@ class AddFavourFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        val autocompleteFragment =
-            activity!!.supportFragmentManager.findFragmentById(R.id.maps_autocomplete_fragment) as AutocompleteSupportFragment
-
-        autocompleteFragment.setPlaceFields(
-            listOf(
-                Place.Field.ADDRESS,
-                Place.Field.LAT_LNG,
-                Place.Field.ADDRESS_COMPONENTS,
-                Place.Field.ID,
-                Place.Field.NAME
-            )
-        )
-
-//        autocompleteFragment
-//            .setTypeFilter(TypeFilter.ADDRESS)
-
-        autocompleteFragment
-            .setCountry("BG")
-
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                viewModel.place = place
-            }
-
-            override fun onError(status: Status) {
-
-            }
-        })
-
+        setupGoogleLocationAutocomplete()
 
         submit_add_favour.setOnClickListener {
             val title = title_favour_input.editText!!.text.toString()
@@ -199,5 +170,36 @@ class AddFavourFragment : DialogFragment() {
                 viewModel.addFavour(favour)
             }
         }
+    }
+
+    fun setupGoogleLocationAutocomplete() {
+        val autocompleteFragment =
+            activity!!.supportFragmentManager.findFragmentById(R.id.maps_autocomplete_fragment) as AutocompleteSupportFragment
+
+        autocompleteFragment.setPlaceFields(
+            listOf(
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS_COMPONENTS,
+                Place.Field.ID,
+                Place.Field.NAME
+            )
+        )
+
+//        autocompleteFragment
+//            .setTypeFilter(TypeFilter.ADDRESS)
+
+        autocompleteFragment
+            .setCountry("BG")
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                viewModel.place = place
+            }
+
+            override fun onError(status: Status) {
+
+            }
+        })
     }
 }

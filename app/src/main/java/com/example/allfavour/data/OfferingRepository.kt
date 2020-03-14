@@ -49,18 +49,7 @@ class OfferingRepository {
 
     // maybe this will be an inputType
     suspend fun addOffering(offering: Offering) {
-        val locationInput = LocationInput(
-            mapsId = offering.location!!.mapsId,
-            id = "",
-            country = offering.location!!.country!!,
-            town = offering.location!!.town!!,
-            address = offering.location!!.address!!,
-            latitude = offering.location!!.latitude.toString(),
-            longitude = offering.location!!.longitude.toString()
-        )
-
-        val input = OfferingInput("", offering.title, "", offering.money, "", locationInput)
-        val mutation = CreateOfferingMutation(input)
+        val mutation = CreateOfferingMutation(offering.toInputType())
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         print(result.data())
