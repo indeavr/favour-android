@@ -545,6 +545,7 @@ class MainActivity : AppCompatActivity(),
                                 setPassword(account, password)
                                 setUserData(account, "FavourToken", "FavourToken")
                                 setUserData(account, "userId", it.userId)
+                                setUserData(account, "fullName", it.fullName)
                             }
 
                             navigateToConsumerOrProvider()

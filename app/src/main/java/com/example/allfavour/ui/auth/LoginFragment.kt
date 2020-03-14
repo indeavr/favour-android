@@ -60,6 +60,7 @@ class LoginFragment: Fragment() {
                 setPassword(account, password)
                 setUserData(account, "FavourToken", "FavourToken")
                 setUserData(account, "userId", it.userId)
+                setUserData(account, "fullName", it.fullName)
             }
             mainNavController!!.navigate(MainNavigationDirections.consumerSearchDest())
         }

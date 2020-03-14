@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -32,17 +33,13 @@ class MessagesFragment : Fragment() {
 
     private val chatData = ArrayList<ChatItem>()
 
-    private lateinit var myUserId: String
-    private lateinit var myUsername: String
+    private val myUserId: String by lazy { AuthenticationProvider.getUserId(requireActivity()) }
+    private val myUsername: String by lazy { AuthenticationProvider.getUserFullname(requireActivity()) }
     val USERS_CHILD = "users"
     val CHAT_CHILD = "chats"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val user = FirebaseAuth.getInstance().currentUser
-        myUserId = user!!.uid
-        getMyUsername()
 
         firebaseDB.child(USERS_CHILD)
             .child(myUserId)
@@ -120,50 +117,32 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    private fun getMyUsername() {
-//        firebaseDB.child(USERS_CHILD)
-//            .child(myUserId)
-//            .child("username")
-//            .addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    myUsername = snapshot.getValue(String::class.java)!!
-//
-//                    firebaseDB.child(USERS_CHILD)
-//                        .child(myUserId)
-//                        .removeEventListener(this)
-//                }
-//
-//                override fun onCancelled(p0: DatabaseError) {
-//
-//                }
-//            })
-        myUsername = "Svetlozar Mateeev"
-    }
-
     private fun showPeopleList(it: View) {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val users = snapshot.children
 
-                val usernames = ArrayList<String>()
+                val fullNames = ArrayList<String>()
                 val userToId = mutableMapOf<String, String>()
 
                 users.forEach {
                     val id = it.key
                     if (id != myUserId) {
-                        val username = it.child("username").getValue(String::class.java)
-                        usernames.add(username!!)
-                        userToId[username] = id!!
+
+                        // TODO: what if there is no fullName for some reason ? -> crash
+                        val fullName = it.child("fullName").getValue(String::class.java)
+                        fullNames.add(fullName!!)
+                        userToId[fullName] = id!!
                     }
                 }
 
-                val array = arrayOfNulls<String>(usernames.size)
-                usernames.toArray<String>(array)
+                val array = arrayOfNulls<String>(fullNames.size)
+                fullNames.toArray<String>(array)
 
                 MaterialAlertDialogBuilder(context)
                     .setTitle("Choose a Person")
                     .setItems(array) { dialog: DialogInterface, which: Int ->
-                        val user = usernames[which]
+                        val user = fullNames[which]
                         startNewChat(userToId[user]!!, user)
                     }
                     .setPositiveButton("Ok", null)

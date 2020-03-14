@@ -23,7 +23,7 @@ class RegisterFragment : Fragment() {
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController by lazy { requireActivity().findNavController(R.id.main_nav_activity) }
-    private  val authNavController: NavController by lazy { findNavController() }
+    private val authNavController: NavController by lazy { findNavController() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,13 +41,15 @@ class RegisterFragment : Fragment() {
         registerButton.setOnClickListener {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
+            val firstName = register_first_name.text.toString()
+            val lastName = register_last_name.text.toString()
 
-            viewModel.register(email, password)
+            viewModel.register(email, password, firstName, lastName)
         }
 
         switchToLoginLabel.setOnClickListener {
             val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            findNavController().navigate(action )
+            findNavController().navigate(action)
         }
 
         viewModel.registeredUser.observe(this) {
@@ -62,6 +64,7 @@ class RegisterFragment : Fragment() {
                 setPassword(account, password)
                 setUserData(account, "FavourToken", "FavourToken")
                 setUserData(account, "userId", it.userId)
+                setUserData(account, "fullName", it.fullName)
             }
 
             mainNavController.navigate(MainNavigationDirections.consumerSearchDest())

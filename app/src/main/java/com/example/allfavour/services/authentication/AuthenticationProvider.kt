@@ -8,9 +8,17 @@ object AuthenticationProvider {
 
     fun getUserId(context: Context): String {
         val accountManager: AccountManager = AccountManager.get(context)
-        val accounts = accountManager.accounts
+        //TODO: make Constants class --> (! strings wont work, must be a class)
+        val accounts = accountManager.getAccountsByType("AllFavour")
 
         return accountManager.getUserData(accounts[0], "userId")
+    }
+
+    fun getUserFullname(context: Context): String {
+        val accountManager: AccountManager = AccountManager.get(context)
+        val accounts = accountManager.getAccountsByType("AllFavour")
+
+        return accountManager.getUserData(accounts[0], "fullName")
     }
 
     fun getAuthToken(context: Context): String? {

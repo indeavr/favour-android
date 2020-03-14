@@ -13,16 +13,17 @@ class RegisterViewModel(private val authRepository: LoginRepository) : ViewModel
     private val _registeredUser = MutableLiveData<LoggedUser>()
     val registeredUser: LiveData<LoggedUser> = this._registeredUser
 
-    fun register(email: String, password: String) {
+    fun register(email: String, password: String, firstName: String, lastName: String) {
 
 
         viewModelScope.launch {
-            val loggedUser = authRepository.register(email, password)
+            val loggedUser = authRepository.register(email, password, firstName, lastName)
             _registeredUser.postValue(
                 LoggedUser(
                     loggedUser.userId,
                     loggedUser.displayName,
-                    loggedUser.token
+                    loggedUser.token,
+                    loggedUser.fullName
                 )
             )
         }

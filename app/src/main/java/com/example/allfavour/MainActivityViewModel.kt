@@ -20,7 +20,8 @@ class MainActivityViewModel(private val loginRepository: LoginRepository) : View
                 LoggedUser(
                     loggedUser.userId,
                     loggedUser.displayName,
-                    loggedUser.token
+                    loggedUser.token,
+                    loggedUser.fullName
                 )
             )
         }

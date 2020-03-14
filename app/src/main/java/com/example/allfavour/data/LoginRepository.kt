@@ -1,8 +1,8 @@
 package com.example.allfavour.data
 
-import LoginMutation
-import LoginWithGoogleMutation
-import RegisterMutation
+import com.allfavour.graphql.api.LoginMutation
+import com.allfavour.graphql.api.LoginWithGoogleMutation
+import com.allfavour.graphql.api.RegisterMutation
 import com.apollographql.apollo.coroutines.toDeferred
 import com.example.allfavour.data.model.LoggedInUser
 import com.example.allfavour.graphql.GraphqlConnector
@@ -18,17 +18,24 @@ class LoginRepository {
         val mutation = LoginMutation(username, password)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
-        return LoggedInUser(result.data()!!.login!!.userId, username, result.data()!!.login!!.token)
+        val login = result.data()!!.login!!
+        return LoggedInUser(login.userId, username, login.token, login.fullName)
     }
 
-    suspend fun register(username: String, password: String): LoggedInUser {
-        val mutation = RegisterMutation(username, password)
+    suspend fun register(
+        username: String,
+        password: String,
+        firstName: String,
+        lastName: String
+    ): LoggedInUser {
+        val mutation = RegisterMutation(username, password, firstName, lastName)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         return LoggedInUser(
             result.data()!!.register!!.userId,
             username,
-            result.data()!!.register!!.token
+            result.data()!!.register!!.token,
+            result.data()!!.register!!.fullName
         )
     }
 
@@ -41,7 +48,8 @@ class LoginRepository {
         return LoggedInUser(
             user!!.loginWithGoogle!!.userId,
             username,
-            user.loginWithGoogle!!.token
+            user.loginWithGoogle!!.token,
+            user.loginWithGoogle!!.fullName
         )
     }
 }

@@ -20,7 +20,8 @@ class LoginViewModel(private val authRepository: LoginRepository) : ViewModel() 
                 LoggedUser(
                     loggedUser.userId,
                     loggedUser.displayName,
-                    loggedUser.token
+                    loggedUser.token,
+                    loggedUser.fullName
                 )
             )
         }
