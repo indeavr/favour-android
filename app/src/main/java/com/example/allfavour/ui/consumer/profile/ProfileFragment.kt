@@ -9,10 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.allfavour.MainActivity
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
+import com.example.allfavour.ui.auth.LoginFragmentDirections
 
 class ProfileFragment : Fragment() {
 
@@ -57,8 +60,7 @@ class ProfileFragment : Fragment() {
         AuthenticationProvider.invalidateToken(context!!.applicationContext)
         accountManager.clearPassword(accounts[0])
 
-        val intent = Intent(this.activity, MainActivity::class.java)
-        startActivity(intent)
+        activity!!.findNavController(R.id.main_nav_activity).navigate(R.id.auth_navigation_dest)
     }
 
 }

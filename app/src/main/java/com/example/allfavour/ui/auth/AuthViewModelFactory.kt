@@ -12,13 +12,8 @@ class AuthViewModelFactory : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
-            return RegisterViewModel(
-                authRepository = LoginRepository()
-            ) as T
-        }
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(
+        if (modelClass.isAssignableFrom(AuthenticationViewModel::class.java)) {
+            return AuthenticationViewModel(
                 authRepository = LoginRepository()
             ) as T
         }

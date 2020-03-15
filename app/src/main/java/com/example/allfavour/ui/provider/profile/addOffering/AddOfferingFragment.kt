@@ -191,7 +191,7 @@ class AddOfferingFragment : DialogFragment() {
                     provider = null
                 )
 
-                viewModel.addOffering(AuthenticationProvider.getUserId(requireActivity()), offering)
+                viewModel.addOffering(AuthenticationProvider.getUserId(requireActivity())!!, offering)
             }
         }
     }

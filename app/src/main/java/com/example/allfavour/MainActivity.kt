@@ -30,6 +30,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.allfavour.ui.BasicInfoFormFragment
 import com.example.allfavour.data.model.LoggedUser
 import com.example.allfavour.data.model.PermissionsModel
+import com.example.allfavour.ui.auth.AuthViewModelFactory
+import com.example.allfavour.ui.auth.AuthenticationViewModel
 import java.util.*
 
 
@@ -158,19 +160,23 @@ class MainActivity : AppCompatActivity(),
     val hasStartedFromAPendingDeepLink: Boolean by lazy { intent.action == null && intent.data == null }
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var authViewModel: AuthenticationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        viewModel = ViewModelProviders.of(this, MainViewModelFactory())
-            .get(MainActivityViewModel::class.java)
+        authViewModel = ViewModelProviders.of(this, AuthViewModelFactory())
+            .get(AuthenticationViewModel::class.java)
 
         auth = FirebaseAuth.getInstance()
         accountManager = AccountManager.get(this)
-        val currentUser = auth.currentUser
+
+        val currentUserId = AuthenticationProvider.getUserId(this)
+        if (currentUserId != null) {
+            authViewModel.userId = currentUserId
+        }
 
         // initialize backStack with home page index
         if (backStack.empty()) backStack.push(0)
@@ -534,9 +540,9 @@ class MainActivity : AppCompatActivity(),
                     user!!.getIdToken(false).addOnCompleteListener {
                         val token = it.result!!.token!!
 
-                        viewModel.loginWithGoogle(user.email!!, token)
+                        authViewModel.loginWithGoogle(user.email!!, token)
 
-                        viewModel.registeredUser.observe(this, Observer<LoggedUser> {
+                        authViewModel.registeredUser.observe(this, Observer<LoggedUser> {
                             val email = it.email
                             val password = ""
 
@@ -584,11 +590,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun navigateToConsumerOrProvider(inputSide: String?) {
-        if(currentSide == null && inputSide != null){
+        if (currentSide == null && inputSide != null) {
             currentSide = inputSide
         }
 
-        val permissions = viewModel.registeredUser.value!!.permissions
+        val permissions = authViewModel.registeredUser.value!!.permissions
 
         if (currentSide == "consumer") {
             activateConsumerNavigation()

@@ -168,7 +168,7 @@ class AddFavourFragment : DialogFragment() {
                     id = null
                 )
 
-                viewModel.addFavour(AuthenticationProvider.getUserId(requireActivity()), favour)
+                viewModel.addFavour(AuthenticationProvider.getUserId(requireActivity())!!, favour)
             }
         }
     }

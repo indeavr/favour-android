@@ -6,19 +6,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NavigationRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.login_fragment.*
 
-class LoginFragment: Fragment() {
-    private lateinit var viewModel: LoginViewModel
+inline fun <reified T : ViewModel> NavController.viewModel(@NavigationRes navGraphId: Int): T {
+    val storeOwner = getViewModelStoreOwner(navGraphId)
+    return ViewModelProvider(storeOwner)[T::class.java]
+}
+
+class LoginFragment : Fragment() {
+    private lateinit var viewModel: AuthenticationViewModel
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
@@ -33,8 +42,8 @@ class LoginFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, AuthViewModelFactory())
-            .get(LoginViewModel::class.java)
+        viewModel = ViewModelProviders.of(this.requireActivity(), AuthViewModelFactory())
+            .get(AuthenticationViewModel::class.java)
         accountManager = AccountManager.get(context)
 
         loginButton.setOnClickListener {

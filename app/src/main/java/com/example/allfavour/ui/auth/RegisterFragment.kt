@@ -19,7 +19,7 @@ import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment : Fragment() {
-    private lateinit var viewModel: RegisterViewModel
+    private lateinit var viewModel: AuthenticationViewModel
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController by lazy { requireActivity().findNavController(R.id.main_nav_activity) }
@@ -34,8 +34,8 @@ class RegisterFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, AuthViewModelFactory())
-            .get(RegisterViewModel::class.java)
+        viewModel = ViewModelProviders.of(this.requireActivity(), AuthViewModelFactory())
+            .get(AuthenticationViewModel::class.java)
         accountManager = AccountManager.get(context)
 
         registerButton.setOnClickListener {

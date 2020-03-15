@@ -33,7 +33,7 @@ class MessagesFragment : Fragment() {
 
     private val chatData = ArrayList<ChatItem>()
 
-    private val myUserId: String by lazy { AuthenticationProvider.getUserId(requireActivity()) }
+    private val myUserId: String by lazy { AuthenticationProvider.getUserId(requireActivity())!! }
     private val myUsername: String by lazy { AuthenticationProvider.getUserFullname(requireActivity()) }
     val USERS_CHILD = "users"
     val CHAT_CHILD = "chats"

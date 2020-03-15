@@ -35,7 +35,7 @@ class ProfileProviderFragment : Fragment() {
         val view = inflater.inflate(R.layout.provider_profile_fragment, container, false)
 
         viewModel.getProvider(
-            AuthenticationProvider.getUserId(requireActivity())
+            AuthenticationProvider.getUserId(requireActivity())!!
         )
 
         return view

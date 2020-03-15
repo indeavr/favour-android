@@ -23,6 +23,8 @@ import androidx.lifecycle.Observer
 import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.data.model.LocationModel
 import com.example.allfavour.services.authentication.AuthenticationProvider
+import com.example.allfavour.ui.auth.AuthViewModelFactory
+import com.example.allfavour.ui.auth.AuthenticationViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -40,6 +42,13 @@ class BasicInfoFormFragment : DialogFragment() {
             this,
             BasicInfoFormViewModelFactory()
         ).get(BasicInfoFormViewModel::class.java)
+    }
+
+    private val authViewModel: AuthenticationViewModel by lazy {
+        ViewModelProviders.of(
+            this.requireActivity(),
+            AuthViewModelFactory()
+        ).get(AuthenticationViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +76,7 @@ class BasicInfoFormFragment : DialogFragment() {
             )
 
         viewModel.init()
-        viewModel.userId = AuthenticationProvider.getUserId(requireActivity())
+        viewModel.userId = authViewModel.userId // AuthenticationProvider.getUserId(requireActivity())!!
 
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel

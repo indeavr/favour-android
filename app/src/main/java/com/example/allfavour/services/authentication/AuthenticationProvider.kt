@@ -6,7 +6,7 @@ import android.content.Context
 object AuthenticationProvider {
     private var authToken: String? = null
 
-    fun getUserId(context: Context): String {
+    fun getUserId(context: Context): String? {
         val accountManager: AccountManager = AccountManager.get(context)
         //TODO: make Constants class --> (! strings wont work, must be a class)
         val accounts = accountManager.getAccountsByType("AllFavour")
