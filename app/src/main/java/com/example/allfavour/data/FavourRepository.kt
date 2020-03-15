@@ -48,8 +48,8 @@ class FavourRepository {
     }
 
     // maybe this will be an inputType
-    suspend fun addFavour(favour: Favour) {
-        val mutation = CreateFavourMutation(favour.toInputType())
+    suspend fun addFavour(userId: String, favour: Favour) {
+        val mutation = CreateFavourMutation(userId, favour.toInputType())
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         print(result.data())

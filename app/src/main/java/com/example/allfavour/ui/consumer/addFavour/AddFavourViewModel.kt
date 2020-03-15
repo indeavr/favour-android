@@ -14,9 +14,9 @@ class AddFavourViewModel(val favourRepository: FavourRepository) : ViewModel() {
     val status: LiveData<String> = this._status
     var place: Place? = null
 
-    fun addFavour(favour: Favour) {
+    fun addFavour(userId: String,favour: Favour) {
         viewModelScope.launch {
-            favourRepository.addFavour(favour)
+            favourRepository.addFavour(userId, favour)
 
         }
 

@@ -3,15 +3,31 @@ query OfferingsQuery {
     id
     title
     description
-    money,
+    money
     location {
-        id,
-        mapsId,
-        address,
-        country,
-        town,
-        longitude,
+      id
+      mapsId
+      address
+      country
+      town
+      longitude
+      latitude
+    }
+    provider {
+      id
+      firstName
+      lastName
+      sex
+      phoneNumber
+      location {
+        id
+        mapsId
+        address
+        country
+        town
+        longitude
         latitude
+      }
     }
   }
 }

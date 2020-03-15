@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.data.LoginRepository
-import com.example.allfavour.ui.auth.LoggedUser
+import com.example.allfavour.data.model.LoggedUser
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -21,7 +21,9 @@ class MainActivityViewModel(private val loginRepository: LoginRepository) : View
                     loggedUser.userId,
                     loggedUser.displayName,
                     loggedUser.token,
-                    loggedUser.fullName
+                    loggedUser.fullName,
+                    loggedUser.permissions
+
                 )
             )
         }

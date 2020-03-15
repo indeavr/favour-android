@@ -24,6 +24,7 @@ import android.location.Geocoder
 import android.view.Window
 import androidx.appcompat.widget.Toolbar
 import com.example.allfavour.data.model.LocationModel
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -167,7 +168,7 @@ class AddFavourFragment : DialogFragment() {
                     id = null
                 )
 
-                viewModel.addFavour(favour)
+                viewModel.addFavour(AuthenticationProvider.getUserId(requireActivity()), favour)
             }
         }
     }

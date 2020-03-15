@@ -28,8 +28,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.allfavour.ui.BasicInfoFormFragment
-import com.example.allfavour.ui.auth.LoggedUser
-import com.example.allfavour.ui.consumer.addFavour.AddFavourFragment
+import com.example.allfavour.data.model.LoggedUser
+import com.example.allfavour.data.model.PermissionsModel
 import java.util.*
 
 
@@ -56,6 +56,7 @@ interface DecoratedActivity {
     fun setToolbar(toolbar: Toolbar)
     fun handleGoogleLogin(account: GoogleSignInAccount?)
     fun toggleBottomNavVisibility(show: Boolean)
+    fun navigateToConsumerOrProvider(side: String?)
 }
 
 class MainActivity : AppCompatActivity(),
@@ -189,9 +190,10 @@ class MainActivity : AppCompatActivity(),
             return // Navigation will be handled automagically by the NavController (it redirected / forced a relaunch of the app)
         }
 
+        // TODO: this flow is not relevant anymore (replaced by @navigateToConsumerOrProvider)
         if (false && authToken != null) { //logged in
             if (true) { // hasPassedBasicForms
-                mainNavController.navigate(R.id.basic_info_form_dest)
+//                mainNavController.navigate(R.id.basic_info_form_dest)
                 return
             }
 
@@ -459,7 +461,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun activateAuthNavigation() {
-        currentSide = "provider"
 //        currentController = authNavController
 
         mainWrapper.visibility = View.INVISIBLE
@@ -550,7 +551,12 @@ class MainActivity : AppCompatActivity(),
                                 setUserData(account, "fullName", it.fullName)
                             }
 
-                            navigateToConsumerOrProvider()
+                            if (it.permissions.sideChosen) {
+                                navigateToConsumerOrProvider(null)
+                            } else {
+                                val chooseSideAction = MainNavigationDirections.chooseSideDest()
+                                mainNavController.navigate(chooseSideAction)
+                            }
                         })
                     }
 
@@ -577,7 +583,13 @@ class MainActivity : AppCompatActivity(),
         return account
     }
 
-    private fun navigateToConsumerOrProvider() {
+    override fun navigateToConsumerOrProvider(inputSide: String?) {
+        if(currentSide == null && inputSide != null){
+            currentSide = inputSide
+        }
+
+        val permissions = viewModel.registeredUser.value!!.permissions
+
         if (currentSide == "consumer") {
             activateConsumerNavigation()
             val action = MainNavigationDirections.consumerSearchDest()
@@ -585,18 +597,14 @@ class MainActivity : AppCompatActivity(),
         } else {
             activateProviderNavigation()
 
-            if (false) { // has taken basic info form
+            if (permissions.hasSufficientInfoProvider) { // has taken basic info form
                 val action = MainNavigationDirections.providerSearchDest()
                 mainNavController.navigate(action)
             } else {
-                showBasicInfoForm()
+                val action = MainNavigationDirections.providerBasicInfoFormDest()
+                mainNavController.navigate(action)
             }
         }
-    }
-
-    private fun showBasicInfoForm() {
-        val basicInfoFormFragment = BasicInfoFormFragment.newInstance()
-        basicInfoFormFragment.show(supportFragmentManager, null)
     }
 
     override fun toggleBottomNavVisibility(show: Boolean) {

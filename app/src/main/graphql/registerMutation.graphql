@@ -13,5 +13,10 @@ mutation Register(
     token
     userId
     fullName
+     permissions {
+            hasSufficientInfoProvider
+            hasSufficientInfoConsumer
+            sideChosen
+        }
   }
 }

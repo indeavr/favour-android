@@ -20,7 +20,7 @@ import androidx.navigation.navGraphViewModels
 import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
-import com.example.allfavour.data.model.Offering
+import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModel
 import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModelFactory
 import com.google.android.gms.maps.GoogleMap
@@ -45,11 +45,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.offering_bottom_sheet_fragment.*
-import java.text.DecimalFormat
-import kotlin.math.cos
 import kotlin.math.roundToInt
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 
 class AroundMeFragment : DialogFragment(),
@@ -229,7 +225,7 @@ class AroundMeFragment : DialogFragment(),
     }
 
     private fun subscribeForOfferrings() {
-        viewModel.offeringsList.observe(this, Observer<ArrayList<Offering>> { offerings ->
+        viewModel.offeringsList.observe(this, Observer<ArrayList<OfferingModel>> { offerings ->
             offerings.forEach {
                 val coordinates = LatLng(
                     it.location!!.latitude,
@@ -448,7 +444,7 @@ class AroundMeFragment : DialogFragment(),
     }
 
     fun attachBottomSheetCurrentOfferingListener() {
-        viewModel.currentOffering.observe(viewLifecycleOwner, Observer<Offering> {
+        viewModel.currentOffering.observe(viewLifecycleOwner, Observer<OfferingModel> {
             if (it != null) {
                 offering_sheet_title.text = it.title
                 offering_sheet_address.text = it.location!!.address

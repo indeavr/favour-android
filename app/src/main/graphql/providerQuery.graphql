@@ -1,0 +1,18 @@
+query ProviderQuery($userId: String!) {
+  provider(userId: $userId) {
+    id
+    firstName
+    lastName
+    phoneNumber
+    sex
+    location {
+      id
+      mapsId
+      address
+      country
+      town
+      longitude
+      latitude
+    }
+  }
+}

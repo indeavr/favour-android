@@ -9,13 +9,21 @@
         android:id="@+id/consumer_search_dest"
         android:name="com.example.allfavour.ui.consumer.search.OfferingsSearchFragment"
         android:label="Search"
-        tools:layout="@layout/consumer_search_fragment" >
+        tools:layout="@layout/consumer_search_fragment">
         <action
             android:id="@+id/action_consumer_add_favour"
             app:destination="@id/addFavourFragment" />
         <action
             android:id="@+id/action_consumer_search_dest_to_aroundMeFragment"
             app:destination="@id/aroundMeFragment" />
+        <action
+            android:id="@+id/offering_dest"
+            app:destination="@id/offering_fragment">
+
+            <argument
+                android:name="offeringId"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment
@@ -28,5 +36,22 @@
         android:name="com.example.allfavour.ui.consumer.search.aroundMe.AroundMeFragment"
         android:label="offerings_around_me_fragment"
         tools:layout="@layout/offerings_around_me_fragment" />
+    <fragment
+        android:id="@+id/offering_fragment"
+        android:name="com.example.allfavour.ui.consumer.search.offering.OfferingFragment"
+        android:label="offering_fragment"
+        tools:layout="@layout/offering_fragment">
+
+        <action
+            android:id="@+id/apply_for_offering_dest"
+            app:destination="@id/apply_for_offering_dialog" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/apply_for_offering_dialog"
+        android:name="com.example.allfavour.ui.consumer.search.offering.ApplyForOfferingDialog"
+        android:label="apply_for_offering_dialog_fragment"
+        tools:layout="@layout/apply_for_offering_dialog_fragment" />
 
 </navigation>

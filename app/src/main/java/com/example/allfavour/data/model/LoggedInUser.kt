@@ -7,5 +7,6 @@ data class LoggedInUser(
         val userId: String,
         val displayName: String,
         val token:String,
-        val fullName:String
+        val fullName:String,
+        val permissions:PermissionsModel
 )

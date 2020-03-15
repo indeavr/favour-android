@@ -1,0 +1,3 @@
+mutation ApplyForOfferingMutation($userId: String!, $offeringId: String!, $application: ApplicationInput!){
+    applyForOffering(userId: $userId, offeringId: $offeringId, application: $application)
+}

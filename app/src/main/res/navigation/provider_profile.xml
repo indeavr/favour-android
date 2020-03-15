@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/provider_profile_dest"
-        android:name="com.example.allfavour.ui.provider.profile.ProfileFragment"
+        android:name="com.example.allfavour.ui.provider.profile.ProfileProviderFragment"
         android:label="Profile"
         tools:layout="@layout/provider_profile_fragment">
         <action

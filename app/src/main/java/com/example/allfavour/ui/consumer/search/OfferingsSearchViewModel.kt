@@ -5,15 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.data.OfferingRepository
-import com.example.allfavour.data.model.Offering
+import com.example.allfavour.data.model.OfferingModel
 import kotlinx.coroutines.launch
 
 class OfferingsSearchViewModel(private val offeringRepository: OfferingRepository) : ViewModel() {
-    private val _offeringsList = MutableLiveData<ArrayList<Offering>>()
-    val offeringsList: LiveData<ArrayList<Offering>> = this._offeringsList
+    private val _offeringsList = MutableLiveData<ArrayList<OfferingModel>>()
+    val offeringsList: LiveData<ArrayList<OfferingModel>> = this._offeringsList
 
-    private val _currentOffering = MutableLiveData<Offering>()
-    val currentOffering: LiveData<Offering> = this._currentOffering
+    private val _currentOffering = MutableLiveData<OfferingModel>()
+    val currentOffering: LiveData<OfferingModel> = this._currentOffering
+
+    private val _appliedSuccessfully = MutableLiveData<Boolean?>()
+    val appliedSuccessfully: LiveData<Boolean?> = this._appliedSuccessfully
 
     fun getOfferings() {
         viewModelScope.launch {
@@ -28,5 +31,16 @@ class OfferingsSearchViewModel(private val offeringRepository: OfferingRepositor
         }
 
         _currentOffering.value = _offeringsList.value!!.find { it.id == id }
+    }
+
+    fun applyForOffering(userId: String) {
+        val id = currentOffering.value?.id
+
+        if (id != null) {
+            viewModelScope.launch {
+                val result = offeringRepository.applyForOffering(userId, id)
+                _appliedSuccessfully.value = result
+            }
+        }
     }
 }

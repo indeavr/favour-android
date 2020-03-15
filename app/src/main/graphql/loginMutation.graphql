@@ -3,5 +3,10 @@ mutation Login($email: String!, $password: String!) {
         token
         userId
         fullName
+        permissions {
+            hasSufficientInfoProvider
+            hasSufficientInfoConsumer
+            sideChosen
+        }
     }
-}
+}   

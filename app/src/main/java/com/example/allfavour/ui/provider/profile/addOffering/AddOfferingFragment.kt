@@ -21,8 +21,8 @@ import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
 import com.example.allfavour.data.model.LocationModel
-import com.example.allfavour.data.model.Offering
-import com.example.allfavour.ui.auth.AddFavourViewModelFactory
+import com.example.allfavour.data.model.OfferingModel
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -182,15 +182,16 @@ class AddOfferingFragment : DialogFragment() {
                     town = addresses[0].getAddressLine(0)
                 )
 
-                val offering = Offering(
+                val offering = OfferingModel(
                     title = title,
                     description = description,
                     money = money,
                     location = location,
-                    id = null
+                    id = null,
+                    provider = null
                 )
 
-                viewModel.addOffering(offering)
+                viewModel.addOffering(AuthenticationProvider.getUserId(requireActivity()), offering)
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,6 +16,8 @@ import com.example.allfavour.R
 import com.example.allfavour.data.model.Favour
 import com.example.allfavour.ui.provider.search.SearchViewModelFactory
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModel
+import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModelFactory
 
 
 class SearchFragment : Fragment() {
@@ -30,13 +33,8 @@ class SearchFragment : Fragment() {
 
     private val navController: NavController by lazy { NavHostFragment.findNavController(this) }
 
-    private val viewModel: SearchViewModel by lazy {
-        ViewModelProviders.of(
-            this,
-            SearchViewModelFactory()
-        ).get(SearchViewModel::class.java)
-    }
-
+    private val factory = SearchViewModelFactory()
+    private val viewModel: SearchViewModel by navGraphViewModels(R.id.provider_search_navigation) { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

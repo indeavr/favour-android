@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.data.OfferingRepository
-import com.example.allfavour.data.model.Offering
+import com.example.allfavour.data.model.OfferingModel
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
@@ -14,9 +14,9 @@ class AddOfferingViewModel(val offeringRepository: OfferingRepository) : ViewMod
     val status: LiveData<String> = this._status
     var place: Place? = null
 
-    fun addOffering(offering: Offering) {
+    fun addOffering(userId: String, offering: OfferingModel) {
         viewModelScope.launch {
-            offeringRepository.addOffering(offering)
+            offeringRepository.addOffering(userId, offering)
 
         }
 

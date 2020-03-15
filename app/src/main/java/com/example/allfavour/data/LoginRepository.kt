@@ -5,6 +5,7 @@ import com.allfavour.graphql.api.LoginWithGoogleMutation
 import com.allfavour.graphql.api.RegisterMutation
 import com.apollographql.apollo.coroutines.toDeferred
 import com.example.allfavour.data.model.LoggedInUser
+import com.example.allfavour.data.model.PermissionsModel
 import com.example.allfavour.graphql.GraphqlConnector
 
 /**
@@ -19,7 +20,14 @@ class LoginRepository {
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         val login = result.data()!!.login!!
-        return LoggedInUser(login.userId, username, login.token, login.fullName)
+
+        val permissions = PermissionsModel(
+            hasSufficientInfoConsumer = login.permissions.hasSufficientInfoConsumer,
+            hasSufficientInfoProvider = login.permissions.hasSufficientInfoProvider,
+            sideChosen = login.permissions.sideChosen
+        )
+
+        return LoggedInUser(login.userId, username, login.token, login.fullName, permissions)
     }
 
     suspend fun register(
@@ -31,11 +39,18 @@ class LoginRepository {
         val mutation = RegisterMutation(username, password, firstName, lastName)
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
+        val permissions = PermissionsModel(
+            hasSufficientInfoConsumer = result.data()!!.register!!.permissions.hasSufficientInfoConsumer,
+            hasSufficientInfoProvider = result.data()!!.register!!.permissions.hasSufficientInfoProvider,
+            sideChosen = result.data()!!.register!!.permissions.sideChosen
+        )
+
         return LoggedInUser(
             result.data()!!.register!!.userId,
             username,
             result.data()!!.register!!.token,
-            result.data()!!.register!!.fullName
+            result.data()!!.register!!.fullName,
+            permissions
         )
     }
 
@@ -45,11 +60,18 @@ class LoginRepository {
 
         val user = result.data()
 
+        val permissions = PermissionsModel(
+            hasSufficientInfoConsumer = result.data()!!.loginWithGoogle!!.permissions.hasSufficientInfoConsumer,
+            hasSufficientInfoProvider = result.data()!!.loginWithGoogle!!.permissions.hasSufficientInfoProvider,
+            sideChosen = result.data()!!.loginWithGoogle!!.permissions.sideChosen
+        )
+
         return LoggedInUser(
             user!!.loginWithGoogle!!.userId,
             username,
             user.loginWithGoogle!!.token,
-            user.loginWithGoogle!!.fullName
+            user.loginWithGoogle!!.fullName,
+            permissions
         )
     }
 }

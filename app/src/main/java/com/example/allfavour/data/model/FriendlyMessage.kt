@@ -1,4 +1,4 @@
-package com.example.allfavour.ui
+package com.example.allfavour.data.model
 
 import com.google.firebase.database.Exclude
 import java.util.*

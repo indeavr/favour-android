@@ -2,56 +2,52 @@ package com.example.allfavour.data
 
 import com.allfavour.graphql.api.CreateOfferingMutation
 import com.allfavour.graphql.api.OfferingsQuery
-import com.allfavour.graphql.api.type.LocationInput
-import com.allfavour.graphql.api.type.OfferingInput
 import com.apollographql.apollo.coroutines.toDeferred
+import com.apollographql.apollo.exception.ApolloException
 import com.example.allfavour.data.model.LocationModel
-import com.example.allfavour.data.model.Offering
+import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.graphql.GraphqlConnector
 
 class OfferingRepository {
 
-    suspend fun getOfferings(): ArrayList<Offering> {
+    suspend fun getOfferings(): ArrayList<OfferingModel> {
         val query = OfferingsQuery()
         val result = GraphqlConnector.client.query(query).toDeferred().await()
 
         val receivedOfferings = result.data()!!.offerings!!
 
-        val offerings = arrayListOf<Offering>()
+        val offerings = arrayListOf<OfferingModel>()
 
         // TODO: handle null location
         receivedOfferings.forEach {
-            val inputLocation = it!!.location!!
-
-            val location = LocationModel(
-                id = null,
-                mapsId = inputLocation.id,
-                address = inputLocation.address,
-                country = inputLocation.country,
-                latitude = inputLocation.latitude.toDouble(),
-                longitude = inputLocation.longitude.toDouble(),
-                town = inputLocation.town
-            )
-
-            offerings.add(
-                Offering(
-                    it.id,
-                    it.title,
-                    it.description,
-                    it.money,
-                    location
-                )
-            )
+            if (it != null) {
+                offerings.add(OfferingModel.fromGraphType(it))
+            }
         }
 
         return offerings
     }
 
     // maybe this will be an inputType
-    suspend fun addOffering(offering: Offering) {
-        val mutation = CreateOfferingMutation(offering.toInputType())
+    suspend fun addOffering(userId: String, offering: OfferingModel) {
+        val mutation = CreateOfferingMutation(userId, offering.toInputType())
         val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         print(result.data())
+    }
+
+    suspend fun applyForOffering(userId: String, offeringId: String): Boolean? {
+        try {
+//            val mutation = ApplyForOfferingMutation(userId, offeringId)
+//            val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
+
+            return true
+        } catch (e: ApolloException) {
+            return null
+        } catch (e: NullPointerException) {
+            // you will end up here if repositories!! throws above. This will happen if your server sends a response
+            // with missing fields or errors
+            return null
+        }
     }
 }

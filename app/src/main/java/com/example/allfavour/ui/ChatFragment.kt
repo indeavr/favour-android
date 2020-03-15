@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.allfavour.DecoratedActivity
+import com.example.allfavour.data.model.FriendlyMessage
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions.Builder
 import com.firebase.ui.database.SnapshotParser
@@ -117,7 +118,8 @@ class ChatFragment : Fragment() {
 
         val parser: SnapshotParser<FriendlyMessage> = SnapshotParser { dataSnapshot ->
             val friendlyMessage =
-                dataSnapshot.getValue<FriendlyMessage>(FriendlyMessage::class.java)
+                dataSnapshot.getValue<FriendlyMessage>(
+                    FriendlyMessage::class.java)
             if (friendlyMessage != null) {
                 friendlyMessage.id = dataSnapshot.key
             }
@@ -233,12 +235,13 @@ class ChatFragment : Fragment() {
 
         sendButton.setOnClickListener {
             // Send messages on click.
-            val friendlyMessage = FriendlyMessage(
-                messageEditText.text.toString(),
-                username.toString(),
-                mPhotoUrl,
-                null /* no image */
-            )
+            val friendlyMessage =
+                FriendlyMessage(
+                    messageEditText.text.toString(),
+                    username.toString(),
+                    mPhotoUrl,
+                    null /* no image */
+                )
             saveMessageToDb(friendlyMessage)
 
             messageEditText.setText("")
@@ -293,10 +296,11 @@ class ChatFragment : Fragment() {
                     val uri = data!!.data
                     Log.d(TAG, "Uri: " + uri!!.toString())
 
-                    val tempMessage = FriendlyMessage(
-                        null, username, mPhotoUrl,
-                        LOADING_IMAGE_URL
-                    )
+                    val tempMessage =
+                        FriendlyMessage(
+                            null, username, mPhotoUrl,
+                            LOADING_IMAGE_URL
+                        )
                     firebaseDB.child(MESSAGES_CHILD)
                         .child(chatId)
                         .push()
@@ -330,10 +334,11 @@ class ChatFragment : Fragment() {
                     task.result!!.metadata!!.reference!!.downloadUrl
                         .addOnCompleteListener(activity) { task ->
                             if (task.isSuccessful) {
-                                val friendlyMessage = FriendlyMessage(
-                                    null, username, mPhotoUrl,
-                                    task.result!!.toString()
-                                )
+                                val friendlyMessage =
+                                    FriendlyMessage(
+                                        null, username, mPhotoUrl,
+                                        task.result!!.toString()
+                                    )
                                 firebaseDB.child(MESSAGES_CHILD)
                                     .child(chatId)
                                     .child(key!!)

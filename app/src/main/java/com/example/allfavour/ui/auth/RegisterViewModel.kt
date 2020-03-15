@@ -1,12 +1,13 @@
 package com.example.allfavour.ui.auth
 
-import android.accounts.AccountManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.data.LoginRepository
+import com.example.allfavour.data.model.LoggedUser
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class RegisterViewModel(private val authRepository: LoginRepository) : ViewModel() {
 
@@ -23,7 +24,8 @@ class RegisterViewModel(private val authRepository: LoginRepository) : ViewModel
                     loggedUser.userId,
                     loggedUser.displayName,
                     loggedUser.token,
-                    loggedUser.fullName
+                    loggedUser.fullName,
+                    loggedUser.permissions
                 )
             )
         }

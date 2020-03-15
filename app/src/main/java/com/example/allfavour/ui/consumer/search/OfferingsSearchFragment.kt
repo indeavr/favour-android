@@ -1,6 +1,5 @@
 package com.example.allfavour.ui.consumer.search
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -14,10 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.R
-import com.example.allfavour.data.model.Offering
+import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.ui.consumer.addFavour.AddFavourFragment
-import com.example.allfavour.ui.consumer.search.aroundMe.AroundMeFragment
-import com.example.allfavour.ui.provider.search.SearchViewModelFactory
 import kotlinx.android.synthetic.main.consumer_search_fragment.*
 
 
@@ -29,24 +26,17 @@ class OfferingsSearchFragment : Fragment() {
 
     private lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var listData: ArrayList<Offering>
+    private lateinit var listData: ArrayList<OfferingModel>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private val navController: NavController by lazy { NavHostFragment.findNavController(this) }
-
-//    private val viewModel: OfferingsSearchViewModel by lazy {
-//        ViewModelProviders.of(
-//            this,
-//            OfferingsSearchViewModelFactory()
-//        ).get(OfferingsSearchViewModel::class.java)
-//    }
 
     private val factory = OfferingsSearchViewModelFactory()
     private val viewModel: OfferingsSearchViewModel by navGraphViewModels(R.id.consumer_search_navigation) { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.offeringsList.observe(this, Observer<ArrayList<Offering>> { offerings ->
+        viewModel.offeringsList.observe(this, Observer<ArrayList<OfferingModel>> { offerings ->
             swipeRefreshLayout.isRefreshing = false
 
             listData.clear()
@@ -112,6 +102,7 @@ class OfferingsSearchFragment : Fragment() {
         add_favour_button.setOnClickListener {
             //            navController.navigate(SearchFragmentDirections.actionConsumerAddFavour())
 
+            // TODO: make it a navigation dialog
             val addFavourFragment = AddFavourFragment.newInstance()
 //
             addFavourFragment.show(fragmentManager, null)
@@ -128,7 +119,7 @@ class OfferingsSearchFragment : Fragment() {
     }
 
     class OfferingsAdapter(
-        private val myDataset: ArrayList<Offering>,
+        private val myDataset: ArrayList<OfferingModel>,
         private val navController: NavController
     ) :
         RecyclerView.Adapter<OfferingsAdapter.ViewHolder>() {
@@ -159,16 +150,18 @@ class OfferingsSearchFragment : Fragment() {
                 val offering = myDataset[position]
 
                 holder.view.findViewById<TextView>(R.id.offering_item_title).text = offering.title
+                holder.view.findViewById<TextView>(R.id.offering_item_address).text =
+                    offering.location.address
+                holder.view.findViewById<TextView>(R.id.offering_item_dates).text =
+                    offering.description
                 holder.view.findViewById<TextView>(R.id.offering_item_money).text =
                     offering.money.toString()
 
                 holder.view.setOnClickListener {
                     if (offering.id != null) {
-//                        navController.navigate(
-//                            SearchFragmentDirections.actionProviderSearchDestToFavourFragment(
-//                                offering.id!!
-//                            )
-//                        )
+                        navController.navigate(
+                            OfferingsSearchFragmentDirections.offeringDest(offering.id!!)
+                        )
                     }
                 }
             }

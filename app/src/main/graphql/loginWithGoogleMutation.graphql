@@ -3,5 +3,10 @@ mutation LoginWithGoogle($serverToken: String!) {
         token
         userId
         fullName
+         permissions {
+            hasSufficientInfoProvider
+            hasSufficientInfoConsumer
+            sideChosen
+        }
     }
 }

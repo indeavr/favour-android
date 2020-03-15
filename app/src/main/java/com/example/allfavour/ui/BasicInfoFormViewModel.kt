@@ -6,13 +6,11 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.databinding.BindingAdapter
-import androidx.databinding.adapters.TextViewBindingAdapter
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.R
 import com.example.allfavour.data.ProviderRepository
 import com.example.allfavour.data.model.LocationModel
-import com.example.allfavour.data.model.Provider
-import com.google.android.libraries.places.api.model.AddressComponent
+import com.example.allfavour.data.model.ProviderModel
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
@@ -67,10 +65,13 @@ class BasicInfoFormViewModel(val providerRepository: ProviderRepository) : ViewM
                 town = ""
             )
 
-            val provider = Provider(
+            val provider = ProviderModel(
+                id = "",
                 phoneNumber = fields.phoneNumber!!,
                 location = location,
-                sex = fields.sex!!
+                sex = fields.sex!!,
+                firstName = null,
+                lastName = null
             )
 
             viewModelScope.launch {
