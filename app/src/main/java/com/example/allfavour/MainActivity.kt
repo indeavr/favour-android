@@ -59,6 +59,7 @@ interface DecoratedActivity {
     fun handleGoogleLogin(account: GoogleSignInAccount?)
     fun toggleBottomNavVisibility(show: Boolean)
     fun navigateToConsumerOrProvider(side: String?)
+    fun activateAuthNavigation()
 }
 
 class MainActivity : AppCompatActivity(),
@@ -197,10 +198,10 @@ class MainActivity : AppCompatActivity(),
         }
 
         // TODO: this flow is not relevant anymore (replaced by @navigateToConsumerOrProvider)
-        if (false && authToken != null) { //logged in
+        if (authToken != null) { //logged in
             if (true) { // hasPassedBasicForms
 //                mainNavController.navigate(R.id.basic_info_form_dest)
-                return
+                // return
             }
 
             if (true)  // provider
@@ -466,7 +467,7 @@ class MainActivity : AppCompatActivity(),
 //        bottomNav?.setupWithNavController(providerNavController)
     }
 
-    fun activateAuthNavigation() {
+    override fun activateAuthNavigation() {
 //        currentController = authNavController
 
         mainWrapper.visibility = View.INVISIBLE

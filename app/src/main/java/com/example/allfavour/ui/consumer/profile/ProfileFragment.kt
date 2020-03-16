@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.MainActivity
 
 import com.example.allfavour.R
@@ -59,7 +60,7 @@ class ProfileFragment : Fragment() {
         accountManager.invalidateAuthToken("AllFavour", oldToken)
         AuthenticationProvider.invalidateToken(context!!.applicationContext)
         accountManager.clearPassword(accounts[0])
-
+        (requireActivity() as DecoratedActivity).activateAuthNavigation()
         activity!!.findNavController(R.id.main_nav_activity).navigate(R.id.auth_navigation_dest)
     }
 
