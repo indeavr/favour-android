@@ -17,6 +17,10 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
 
     private val _registeredUser = MutableLiveData<LoggedUser>()
     val registeredUser: LiveData<LoggedUser> = this._registeredUser
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = this._error
+
     lateinit var userId: String
     lateinit var email: String
 
@@ -55,17 +59,21 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
 
     fun register(email: String, password: String, firstName: String, lastName: String) {
         viewModelScope.launch {
-            val loggedUser = authRepository.register(email, password, firstName, lastName)
-            userId = loggedUser.userId
-            _registeredUser.postValue(
-                LoggedUser(
-                    loggedUser.userId,
-                    loggedUser.displayName,
-                    loggedUser.token,
-                    loggedUser.fullName,
-                    loggedUser.permissions
+            try {
+                val loggedUser = authRepository.register(email, password, firstName, lastName)
+                userId = loggedUser.userId
+                _registeredUser.postValue(
+                    LoggedUser(
+                        loggedUser.userId,
+                        loggedUser.displayName,
+                        loggedUser.token,
+                        loggedUser.fullName,
+                        loggedUser.permissions
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                _error.postValue(e.message)
+            }
         }
     }
 
