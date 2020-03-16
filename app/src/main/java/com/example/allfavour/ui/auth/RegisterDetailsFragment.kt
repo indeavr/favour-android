@@ -2,35 +2,33 @@ package com.example.allfavour.ui.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.allfavour.MainNavigationDirections
-
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.register_fragment.*
-import kotlinx.android.synthetic.main.register_fragment_x.*
+import kotlinx.android.synthetic.main.register_fragment_details.*
 
-class RegisterFragment : Fragment() {
+class RegisterDetailsFragment: Fragment() {
     private lateinit var viewModel: AuthenticationViewModel
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController by lazy { requireActivity().findNavController(R.id.main_nav_activity) }
-    private val authNavController: NavController by lazy { findNavController() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.register_fragment_x, container, false)
+        return inflater.inflate(R.layout.register_fragment_details, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -39,18 +37,14 @@ class RegisterFragment : Fragment() {
             .get(AuthenticationViewModel::class.java)
         accountManager = AccountManager.get(context)
 
-        sign_up_button.setOnClickListener {
-            val email = email_input_field.text.toString()
+        email_input.text = SpannableStringBuilder(viewModel.email)
+        register_button.setOnClickListener {
+            val email = email_input.text.toString()
+            val password = password_input.text.toString()
+            val firstName = first_name_input.text.toString()
+            val lastName = last_name_input.text.toString()
 
-            viewModel.saveEmailBeforeTransition(email)
-
-            val action = RegisterFragmentDirections.actionRegisterFragmentToRegisterDetailsFragment()
-            findNavController().navigate(action)
-        }
-
-        switch_login.setOnClickListener {
-            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            findNavController().navigate(action)
+            viewModel.register(email,password, firstName, lastName)
         }
 
         viewModel.registeredUser.observe(this) {
@@ -70,7 +64,6 @@ class RegisterFragment : Fragment() {
 
             mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
         }
-
     }
 
     private fun addOrFindAccount(email: String, password: String): Account {
@@ -87,5 +80,4 @@ class RegisterFragment : Fragment() {
         }
         return account
     }
-
 }

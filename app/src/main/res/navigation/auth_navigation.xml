@@ -23,6 +23,9 @@
       <action
               android:id="@+id/action_registerFragment_to_loginFragment2"
               app:destination="@id/loginFragment" />
+      <action
+          android:id="@+id/action_registerFragment_to_registerDetailsFragment"
+          app:destination="@id/registerDetailsFragment" />
   </fragment>
     <fragment
             android:id="@+id/welcomeFragment2"
@@ -49,4 +52,8 @@
                 android:id="@+id/action_loginFragment_to_registerFragment"
                 app:destination="@id/registerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/registerDetailsFragment"
+        android:name="com.example.allfavour.ui.auth.RegisterDetailsFragment"
+        android:label="RegisterDetailsFragment" />
 </navigation>

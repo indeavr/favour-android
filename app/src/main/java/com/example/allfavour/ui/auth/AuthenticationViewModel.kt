@@ -18,6 +18,7 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
     private val _registeredUser = MutableLiveData<LoggedUser>()
     val registeredUser: LiveData<LoggedUser> = this._registeredUser
     lateinit var userId: String
+    lateinit var email: String
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -66,6 +67,10 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
                 )
             )
         }
+    }
+
+    fun saveEmailBeforeTransition(email: String) {
+        this.email = email
     }
 
     fun logout(context: Context) {
