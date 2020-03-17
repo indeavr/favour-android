@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,37 +24,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Log in"
+        android:text="Sign up"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/sign_up_caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Create your account"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_image" />
-
-    <TextView
-        android:id="@+id/sign_up_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Search for pet sitters, read reviews, compare their quality of work and find the proper person to take care of your pet"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:text="Welcome back to Pet Favour"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_caption" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_image" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -73,14 +62,15 @@
         android:id="@+id/continue_with_facebook_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/button_radius"
+        android:drawableStart="@color/common_google_signin_btn_text_light_default"
         android:text="Continue with Facebook"
-        app:layout_constraintEnd_toEndOf="@+id/sign_up_description"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/sign_up_description"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_description"
-        android:drawableStart="@color/common_google_signin_btn_text_light_default"/>
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_caption" />
 
     <Button
         android:id="@+id/continue_with_google_button"
@@ -109,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="OR SIGN UP WITH EMAIL"
+        android:text="OR LOG IN WITH EMAIL"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -122,7 +112,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="textEmailAddress"
@@ -134,20 +124,22 @@
         android:id="@+id/log_in_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Sign Up"
+        android:layout_marginTop="32dp"
+        android:text="Log In"
         app:layout_constraintEnd_toEndOf="@+id/email_input_field"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/email_input_field"
-        app:layout_constraintTop_toBottomOf="@+id/email_input_field" />
+        app:layout_constraintTop_toBottomOf="@+id/password_input_field" />
 
-    <CheckBox
-        android:id="@+id/terms_conditions_checkbox"
+    <EditText
+        android:id="@+id/password_input_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="I am agree with Pet Favour's Terms of Service and Privacy Policy"
-        app:layout_constraintEnd_toEndOf="@+id/log_in_button"
-        app:layout_constraintStart_toStartOf="@+id/log_in_button"
-        app:layout_constraintTop_toBottomOf="@+id/log_in_button" />
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/email_input_field"
+        app:layout_constraintStart_toStartOf="@+id/email_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/email_input_field" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

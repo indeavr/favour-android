@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/auth_navigation"
-    app:startDestination="@id/loginWithFragment">
+    app:startDestination="@id/loginFragment">
 <!--    <fragment-->
 <!--        android:id="@+id/basicInfoFormFragment"-->
 <!--        android:name="com.example.allfavour.ui.BasicInfoFormFragment"-->
@@ -31,19 +31,19 @@
             android:id="@+id/welcomeFragment2"
             android:name="com.example.allfavour.ui.WelcomeFragment"
             android:label="WelcomeFragment" />
-    <fragment
-        android:id="@+id/loginWithFragment"
-        android:name="com.example.allfavour.ui.auth.LoginWithFragment"
-        android:label="login_with_fragment"
-        tools:layout="@layout/login_with_fragment" >
-        <action
-            android:id="@+id/action_loginWithFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-        <action
-                android:id="@+id/action_loginWithFragment_to_loginFragment2"
-                app:destination="@id/loginFragment" />
+<!--    <fragment-->
+<!--        android:id="@+id/loginWithFragment"-->
+<!--        android:name="com.example.allfavour.ui.auth.LoginWithFragment"-->
+<!--        android:label="login_with_fragment"-->
+<!--        tools:layout="@layout/login_with_fragment" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_loginWithFragment_to_registerFragment"-->
+<!--            app:destination="@id/registerFragment" />-->
+<!--        <action-->
+<!--                android:id="@+id/action_loginWithFragment_to_loginFragment2"-->
+<!--                app:destination="@id/loginFragment" />-->
 
-    </fragment>
+<!--    </fragment>-->
     <fragment
             android:id="@+id/loginFragment"
             android:name="com.example.allfavour.ui.auth.LoginFragment"

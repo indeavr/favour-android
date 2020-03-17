@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NavigationRes
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -15,29 +14,29 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.login_fragment_x.*
 
 inline fun <reified T : ViewModel> NavController.viewModel(@NavigationRes navGraphId: Int): T {
     val storeOwner = getViewModelStoreOwner(navGraphId)
     return ViewModelProvider(storeOwner)[T::class.java]
 }
 
-class LoginFragment : Fragment() {
+class LoginFragment : GoogleLoginBaseFragment() {
     private lateinit var viewModel: AuthenticationViewModel
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
-    private val authControler: NavController? by lazy { activity?.findNavController(R.id.auth_navigation) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.login_fragment, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.login_fragment_x, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,15 +45,20 @@ class LoginFragment : Fragment() {
             .get(AuthenticationViewModel::class.java)
         accountManager = AccountManager.get(context)
 
-        loginButton.setOnClickListener {
+        log_in_button.setOnClickListener {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
 
             viewModel.login(email, password)
         }
 
-        switchToRegister.setOnClickListener {
+        switch_register.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        continue_with_google_button.setOnClickListener {
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
         viewModel.registeredUser.observe(this) {
