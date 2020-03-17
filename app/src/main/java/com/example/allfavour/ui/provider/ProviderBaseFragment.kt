@@ -23,7 +23,7 @@ class ProviderBaseFragment : Fragment() {
     private val rootDestinations = setOf(
         R.id.provider_search_dest,
         R.id.provider_my_favours_dest,
-        R.id.provider_my_interests_dest,
+        R.id.provider_my_offerings_dest,
         R.id.provider_profile_dest,
 //        R.id.provider_notifications_dest
         R.id.provider_messages_dest

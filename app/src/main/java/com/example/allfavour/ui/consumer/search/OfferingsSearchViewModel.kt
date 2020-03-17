@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.data.OfferingRepository
+import com.example.allfavour.data.model.ApplicationModel
 import com.example.allfavour.data.model.OfferingModel
 import kotlinx.coroutines.launch
 
@@ -33,12 +34,12 @@ class OfferingsSearchViewModel(private val offeringRepository: OfferingRepositor
         _currentOffering.value = _offeringsList.value!!.find { it.id == id }
     }
 
-    fun applyForOffering(userId: String) {
-        val id = currentOffering.value?.id
+    fun applyForOffering(userId: String, application: ApplicationModel) {
+        val offeringId = currentOffering.value?.id
 
-        if (id != null) {
+        if (userId != null && offeringId != null) {
             viewModelScope.launch {
-                val result = offeringRepository.applyForOffering(userId, id)
+                val result = offeringRepository.applyForOffering(userId, offeringId, application)
                 _appliedSuccessfully.value = result
             }
         }

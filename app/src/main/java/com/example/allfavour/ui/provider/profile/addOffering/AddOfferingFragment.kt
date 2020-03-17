@@ -188,7 +188,8 @@ class AddOfferingFragment : DialogFragment() {
                     money = money,
                     location = location,
                     id = null,
-                    provider = null
+                    provider = null,
+                    applications = null
                 )
 
                 viewModel.addOffering(AuthenticationProvider.getUserId(requireActivity())!!, offering)

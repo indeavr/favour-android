@@ -1,9 +1,11 @@
 package com.example.allfavour.data
 
 import com.allfavour.graphql.api.CreateProviderMutation
+import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.ProviderQuery
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
+import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.data.model.ProviderModel
 import com.example.allfavour.graphql.GraphqlConnector
 
@@ -35,5 +37,18 @@ class ProviderRepository {
             // with missing fields or errors
             return null
         }
+    }
+
+    suspend fun getMyOfferings(userId: String): ArrayList<OfferingModel>? {
+            val query = MyOfferingsQuery(userId)
+            val task = GraphqlConnector.client.query(query).toDeferred().await()
+
+            val myOfferings = task.data()?.myOfferings ?: run {
+                throw NullPointerException()
+            }
+
+            return ArrayList(myOfferings.map {
+                OfferingModel.fromGraphType(it!!)
+            })
     }
 }

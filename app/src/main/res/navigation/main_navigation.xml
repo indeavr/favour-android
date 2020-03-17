@@ -17,7 +17,7 @@
 
     <include app:graph="@navigation/provider_notifications" />
 
-    <include app:graph="@navigation/provider_my_interests" />
+    <include app:graph="@navigation/provider_my_offerings" />
 
     <include app:graph="@navigation/consumer_search" />
 
@@ -85,8 +85,8 @@
         app:destination="@id/auth_navigation" />
 
     <action
-        android:id="@+id/provider_my_interests_dest"
-        app:destination="@id/provider_my_interests" />
+        android:id="@+id/provider_my_offerings_dest"
+        app:destination="@id/provider_my_offerings_dest" />
 
     <action
         android:id="@+id/choose_side_dest"

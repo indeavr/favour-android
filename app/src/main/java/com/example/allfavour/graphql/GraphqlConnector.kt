@@ -1,6 +1,7 @@
 package com.example.allfavour.graphql
 
 import android.content.Context
+import android.net.ParseException
 import com.apollographql.apollo.ApolloClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,6 +12,11 @@ import android.provider.Settings.System.DATE_FORMAT
 import com.apollographql.apollo.response.CustomTypeValue
 import com.apollographql.apollo.response.CustomTypeAdapter
 import com.example.allfavour.data.model.LocationModel
+import android.provider.Settings.System.DATE_FORMAT
+import com.allfavour.graphql.api.type.CustomType
+import com.google.gson.internal.bind.util.ISO8601Utils
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object GraphqlConnector {
@@ -20,9 +26,43 @@ object GraphqlConnector {
     fun setup(context: Context) {
         val unsafeHttpClient = this.getUnsafeOkHttpClient(context)
 
+        val dateCustomTypeAdapter = object : CustomTypeAdapter<Calendar> {
+            override fun decode(value: CustomTypeValue<*>): Calendar {
+                val calendar = GregorianCalendar.getInstance()
+                var s = value.value.toString()
+
+                val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(s)
+                calendar.time = date
+                return calendar
+
+            }
+
+            override fun encode(value: Calendar): CustomTypeValue<*> {
+                val formatted = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                    .format(value.time)
+                val str = formatted.substring(0, 22) + ":" + formatted.substring(22)
+
+                return CustomTypeValue.fromRawValue(str)
+            }
+        }
+
+//        val dateCustomTypeAdapter = object : CustomTypeAdapter<String> {
+//            val formatted = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+//            override fun decode(value: CustomTypeValue<*>): String {
+//                try {
+//                    return formatted.parse(value.value.toString()).toString()
+//                } catch (e: ParseException) {
+//                    throw RuntimeException(e)
+//                }
+//            }
+//            override fun encode(value: String): CustomTypeValue<*> {
+//                return CustomTypeValue.GraphQLString(value)
+//            }
+//        }
         this.client = ApolloClient.builder()
             .serverUrl(baseUrl)
             .okHttpClient(unsafeHttpClient)
+            .addCustomTypeAdapter(CustomType.DATETIME, dateCustomTypeAdapter)
             .build()
     }
 
