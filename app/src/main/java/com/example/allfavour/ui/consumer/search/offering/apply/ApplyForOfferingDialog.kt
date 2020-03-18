@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import com.example.allfavour.DecoratedActivity
 
-import com.example.allfavour.R
 import com.example.allfavour.databinding.ApplyForOfferingDialogFragmentBinding
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.example.allfavour.ui.auth.AuthViewModelFactory
@@ -26,6 +25,10 @@ import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModel
 import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModelFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.apply_for_offering_dialog_fragment.*
+import android.app.TimePickerDialog
+import com.example.allfavour.R
+import java.util.*
+
 
 class ApplyForOfferingDialog : DialogFragment() {
 
@@ -35,13 +38,13 @@ class ApplyForOfferingDialog : DialogFragment() {
     }
 
     private val factory = OfferingsSearchViewModelFactory()
-    private val offeringViewModel: OfferingsSearchViewModel by navGraphViewModels(R.id.consumer_search_navigation) { factory }
+    private val viewModelOffering: OfferingsSearchViewModel by navGraphViewModels(R.id.consumer_search_navigation) { factory }
 
-    private val applyFormViewModel: ApplyForOfferingViewModel by lazy {
+    private val viewModelApply: ApplyForOfferingViewModel by lazy {
         ViewModelProviders.of(this).get(ApplyForOfferingViewModel::class.java)
     }
 
-    private val authViewModel: AuthenticationViewModel by lazy {
+    private val viewModelAuth: AuthenticationViewModel by lazy {
         ViewModelProviders.of(this, AuthViewModelFactory())
             .get(AuthenticationViewModel::class.java)
     }
@@ -49,8 +52,10 @@ class ApplyForOfferingDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        applyFormViewModel.application.observe(this, Observer { application ->
-            offeringViewModel.applyForOffering(
+        viewModelApply.application.observe(this, Observer { application ->
+            //  viewModelOffering.appliedSuccessfully.observe()
+
+            viewModelOffering.applyForOffering(
                 AuthenticationProvider.getUserId(requireActivity())!!,
                 application
             )
@@ -69,10 +74,10 @@ class ApplyForOfferingDialog : DialogFragment() {
                 false
             )
 
-        applyFormViewModel.init()
+        viewModelApply.init()
 
         binding.lifecycleOwner = this
-        binding.viewmodel = applyFormViewModel
+        binding.viewmodel = viewModelApply
 
         return binding.root
     }
@@ -80,8 +85,20 @@ class ApplyForOfferingDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setNavigationOnClickListener {
+            dialog!!.dismiss()
+        }
+
         offering_apply_dates_button.setOnClickListener {
             showDatePicker()
+        }
+
+        offering_apply_startHour_button.setOnClickListener {
+            showStartHourTimePicker()
+        }
+
+        offering_apply_endHour_button.setOnClickListener {
+            showEndHourTimePicker()
         }
     }
 
@@ -101,11 +118,44 @@ class ApplyForOfferingDialog : DialogFragment() {
         picker.addOnPositiveButtonClickListener {
             offering_apply_dates_button.text = picker.headerText
             if (it != null) {
-                applyFormViewModel.setDate(it)
+                viewModelApply.setDate(it)
             }
         }
     }
 
+    fun showStartHourTimePicker() {
+        val currentTime = Calendar.getInstance()
+        val hour = currentTime.get(Calendar.HOUR_OF_DAY)
+        val minute = currentTime.get(Calendar.MINUTE)
+
+        val mTimePicker: TimePickerDialog
+        mTimePicker = TimePickerDialog(
+            this.context,
+            TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
+                viewModelApply.onStartHourChanged(timePicker, selectedHour, selectedMinute)
+                offering_apply_startHour_button.text = "Start Time: $selectedHour:$selectedMinute"
+            }, hour, minute, true
+        )//Yes 24 hour time
+        mTimePicker.setTitle("Select Time")
+        mTimePicker.show()
+    }
+
+    fun showEndHourTimePicker() {
+        val currentTime = Calendar.getInstance()
+        val hour = currentTime.get(Calendar.HOUR_OF_DAY)
+        val minute = currentTime.get(Calendar.MINUTE)
+
+        val mTimePicker: TimePickerDialog
+        mTimePicker = TimePickerDialog(
+            this.context,
+            TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
+                viewModelApply.onEndHourChanged(timePicker, selectedHour, selectedMinute)
+                offering_apply_endHour_button.text = "End Time: $selectedHour:$selectedMinute"
+            }, hour, minute, true
+        )//Yes 24 hour time
+        mTimePicker.setTitle("Select Time")
+        mTimePicker.show()
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)

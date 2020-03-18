@@ -29,9 +29,9 @@ object GraphqlConnector {
         val dateCustomTypeAdapter = object : CustomTypeAdapter<Calendar> {
             override fun decode(value: CustomTypeValue<*>): Calendar {
                 val calendar = GregorianCalendar.getInstance()
-                var s = value.value.toString()
+                val str = value.value.toString()
 
-                val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(s)
+                val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(str)
                 calendar.time = date
                 return calendar
 
@@ -46,19 +46,6 @@ object GraphqlConnector {
             }
         }
 
-//        val dateCustomTypeAdapter = object : CustomTypeAdapter<String> {
-//            val formatted = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-//            override fun decode(value: CustomTypeValue<*>): String {
-//                try {
-//                    return formatted.parse(value.value.toString()).toString()
-//                } catch (e: ParseException) {
-//                    throw RuntimeException(e)
-//                }
-//            }
-//            override fun encode(value: String): CustomTypeValue<*> {
-//                return CustomTypeValue.GraphQLString(value)
-//            }
-//        }
         this.client = ApolloClient.builder()
             .serverUrl(baseUrl)
             .okHttpClient(unsafeHttpClient)

@@ -17,11 +17,32 @@
         android:background="@color/secondaryColor"
         tools:context=".ui.consumer.search.offering.apply.ApplyForOfferingDialog">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/custom_apply_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingStart="6dp"
+                android:paddingEnd="16dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:navigationIcon="@drawable/ic_close_black_24dp" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <TextView
             android:id="@+id/offering_apply_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="Application"
             android:textAlignment="center"
@@ -30,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/custom_apply_menu"
             app:layout_constraintVertical_bias="0.0" />
 
         <!--        Message -->
@@ -39,15 +60,14 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="Message"
             app:layout_constraintBottom_toTopOf="@+id/offering_apply_dates_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/offering_apply_dates_button"
+            app:layout_constraintStart_toStartOf="@+id/offering_apply_dates_button"
             app:layout_constraintTop_toBottomOf="@+id/offering_apply_title"
-            app:layout_constraintVertical_bias="0.13">
+            app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/offering_apply_message_input"
@@ -59,67 +79,42 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <Button
             android:id="@+id/offering_apply_dates_button"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="36dp"
             android:text="Dates"
-            app:layout_constraintBottom_toTopOf="@+id/offering_apply_start_hour"
+            app:layout_constraintBottom_toTopOf="@+id/offering_apply_startHour_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.043"
+            app:layout_constraintHorizontal_bias="0.089"
             app:layout_constraintStart_toStartOf="parent" />
 
-
-<!--        <Button-->
-<!--            android:id="@+id/offering_apply_startHour_button"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="28dp"-->
-<!--            android:text="Dates"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/offering_apply_start_hour"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.043"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-
-<!--        <Button-->
-<!--            android:id="@+id/offering_apply_endHour_button"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="28dp"-->
-<!--            android:text="Dates"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/offering_apply_start_hour"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.043"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-        <TimePicker
-            android:id="@+id/offering_apply_start_hour"
-            android:layout_width="273dp"
-            android:layout_height="106dp"
-            android:layout_marginBottom="56dp"
-            android:timePickerMode="spinner"
-            app:layout_constraintBottom_toTopOf="@+id/offering_apply_end_hour"
+        <Button
+            android:id="@+id/offering_apply_startHour_button"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:text="Start Hour"
+            app:layout_constraintBottom_toTopOf="@+id/offering_apply_endHour_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.057"
-            android:onTimeChanged="@{viewmodel.onStartHourChanged}"
+            app:layout_constraintHorizontal_bias="0.054"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TimePicker
-            android:id="@+id/offering_apply_end_hour"
-            android:layout_width="270dp"
-            android:layout_height="102dp"
-            android:layout_marginBottom="60dp"
-            android:onTimeChanged="@{viewmodel.onEndHourChanged}"
+        <Button
+            android:id="@+id/offering_apply_endHour_button"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="116dp"
+            android:text="End Hour"
 
-            android:timePickerMode="spinner"
             app:layout_constraintBottom_toTopOf="@+id/offering_application_submit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.099"
+            app:layout_constraintHorizontal_bias="0.051"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
