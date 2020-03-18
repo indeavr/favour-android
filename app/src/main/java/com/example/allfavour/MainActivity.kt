@@ -597,9 +597,9 @@ class MainActivity : AppCompatActivity(),
         val permissions = authViewModel.registeredUser.value!!.permissions
 
         if (currentSide == "consumer") {
-            activateConsumerNavigation()
 
             if (permissions.hasSufficientInfoProvider) { // has taken basic info form
+                activateConsumerNavigation()
                 val action = MainNavigationDirections.consumerSearchDest()
                 mainNavController.navigate(action)
             } else {
@@ -607,9 +607,9 @@ class MainActivity : AppCompatActivity(),
                 mainNavController.navigate(action)
             }
         } else {
-            activateProviderNavigation()
 
             if (permissions.hasSufficientInfoProvider) { // has taken basic info form
+                activateProviderNavigation()
                 val action = MainNavigationDirections.providerSearchDest()
                 mainNavController.navigate(action)
             } else {
