@@ -1,4 +1,4 @@
-package com.example.allfavour.ui
+package com.example.allfavour.ui.provider.basicForm
 
 import androidx.databinding.ObservableField
 import androidx.databinding.BaseObservable

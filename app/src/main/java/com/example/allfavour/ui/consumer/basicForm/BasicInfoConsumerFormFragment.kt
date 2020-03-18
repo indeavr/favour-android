@@ -1,4 +1,4 @@
-package com.example.allfavour.ui
+package com.example.allfavour.ui.consumer.basicForm
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -13,35 +13,37 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
+import com.example.allfavour.databinding.BasicInfoConsumerFormFragmentBinding
 import com.example.allfavour.databinding.BasicInfoFormFragmentBinding
-import androidx.lifecycle.Observer
-import com.example.allfavour.DecoratedActivity
-import com.example.allfavour.data.model.LocationModel
-import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
+import com.example.allfavour.ui.provider.basicForm.BasicInfoFormViewModel
+import com.example.allfavour.ui.provider.basicForm.BasicInfoFormViewModelFactory
 import com.google.android.gms.common.api.Status
-import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
+class BasicInfoConsumerFormFragment : DialogFragment() {
 
-class BasicInfoFormFragment : DialogFragment() {
-    private val apiKey: String by lazy { getString(R.string.google_api_key) }
+    companion object {
+        fun newInstance() = BasicInfoConsumerFormFragment()
+    }
 
     val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
 
-    private val viewModel: BasicInfoFormViewModel by lazy {
+    private val viewModel: BasicInfoConsumerFormViewModel by lazy {
         ViewModelProviders.of(
             this,
-            BasicInfoFormViewModelFactory()
-        ).get(BasicInfoFormViewModel::class.java)
+            BasicInfoConsumerFormViewModelFactory()
+        ).get(BasicInfoConsumerFormViewModel::class.java)
     }
 
     private val authViewModel: AuthenticationViewModel by lazy {
@@ -51,32 +53,21 @@ class BasicInfoFormFragment : DialogFragment() {
         ).get(AuthenticationViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (!Places.isInitialized()) {
-            Places.initialize(
-                requireActivity().applicationContext,
-                apiKey
-            )
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val binding: BasicInfoFormFragmentBinding =
+        val binding: BasicInfoConsumerFormFragmentBinding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.basic_info_form_fragment,
+                R.layout.basic_info_consumer_form_fragment,
                 container,
                 false
             )
 
         viewModel.init()
-        viewModel.userId = authViewModel.userId // AuthenticationProvider.getUserId(requireActivity())!!
+        viewModel.userId =
+            authViewModel.userId // AuthenticationProvider.getUserId(requireActivity())!!
 
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
@@ -85,6 +76,7 @@ class BasicInfoFormFragment : DialogFragment() {
 
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -167,7 +159,4 @@ class BasicInfoFormFragment : DialogFragment() {
 
     }
 
-    companion object {
-        fun newInstance() = BasicInfoFormFragment()
-    }
 }

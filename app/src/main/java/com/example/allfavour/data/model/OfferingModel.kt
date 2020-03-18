@@ -3,6 +3,7 @@ package com.example.allfavour.data.model
 import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.OfferingsQuery
 import com.allfavour.graphql.api.type.OfferingInput
+import com.google.android.libraries.places.internal.it
 
 data class OfferingModel(
     var id: String?,
@@ -36,7 +37,7 @@ data class OfferingModel(
             )
         }
 
-        fun fromGraphType(graphType: MyOfferingsQuery.MyOffering): OfferingModel {
+        fun fromGraphType(graphType: MyOfferingsQuery.MyActiveOffering): OfferingModel {
             return OfferingModel(
                 id = graphType.id,
                 title = graphType.title,

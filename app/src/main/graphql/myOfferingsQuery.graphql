@@ -1,5 +1,5 @@
 query MyOfferingsQuery($userId: String!) {
-  myOfferings(userId: $userId) {
+  myActiveOfferings(userId: $userId) {
     id
     title
     description

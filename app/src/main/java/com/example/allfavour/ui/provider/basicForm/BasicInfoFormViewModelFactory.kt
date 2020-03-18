@@ -1,10 +1,8 @@
-package com.example.allfavour.ui
+package com.example.allfavour.ui.provider.basicForm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.allfavour.data.OfferingRepository
 import com.example.allfavour.data.ProviderRepository
-import com.example.allfavour.ui.consumer.search.OfferingsSearchViewModel
 
 class BasicInfoFormViewModelFactory : ViewModelProvider.Factory {
 
