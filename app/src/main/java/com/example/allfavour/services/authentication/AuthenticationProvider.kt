@@ -2,6 +2,7 @@ package com.example.allfavour.services.authentication
 
 import android.accounts.AccountManager
 import android.content.Context
+import com.google.android.gms.common.util.CollectionUtils.isEmpty
 
 object AuthenticationProvider {
     private var authToken: String? = null
@@ -25,6 +26,11 @@ object AuthenticationProvider {
     }
 
     fun getAuthToken(context: Context): String? {
+        val accountManager: AccountManager = AccountManager.get(context)
+        val accounts = accountManager.getAccountsByType("AllFavour")
+        if (accounts.count() == 0) {
+            return null
+        }
         return authToken ?: context.getSharedPreferences(
             "authToken",
             Context.MODE_PRIVATE

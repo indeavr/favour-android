@@ -44,10 +44,9 @@ class LoginFragment : GoogleLoginBaseFragment() {
         viewModel = ViewModelProviders.of(this.requireActivity(), AuthViewModelFactory())
             .get(AuthenticationViewModel::class.java)
         accountManager = AccountManager.get(context)
-
         log_in_button.setOnClickListener {
-            val email = emailField.text.toString()
-            val password = passwordField.text.toString()
+            val email = email_input_field.text.toString()
+            val password = password_input_field.text.toString()
 
             viewModel.login(email, password)
         }
@@ -56,14 +55,9 @@ class LoginFragment : GoogleLoginBaseFragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        continue_with_google_button.setOnClickListener {
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
-        }
-
-        viewModel.registeredUser.observe(this) {
-            val email = emailField.text.toString()
-            val password = passwordField.text.toString()
+       val observer = viewModel.registeredUser.observe(this) {
+            val email = email_input_field.text.toString()
+            val password = password_input_field.text.toString()
 
             val account: Account = addOrFindAccount(email, password)
 
@@ -76,6 +70,12 @@ class LoginFragment : GoogleLoginBaseFragment() {
                 setUserData(account, "fullName", it.fullName)
             }
             mainNavController!!.navigate(MainNavigationDirections.consumerSearchDest())
+        }
+
+        continue_with_google_button.setOnClickListener {
+            viewModel.registeredUser.removeObserver(observer)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
     }

@@ -53,7 +53,8 @@ class RegisterFragment : GoogleLoginBaseFragment() {
 
             viewModel.saveEmailBeforeTransition(email)
 
-            val action = RegisterFragmentDirections.actionRegisterFragmentToRegisterDetailsFragment()
+            val action =
+                RegisterFragmentDirections.actionRegisterFragmentToRegisterDetailsFragment()
             findNavController().navigate(action)
         }
 
@@ -62,12 +63,7 @@ class RegisterFragment : GoogleLoginBaseFragment() {
             findNavController().navigate(action)
         }
 
-        continue_with_google_button.setOnClickListener {
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
-        }
-
-        viewModel.registeredUser.observe(this) {
+        val observer = viewModel.registeredUser.observe(this) {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
 
@@ -83,6 +79,12 @@ class RegisterFragment : GoogleLoginBaseFragment() {
             }
 
             mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+        }
+
+        continue_with_google_button.setOnClickListener {
+            viewModel.registeredUser.removeObserver(observer)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
     }
