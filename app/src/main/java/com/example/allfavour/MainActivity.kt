@@ -27,9 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.allfavour.ui.BasicInfoFormFragment
 import com.example.allfavour.data.model.LoggedUser
-import com.example.allfavour.data.model.PermissionsModel
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
 import java.util.*
@@ -198,7 +196,8 @@ class MainActivity : AppCompatActivity(),
         }
 
         // TODO: this flow is not relevant anymore (replaced by @navigateToConsumerOrProvider)
-        if (authToken != null) { //logged in
+        // authToken != null
+        if (false) { //logged in
             if (true) { // hasPassedBasicForms
 //                mainNavController.navigate(R.id.basic_info_form_dest)
                 // return
@@ -598,13 +597,19 @@ class MainActivity : AppCompatActivity(),
         val permissions = authViewModel.registeredUser.value!!.permissions
 
         if (currentSide == "consumer") {
-            activateConsumerNavigation()
-            val action = MainNavigationDirections.consumerSearchDest()
-            mainNavController.navigate(action)
-        } else {
-            activateProviderNavigation()
 
             if (permissions.hasSufficientInfoProvider) { // has taken basic info form
+                activateConsumerNavigation()
+                val action = MainNavigationDirections.consumerSearchDest()
+                mainNavController.navigate(action)
+            } else {
+                val action = MainNavigationDirections.consumerBasicInfoFormDest()
+                mainNavController.navigate(action)
+            }
+        } else {
+
+            if (permissions.hasSufficientInfoProvider) { // has taken basic info form
+                activateProviderNavigation()
                 val action = MainNavigationDirections.providerSearchDest()
                 mainNavController.navigate(action)
             } else {

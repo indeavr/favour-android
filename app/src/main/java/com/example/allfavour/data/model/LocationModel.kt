@@ -1,5 +1,6 @@
 package com.example.allfavour.data.model
 
+import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.OfferingsQuery
 import com.allfavour.graphql.api.ProviderQuery
 import com.allfavour.graphql.api.type.LocationInput
@@ -52,6 +53,18 @@ data class LocationModel(
         }
 
         fun fromGraphType(graphType: OfferingsQuery.Location1): LocationModel {
+            return LocationModel(
+                id = graphType.id,
+                mapsId = graphType.mapsId,
+                country = graphType.country, // TODO: check this "!!"
+                town = graphType.town,
+                address = graphType.address,
+                latitude = graphType.latitude.toDouble(),
+                longitude = graphType.longitude.toDouble()
+            )
+        }
+
+        fun fromGraphType(graphType: MyOfferingsQuery.Location): LocationModel {
             return LocationModel(
                 id = graphType.id,
                 mapsId = graphType.mapsId,

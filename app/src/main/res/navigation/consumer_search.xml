@@ -50,7 +50,7 @@
 
     <dialog
         android:id="@+id/apply_for_offering_dialog"
-        android:name="com.example.allfavour.ui.consumer.search.offering.ApplyForOfferingDialog"
+        android:name="com.example.allfavour.ui.consumer.search.offering.apply.ApplyForOfferingDialog"
         android:label="apply_for_offering_dialog_fragment"
         tools:layout="@layout/apply_for_offering_dialog_fragment" />
 

@@ -5,14 +5,14 @@ import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.ProviderQuery
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
+import com.example.allfavour.data.model.ConsumerModel
 import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.data.model.ProviderModel
 import com.example.allfavour.graphql.GraphqlConnector
 
-class ProviderRepository {
-
-    suspend fun createProvider(userId: String, provider: ProviderModel) {
-        val mutation = CreateProviderMutation(userId, provider.toInputType())
+class ConsumerRepository {
+    suspend fun createConsumer(userId: String, consumer: ConsumerModel) {
+        val mutation = CreateProviderMutation(userId, consumer.toInputType())
         val task = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         val result = task.data()
@@ -40,15 +40,15 @@ class ProviderRepository {
     }
 
     suspend fun getMyOfferings(userId: String): ArrayList<OfferingModel>? {
-            val query = MyOfferingsQuery(userId)
-            val task = GraphqlConnector.client.query(query).toDeferred().await()
+        val query = MyOfferingsQuery(userId)
+        val task = GraphqlConnector.client.query(query).toDeferred().await()
 
-            val myOfferings = task.data()?.myActiveOfferings ?: run {
-                throw NullPointerException()
-            }
+        val myOfferings = task.data()?.myActiveOfferings ?: run {
+            throw NullPointerException()
+        }
 
-            return ArrayList(myOfferings.map {
-                OfferingModel.fromGraphType(it!!)
-            })
+        return ArrayList(myOfferings.map {
+            OfferingModel.fromGraphType(it!!)
+        })
     }
 }

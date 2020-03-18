@@ -11,6 +11,9 @@ object AuthenticationProvider {
         //TODO: make Constants class --> (! strings wont work, must be a class)
         val accounts = accountManager.getAccountsByType("AllFavour")
 
+        if (accounts == null || accounts.size == 0) {
+            return null
+        }
         return accountManager.getUserData(accounts[0], "userId")
     }
 

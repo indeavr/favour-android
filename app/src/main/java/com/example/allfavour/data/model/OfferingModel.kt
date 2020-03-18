@@ -1,7 +1,9 @@
 package com.example.allfavour.data.model
 
+import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.OfferingsQuery
 import com.allfavour.graphql.api.type.OfferingInput
+import com.google.android.libraries.places.internal.it
 
 data class OfferingModel(
     var id: String?,
@@ -9,7 +11,8 @@ data class OfferingModel(
     var description: String,
     var money: Double,
     var location: LocationModel,
-    var provider: ProviderModel? // null only on createProvider mutation
+    var provider: ProviderModel?, // null only on createProvider mutation & myOfferingsQuery
+    var applications: List<ApplicationModel>? // not null only in MyOfferings provider
 ) {
     fun toInputType(): OfferingInput {
         return OfferingInput(
@@ -29,7 +32,22 @@ data class OfferingModel(
                 description = graphType.description,
                 money = graphType.money,
                 location = LocationModel.fromGraphType(graphType.location),
-                provider = ProviderModel.fromGraphType(graphType.provider)
+                provider = ProviderModel.fromGraphType(graphType.provider),
+                applications = null
+            )
+        }
+
+        fun fromGraphType(graphType: MyOfferingsQuery.MyActiveOffering): OfferingModel {
+            return OfferingModel(
+                id = graphType.id,
+                title = graphType.title,
+                description = graphType.description,
+                money = graphType.money,
+                applications = graphType.applications.map {
+                    ApplicationModel.fromGraphType(it!!)
+                },
+                provider = null,
+                location = LocationModel.fromGraphType(graphType.location)
             )
         }
     }

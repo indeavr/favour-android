@@ -1,22 +1,22 @@
-package com.example.allfavour.ui
+package com.example.allfavour.ui.consumer.basicForm
 
 import android.view.View
-import androidx.lifecycle.ViewModel
 import android.widget.EditText
 import android.widget.RadioGroup
-import androidx.lifecycle.MutableLiveData
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allfavour.R
-import com.example.allfavour.data.ProviderRepository
+import com.example.allfavour.data.ConsumerRepository
+import com.example.allfavour.data.model.ConsumerModel
 import com.example.allfavour.data.model.LocationModel
 import com.example.allfavour.data.model.ProviderModel
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
-
-class BasicInfoFormViewModel(val providerRepository: ProviderRepository) : ViewModel() {
-    lateinit var fields: BasicFormModel
+class BasicInfoConsumerFormViewModel(val consumerRepository: ConsumerRepository) : ViewModel() {
+    lateinit var fields: BasicFormConsumerModel
     lateinit var userId: String
 
     lateinit var onFocusPhoneNumber: View.OnFocusChangeListener
@@ -24,7 +24,7 @@ class BasicInfoFormViewModel(val providerRepository: ProviderRepository) : ViewM
     val submittedSuccessfully = MutableLiveData<Boolean>()
 
     fun init() {
-        fields = BasicFormModel()
+        fields = BasicFormConsumerModel()
 
         onFocusPhoneNumber = View.OnFocusChangeListener { view, focused ->
             val et = view as EditText
@@ -65,7 +65,7 @@ class BasicInfoFormViewModel(val providerRepository: ProviderRepository) : ViewM
                 town = ""
             )
 
-            val provider = ProviderModel(
+            val consumer = ConsumerModel(
                 id = "",
                 phoneNumber = fields.phoneNumber!!,
                 location = location,
@@ -75,7 +75,7 @@ class BasicInfoFormViewModel(val providerRepository: ProviderRepository) : ViewM
             )
 
             viewModelScope.launch {
-                val result = providerRepository.createProvider(userId, provider)
+                val result = consumerRepository.createConsumer(userId, consumer)
 
                 submittedSuccessfully.value = true
             }

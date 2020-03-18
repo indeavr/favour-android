@@ -1,10 +1,11 @@
 package com.example.allfavour.data
 
+import com.allfavour.graphql.api.ApplyForOfferingMutation
 import com.allfavour.graphql.api.CreateOfferingMutation
 import com.allfavour.graphql.api.OfferingsQuery
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
-import com.example.allfavour.data.model.LocationModel
+import com.example.allfavour.data.model.ApplicationModel
 import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.graphql.GraphqlConnector
 
@@ -36,10 +37,14 @@ class OfferingRepository {
         print(result.data())
     }
 
-    suspend fun applyForOffering(userId: String, offeringId: String): Boolean? {
+    suspend fun applyForOffering(
+        userId: String,
+        offeringId: String,
+        application: ApplicationModel
+    ): Boolean? {
         try {
-//            val mutation = ApplyForOfferingMutation(userId, offeringId)
-//            val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
+            val mutation = ApplyForOfferingMutation(userId, offeringId, application.toInputType())
+            val result = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
             return true
         } catch (e: ApolloException) {
