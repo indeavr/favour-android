@@ -5,6 +5,7 @@ import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.ProviderQuery
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
+import com.example.allfavour.data.model.ActiveOfferingModel
 import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.data.model.ProviderModel
 import com.example.allfavour.graphql.GraphqlConnector
@@ -39,7 +40,7 @@ class ProviderRepository {
         }
     }
 
-    suspend fun getMyOfferings(userId: String): ArrayList<OfferingModel>? {
+    suspend fun getMyOfferings(userId: String): ArrayList<ActiveOfferingModel>? {
             val query = MyOfferingsQuery(userId)
             val task = GraphqlConnector.client.query(query).toDeferred().await()
 
@@ -48,7 +49,7 @@ class ProviderRepository {
             }
 
             return ArrayList(myOfferings.map {
-                OfferingModel.fromGraphType(it!!)
+                ActiveOfferingModel.fromGraphType(it!!)
             })
     }
 }

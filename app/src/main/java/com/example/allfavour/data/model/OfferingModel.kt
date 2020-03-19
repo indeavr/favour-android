@@ -11,8 +11,7 @@ data class OfferingModel(
     var description: String,
     var money: Double,
     var location: LocationModel,
-    var provider: ProviderModel?, // null only on createProvider mutation & myOfferingsQuery
-    var applications: List<ApplicationModel>? // not null only in MyOfferings provider
+    var provider: ProviderModel? // null only on createProvider mutation & myOfferingsQuery
 ) {
     fun toInputType(): OfferingInput {
         return OfferingInput(
@@ -32,20 +31,16 @@ data class OfferingModel(
                 description = graphType.description,
                 money = graphType.money,
                 location = LocationModel.fromGraphType(graphType.location),
-                provider = ProviderModel.fromGraphType(graphType.provider),
-                applications = null
+                provider = ProviderModel.fromGraphType(graphType.provider)
             )
         }
 
-        fun fromGraphType(graphType: MyOfferingsQuery.MyActiveOffering): OfferingModel {
+        fun fromGraphType(graphType: MyOfferingsQuery.Offering): OfferingModel {
             return OfferingModel(
                 id = graphType.id,
                 title = graphType.title,
                 description = graphType.description,
                 money = graphType.money,
-                applications = graphType.applications.map {
-                    ApplicationModel.fromGraphType(it!!)
-                },
                 provider = null,
                 location = LocationModel.fromGraphType(graphType.location)
             )

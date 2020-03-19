@@ -39,16 +39,16 @@ class ConsumerRepository {
         }
     }
 
-    suspend fun getMyOfferings(userId: String): ArrayList<OfferingModel>? {
-        val query = MyOfferingsQuery(userId)
-        val task = GraphqlConnector.client.query(query).toDeferred().await()
-
-        val myOfferings = task.data()?.myActiveOfferings ?: run {
-            throw NullPointerException()
-        }
-
-        return ArrayList(myOfferings.map {
-            OfferingModel.fromGraphType(it!!)
-        })
-    }
+//    suspend fun getMyOfferings(userId: String): ArrayList<OfferingModel>? {
+//        val query = MyOfferingsQuery(userId)
+//        val task = GraphqlConnector.client.query(query).toDeferred().await()
+//
+//        val myOfferings = task.data()?.myActiveOfferings ?: run {
+//            throw NullPointerException()
+//        }
+//
+//        return ArrayList(myOfferings.map {
+//            OfferingModel.fromGraphType(it!!)
+//        })
+//    }
 }

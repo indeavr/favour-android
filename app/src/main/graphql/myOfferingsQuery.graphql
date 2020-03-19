@@ -1,24 +1,26 @@
 query MyOfferingsQuery($userId: String!) {
   myActiveOfferings(userId: $userId) {
-    id
-    title
-    description
-    money
-    location {
-      id
-      mapsId
-      address
-      country
-      town
-      longitude
-      latitude
-    }
     applications {
       message
       id
       time {
         startTime
         endTime
+      }
+    }
+    offering {
+      id
+      title
+      description
+      money
+      location {
+        id
+        mapsId
+        address
+        country
+        town
+        longitude
+        latitude
       }
     }
   }

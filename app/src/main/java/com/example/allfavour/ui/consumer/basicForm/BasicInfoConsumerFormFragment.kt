@@ -93,7 +93,7 @@ class BasicInfoConsumerFormFragment : DialogFragment() {
 
     fun setupGoogleLocationAutocomplete() {
         val autocompleteFragment =
-            activity!!.supportFragmentManager.findFragmentById(R.id.maps_autocomplete_fragment_basic_forms) as AutocompleteSupportFragment
+            activity!!.supportFragmentManager.findFragmentById(R.id.maps_autocomplete_fragment_basic_forms_consumer) as AutocompleteSupportFragment
 
         autocompleteFragment.setPlaceFields(
             listOf(

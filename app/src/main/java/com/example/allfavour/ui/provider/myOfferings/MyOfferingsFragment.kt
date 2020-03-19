@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
+import com.example.allfavour.data.model.ActiveOfferingModel
 import com.example.allfavour.data.model.OfferingModel
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
@@ -32,7 +33,7 @@ class MyOfferingsFragment : Fragment() {
 
     private lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var listData: ArrayList<OfferingModel>
+    private lateinit var listData: ArrayList<ActiveOfferingModel>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private val factory = MyOfferingsViewModelFactory()
@@ -48,7 +49,7 @@ class MyOfferingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.myOfferingsList.observe(this, Observer<List<OfferingModel>> { myOfferings ->
+        viewModel.myOfferingsList.observe(this, Observer<List<ActiveOfferingModel>> { myOfferings ->
             swipeRefreshLayout.isRefreshing = false
 
             listData.clear()
@@ -117,7 +118,7 @@ class MyOfferingsFragment : Fragment() {
     }
 
     class MyOfferingsAdapter(
-        private val myDataset: ArrayList<OfferingModel>,
+        private val myDataset: ArrayList<ActiveOfferingModel>,
         private val navController: NavController
     ) :
         RecyclerView.Adapter<MyOfferingsAdapter.ViewHolder>() {
@@ -139,12 +140,12 @@ class MyOfferingsFragment : Fragment() {
             if (myDataset.isNullOrEmpty()) {
 
             } else {
-                val offering = myDataset[position]
+                val activeOffering = myDataset[position]
 
                 holder.view.findViewById<TextView>(R.id.my_offering_item_title).text =
-                    offering.title
+                    activeOffering.offering.title
                 holder.view.findViewById<TextView>(R.id.my_offering_item_applications_count).text =
-                    offering.applications?.size.toString() ?: "0"
+                    activeOffering.applications?.size.toString() ?: "0"
 //                holder.view.findViewById<TextView>(R.id.offering_item_address).text =
 //                    offering.location.address
 //                holder.view.findViewById<TextView>(R.id.offering_item_dates).text =
