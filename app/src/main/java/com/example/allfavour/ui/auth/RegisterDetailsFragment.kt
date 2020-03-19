@@ -49,8 +49,8 @@ class RegisterDetailsFragment: Fragment() {
         }
 
         viewModel.registeredUser.observe(this) {
-            val email = emailField.text.toString()
-            val password = passwordField.text.toString()
+            val email = email_input.text.toString()
+            val password = password_input.text.toString()
 
             val account: Account = addOrFindAccount(email, password)
 
