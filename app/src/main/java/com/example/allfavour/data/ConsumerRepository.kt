@@ -1,5 +1,6 @@
 package com.example.allfavour.data
 
+import com.allfavour.graphql.api.CreatePersonConsumerMutation
 import com.allfavour.graphql.api.CreateProviderMutation
 import com.allfavour.graphql.api.MyOfferingsQuery
 import com.allfavour.graphql.api.ProviderQuery
@@ -12,7 +13,7 @@ import com.example.allfavour.graphql.GraphqlConnector
 
 class ConsumerRepository {
     suspend fun createConsumer(userId: String, consumer: ConsumerModel) {
-        val mutation = CreateProviderMutation(userId, consumer.toInputType())
+        val mutation = CreatePersonConsumerMutation(userId, consumer.toInputType())
         val task = GraphqlConnector.client.mutate(mutation).toDeferred().await()
 
         val result = task.data()

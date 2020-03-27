@@ -1,0 +1,3 @@
+mutation CreatePersonConsumer($userId: String!, $personConsumer: PersonConsumerInput!) {
+    createPersonConsumer(userId: $userId, personConsumer: $personConsumer)
+}

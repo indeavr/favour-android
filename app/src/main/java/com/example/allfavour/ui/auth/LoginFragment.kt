@@ -7,15 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NavigationRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
+import com.example.allfavour.data.model.LoggedInUser
+import com.example.allfavour.data.model.LoggedUser
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.login_fragment_x.*
@@ -30,6 +29,8 @@ class LoginFragment : GoogleLoginBaseFragment() {
     private lateinit var accountManager: AccountManager
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
+
+    private lateinit var observer: Observer<LoggedUser>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,25 +56,28 @@ class LoginFragment : GoogleLoginBaseFragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-       val observer = viewModel.registeredUser.observe(this) {
-            val email = email_input_field.text.toString()
-            val password = password_input_field.text.toString()
-
-            val account: Account = addOrFindAccount(email, password)
-
-            with(accountManager) {
-                AuthenticationProvider.setAuthToken("FavourToken", context!!)
-                setAuthToken(account, "FavourToken", it.token)
-                setPassword(account, password)
-                setUserData(account, "FavourToken", "FavourToken")
-                setUserData(account, "userId", it.userId)
-                setUserData(account, "fullName", it.fullName)
-            }
-            mainNavController!!.navigate(MainNavigationDirections.consumerSearchDest())
-        }
+//        observer = viewModel.registeredUser.observe(this) {
+//            val email = email_input_field.text.toString()
+//            val password = password_input_field.text.toString()
+//
+//            if (email != null && password != null) {
+//                val account: Account = addOrFindAccount(email, password)
+//
+//                with(accountManager) {
+//                    AuthenticationProvider.setAuthToken("FavourToken", context!!)
+//                    setAuthToken(account, "FavourToken", it.token)
+//                    setPassword(account, password)
+//                    setUserData(account, "FavourToken", "FavourToken")
+//                    setUserData(account, "userId", it.userId)
+//                    setUserData(account, "fullName", it.fullName)
+//                }
+//                mainNavController!!.navigate(MainNavigationDirections.consumerSearchDest())
+//            }
+//
+//        }
 
         continue_with_google_button.setOnClickListener {
-            viewModel.registeredUser.removeObserver(observer)
+//            viewModel.registeredUser.removeObserver(observer)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }

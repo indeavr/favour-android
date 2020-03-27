@@ -51,9 +51,9 @@ class BasicFormConsumerModel : BaseObservable() {
             return false
         }
 
-        val isValid = Pattern.matches("^[+]?[0-9]{10,13}\$", phoneNumber)
+        val isValid = Pattern.matches("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*\$", phoneNumber)
 
-        if (isValid && setMessage) {
+        if (isValid) {
             phoneNumberError.set(null)
         } else {
             phoneNumberError.set(R.string.phoneNumber_wrong)

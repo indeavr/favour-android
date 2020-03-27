@@ -53,6 +53,11 @@
         android:name="com.example.allfavour.ui.provider.basicForm.BasicInfoFormFragment"
         android:label="BasicInfoFormFragment" />
 
+    <dialog
+        android:id="@+id/consumer_basic_info_form_dialog"
+        android:name="com.example.allfavour.ui.consumer.basicForm.BasicInfoConsumerFormFragment"
+        android:label="BasicInfoConsumerFormFragment" />
+
     <action
         android:id="@+id/provider_basic_info_form_dest"
         app:destination="@id/provider_basic_info_form_dialog" />
@@ -96,13 +101,5 @@
     <action
         android:id="@+id/choose_side_dest"
         app:destination="@id/choose_side_dialog" />
-
-
-    <fragment
-        android:id="@+id/consumer_basic_info_form_dialog"
-        android:name="com.example.allfavour.ui.consumer.basicForm.BasicInfoConsumerFormFragment"
-        android:label="basic_info_consumer_form_fragment"
-        tools:layout="@layout/basic_info_consumer_form_fragment" />
-
 
 </navigation>

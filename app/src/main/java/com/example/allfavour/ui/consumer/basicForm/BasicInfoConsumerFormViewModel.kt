@@ -41,8 +41,8 @@ class BasicInfoConsumerFormViewModel(val consumerRepository: ConsumerRepository)
 
     fun onGenderChanged(radioGroup: RadioGroup, id: Int) {
         when (id) {
-            R.id.female_radio -> fields.sex = "Female"
-            R.id.male_radio -> fields.sex = "Male"
+            R.id.consumer_female_radio -> fields.sex = "Female"
+            R.id.consumer_male_radio -> fields.sex = "Male"
         }
     }
 

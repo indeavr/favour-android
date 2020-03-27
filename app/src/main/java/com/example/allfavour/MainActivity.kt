@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(),
 
         // TODO: this flow is not relevant anymore (replaced by @navigateToConsumerOrProvider)
         // authToken != null
-        if (authToken != null) { //logged in
+        if (false) { //logged in authToken != null
             if (true) { // hasPassedBasicForms
 //                mainNavController.navigate(R.id.basic_info_form_dest)
                 // return

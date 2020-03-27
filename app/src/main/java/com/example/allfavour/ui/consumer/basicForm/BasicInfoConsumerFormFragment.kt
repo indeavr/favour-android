@@ -27,15 +27,17 @@ import com.example.allfavour.ui.auth.AuthenticationViewModel
 import com.example.allfavour.ui.provider.basicForm.BasicInfoFormViewModel
 import com.example.allfavour.ui.provider.basicForm.BasicInfoFormViewModelFactory
 import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 class BasicInfoConsumerFormFragment : DialogFragment() {
-
     companion object {
         fun newInstance() = BasicInfoConsumerFormFragment()
     }
+
+    private val apiKey: String by lazy { getString(R.string.google_api_key) }
 
     val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
 
@@ -51,6 +53,17 @@ class BasicInfoConsumerFormFragment : DialogFragment() {
             this.requireActivity(),
             AuthViewModelFactory()
         ).get(AuthenticationViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (!Places.isInitialized()) {
+            Places.initialize(
+                requireActivity().applicationContext,
+                apiKey
+            )
+        }
     }
 
     override fun onCreateView(
