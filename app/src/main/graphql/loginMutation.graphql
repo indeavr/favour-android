@@ -1,12 +1,13 @@
 mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-        token
-        userId
-        fullName
-        permissions {
-            hasSufficientInfoProvider
-            hasSufficientInfoConsumer
-            sideChosen
-        }
+  login(email: $email, password: $password) {
+    token
+    userId
+    fullName
+    lastAccountSide
+    permissions {
+      hasSufficientInfoProvider
+      hasSufficientInfoConsumer
+      sideChosen
     }
-}   
+  }
+}

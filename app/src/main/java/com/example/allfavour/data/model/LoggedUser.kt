@@ -5,5 +5,6 @@ data class LoggedUser(
     val email: String,
     val token: String,
     val fullName: String,
-    val permissions: PermissionsModel
+    val permissions: PermissionsModel,
+    val lastAccountSide: String?
 )

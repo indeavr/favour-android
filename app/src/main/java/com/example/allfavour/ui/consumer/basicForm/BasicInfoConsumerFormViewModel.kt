@@ -68,7 +68,6 @@ class BasicInfoConsumerFormViewModel(val consumerRepository: ConsumerRepository)
             val consumer = ConsumerModel(
                 id = "",
                 phoneNumber = fields.phoneNumber!!,
-                location = location,
                 sex = fields.sex!!,
                 firstName = null,
                 lastName = null

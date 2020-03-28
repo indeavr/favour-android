@@ -99,7 +99,7 @@ class BasicInfoConsumerFormFragment : DialogFragment() {
 
     private fun setupSubmit() {
         viewModel.submittedSuccessfully.observe(viewLifecycleOwner, Observer<Boolean> {
-            val action = MainNavigationDirections.providerSearchDest()
+            val action = MainNavigationDirections.consumerSearchDest()
             mainNavController?.navigate(action)
         })
     }

@@ -1,5 +1,6 @@
 package com.example.allfavour.ui.provider.profile
 
+import android.accounts.AccountManager
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
+import com.example.allfavour.DecoratedActivity
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
@@ -45,7 +48,7 @@ class ProfileProviderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val provider = viewModel.provider.value
-        if(provider != null){
+        if (provider != null) {
             provider_address.text = provider.location.address
             provider_phone_number.text = provider.phoneNumber
         }
@@ -68,10 +71,26 @@ class ProfileProviderFragment : Fragment() {
 //
             newFragment.show(fragmentManager!!, null)
         }
+
+
+        provider_my_account_button.setOnClickListener {
+            logout()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
+    }
+
+    private fun logout() {
+        val accountManager = AccountManager.get(context?.applicationContext)
+        val accounts = accountManager.getAccountsByType("AllFavour")
+        val oldToken = AuthenticationProvider.getAuthToken(context!!.applicationContext)
+        accountManager.invalidateAuthToken("AllFavour", oldToken)
+        AuthenticationProvider.invalidateToken(context!!.applicationContext)
+        accountManager.clearPassword(accounts[0])
+        (requireActivity() as DecoratedActivity).activateAuthNavigation()
+        activity!!.findNavController(R.id.main_nav_activity).navigate(R.id.auth_navigation_dest)
     }
 }

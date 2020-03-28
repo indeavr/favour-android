@@ -1,9 +1,6 @@
 package com.example.allfavour.data
 
-import com.allfavour.graphql.api.CreatePersonConsumerMutation
-import com.allfavour.graphql.api.CreateProviderMutation
-import com.allfavour.graphql.api.MyOfferingsQuery
-import com.allfavour.graphql.api.ProviderQuery
+import com.allfavour.graphql.api.*
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.example.allfavour.data.model.ConsumerModel
@@ -20,16 +17,16 @@ class ConsumerRepository {
 
     }
 
-    suspend fun getProvider(userId: String): ProviderModel? {
+    suspend fun getConsumer(userId: String): ConsumerModel? {
         try {
-            val query = ProviderQuery(userId)
+            val query = PersonConsumerQuery(userId)
             val task = GraphqlConnector.client.query(query).toDeferred().await()
 
-            val result = task.data()?.provider ?: run {
+            val result = task.data()?.personConsumer ?: run {
                 throw NullPointerException()
             }
 
-            return ProviderModel.fromGraphType(result)
+            return ConsumerModel.fromGraphType(result)
 
         } catch (e: ApolloException) {
             return null

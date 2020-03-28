@@ -27,7 +27,7 @@ class LoginRepository {
             sideChosen = login.permissions.sideChosen
         )
 
-        return LoggedInUser(login.userId, username, login.token, login.fullName, permissions)
+        return LoggedInUser(login.userId, username, login.token, login.fullName, permissions, login.lastAccountSide)
     }
 
     suspend fun register(
@@ -50,7 +50,8 @@ class LoginRepository {
             username,
             result.data()!!.register!!.token,
             result.data()!!.register!!.fullName,
-            permissions
+            permissions,
+            result.data()!!.register!!.lastAccountSide
         )
     }
 
@@ -71,7 +72,8 @@ class LoginRepository {
             username,
             user.loginWithGoogle!!.token,
             user.loginWithGoogle!!.fullName,
-            permissions
+            permissions,
+            user.loginWithGoogle!!.lastAccountSide
         )
     }
 }

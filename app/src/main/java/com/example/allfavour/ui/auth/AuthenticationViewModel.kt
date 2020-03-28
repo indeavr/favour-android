@@ -34,7 +34,8 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
                     loggedUser.displayName,
                     loggedUser.token,
                     loggedUser.fullName,
-                    loggedUser.permissions
+                    loggedUser.permissions,
+                    loggedUser.lastAccountSide
                 )
             )
         }
@@ -50,8 +51,8 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
                     loggedUser.displayName,
                     loggedUser.token,
                     loggedUser.fullName,
-                    loggedUser.permissions
-
+                    loggedUser.permissions,
+                    loggedUser.lastAccountSide
                 )
             )
         }
@@ -68,7 +69,8 @@ class AuthenticationViewModel(private val authRepository: LoginRepository) : Vie
                         loggedUser.displayName,
                         loggedUser.token,
                         loggedUser.fullName,
-                        loggedUser.permissions
+                        loggedUser.permissions,
+                        loggedUser.lastAccountSide
                     )
                 )
             } catch (e: Exception) {

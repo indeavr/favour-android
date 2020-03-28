@@ -1,12 +1,14 @@
 mutation LoginWithGoogle($serverToken: String!) {
-    loginWithGoogle(serverToken: $serverToken) {
-        token
-        userId
-        fullName
-         permissions {
-            hasSufficientInfoProvider
-            hasSufficientInfoConsumer
-            sideChosen
-        }
+  loginWithGoogle(serverToken: $serverToken) {
+    token
+    userId
+    fullName
+    lastAccountSide
+
+    permissions {
+      hasSufficientInfoProvider
+      hasSufficientInfoConsumer
+      sideChosen
     }
+  }
 }

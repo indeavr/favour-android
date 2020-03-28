@@ -1,0 +1,9 @@
+query PersonConsumerQuery($userId: String!) {
+  personConsumer(id: $userId) {
+    id
+    firstName
+    lastName
+    phoneNumber
+    sex
+  }
+}

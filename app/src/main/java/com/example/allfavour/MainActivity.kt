@@ -558,7 +558,7 @@ class MainActivity : AppCompatActivity(),
                             }
 
                             if (it.permissions.sideChosen) {
-                                navigateToConsumerOrProvider(null)
+                                navigateToConsumerOrProvider(it.lastAccountSide)
                             } else {
                                 val chooseSideAction = MainNavigationDirections.chooseSideDest()
                                 mainNavController.navigate(chooseSideAction)
@@ -598,7 +598,7 @@ class MainActivity : AppCompatActivity(),
 
         if (currentSide == "consumer") {
 
-            if (permissions.hasSufficientInfoProvider) { // has taken basic info form
+            if (permissions.hasSufficientInfoConsumer) { // has taken basic info form
                 activateConsumerNavigation()
                 val action = MainNavigationDirections.consumerSearchDest()
                 mainNavController.navigate(action)

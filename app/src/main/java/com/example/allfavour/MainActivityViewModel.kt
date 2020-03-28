@@ -22,8 +22,8 @@ class MainActivityViewModel(private val loginRepository: LoginRepository) : View
                     loggedUser.displayName,
                     loggedUser.token,
                     loggedUser.fullName,
-                    loggedUser.permissions
-
+                    loggedUser.permissions,
+                    loggedUser.lastAccountSide!!
                 )
             )
         }
