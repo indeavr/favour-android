@@ -49,6 +49,7 @@ object HandleNotifications {
 
         // Create Pending Intents.
         val piLaunchMainActivity = getIntent(context)
+
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle("The Witcher")
             .setContentText("Hmmm ... ")

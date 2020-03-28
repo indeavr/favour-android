@@ -2,6 +2,7 @@ package com.example.allfavour
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -18,6 +19,8 @@ import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_nav_activity.*
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.navigation.navOptions
@@ -30,6 +33,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.allfavour.data.model.LoggedUser
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 import java.util.*
 
 
@@ -165,6 +172,8 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
+
+        showFCMId()
 
         authViewModel = ViewModelProviders.of(this, AuthViewModelFactory())
             .get(AuthenticationViewModel::class.java)
@@ -625,6 +634,51 @@ class MainActivity : AppCompatActivity(),
         } else {
             provider_bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
         }
+    }
+
+    fun setupFirebaseCloudMessaging() {
+
+    }
+
+    fun showFCMId() {
+        // Get token
+        // [START retrieve_current_token]
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(TAG, msg)
+                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
+        // [END retrieve_current_token]
+    }
+
+
+    // TODO: launch only if this is true --> onCreate & onResume
+    fun isGooglePlayServicesAvailable(activity: Activity): Boolean {
+        val googleApiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance()
+
+        val status: Int = googleApiAvailability.isGooglePlayServicesAvailable(activity)
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show()
+            }
+            return false
+        }
+        return true
+    }
+
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }
 
