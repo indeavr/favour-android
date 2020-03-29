@@ -8,7 +8,8 @@ data class FriendlyMessage(
     var name: String? = null,
     var photoUrl: String? = null,
     var imageUrl: String? = null,
-    val time: String? = Calendar.getInstance().timeInMillis.toString()
+    val time: String? = null,
+    val senderId: String? = null
 ) {
 
     var id: String? = null

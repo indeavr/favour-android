@@ -84,13 +84,7 @@ class ProfileProviderFragment : Fragment() {
     }
 
     private fun logout() {
-        val accountManager = AccountManager.get(context?.applicationContext)
-        val accounts = accountManager.getAccountsByType("AllFavour")
-        val oldToken = AuthenticationProvider.getAuthToken(context!!.applicationContext)
-        accountManager.invalidateAuthToken("AllFavour", oldToken)
-        AuthenticationProvider.invalidateToken(context!!.applicationContext)
-        accountManager.clearPassword(accounts[0])
-        (requireActivity() as DecoratedActivity).activateAuthNavigation()
-        activity!!.findNavController(R.id.main_nav_activity).navigate(R.id.auth_navigation_dest)
+        (requireActivity() as DecoratedActivity).handleLogout()
+
     }
 }

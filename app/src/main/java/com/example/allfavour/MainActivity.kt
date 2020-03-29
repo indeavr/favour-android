@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.allfavour.data.model.LoggedUser
+import com.example.allfavour.services.fcm.FavourFCM
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
 import com.google.android.gms.common.ConnectionResult
@@ -65,6 +66,7 @@ interface DecoratedActivity {
     fun toggleBottomNavVisibility(show: Boolean)
     fun navigateToConsumerOrProvider(side: String?)
     fun activateAuthNavigation()
+    fun handleLogout()
 }
 
 class MainActivity : AppCompatActivity(),
@@ -546,41 +548,64 @@ class MainActivity : AppCompatActivity(),
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
-                    user!!.getIdToken(false).addOnCompleteListener {
-                        val token = it.result!!.token!!
+                    user!!.getIdToken(false).addOnCompleteListener { task ->
+                        val token = task.result!!.token!!
 
                         authViewModel.loginWithGoogle(user.email!!, token)
 
                         authViewModel.registeredUser.observe(this, Observer<LoggedUser> {
-                            val email = it.email
-                            val password = ""
-
-                            val account: Account = addOrFindAccount(email, password)
-                            val context = this
-                            with(accountManager) {
-                                AuthenticationProvider.setAuthToken("FavourToken", context)
-                                setAuthToken(account, "FavourToken", it.token)
-                                setPassword(account, password)
-                                setUserData(account, "FavourToken", "FavourToken")
-                                setUserData(account, "userId", it.userId)
-                                setUserData(account, "fullName", it.fullName)
-                            }
-
-                            if (it.permissions.sideChosen) {
-                                navigateToConsumerOrProvider(it.lastAccountSide)
-                            } else {
-                                val chooseSideAction = MainNavigationDirections.chooseSideDest()
-                                mainNavController.navigate(chooseSideAction)
-                            }
+                            handleLogin(it)
                         })
                     }
-
 
                 } else {
                 }
 
                 // ...
             }
+    }
+
+    private fun handleLogin(it: LoggedUser) {
+        val email = it.email
+        val password = ""
+
+        val account: Account = addOrFindAccount(email, password)
+        val context = this
+        with(accountManager) {
+            AuthenticationProvider.setAuthToken("FavourToken", context)
+            setAuthToken(account, "FavourToken", it.token)
+            setPassword(account, password)
+            setUserData(account, "FavourToken", "FavourToken")
+            setUserData(account, "userId", it.userId)
+            setUserData(account, "fullName", it.fullName)
+        }
+
+        if (it.permissions.sideChosen) {
+            navigateToConsumerOrProvider(it.lastAccountSide)
+        } else {
+            val chooseSideAction = MainNavigationDirections.chooseSideDest()
+            mainNavController.navigate(chooseSideAction)
+        }
+
+        FavourFCM.enable(it.userId)
+    }
+
+    override fun handleLogout() {
+        // Invalidate FCM token
+        val userId = authViewModel.userId
+        FavourFCM.disable(userId)
+
+        val accountManager = AccountManager.get(this.applicationContext)
+        val accounts = accountManager.getAccountsByType("AllFavour")
+
+        val oldToken = AuthenticationProvider.getAuthToken(this.applicationContext)
+        accountManager.invalidateAuthToken("AllFavour", oldToken)
+
+        AuthenticationProvider.invalidateToken(this.applicationContext)
+        accountManager.clearPassword(accounts[0])
+
+        activateAuthNavigation()
+        mainNavController.navigate(R.id.auth_navigation_dest)
     }
 
     private fun addOrFindAccount(email: String, password: String): Account {
@@ -636,10 +661,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    fun setupFirebaseCloudMessaging() {
-
-    }
-
     fun showFCMId() {
         // Get token
         // [START retrieve_current_token]
@@ -675,7 +696,6 @@ class MainActivity : AppCompatActivity(),
         }
         return true
     }
-
 
     companion object {
         private const val TAG = "MainActivity"

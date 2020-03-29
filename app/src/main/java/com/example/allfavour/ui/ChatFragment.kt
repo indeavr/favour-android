@@ -119,7 +119,8 @@ class ChatFragment : Fragment() {
         val parser: SnapshotParser<FriendlyMessage> = SnapshotParser { dataSnapshot ->
             val friendlyMessage =
                 dataSnapshot.getValue<FriendlyMessage>(
-                    FriendlyMessage::class.java)
+                    FriendlyMessage::class.java
+                )
             if (friendlyMessage != null) {
                 friendlyMessage.id = dataSnapshot.key
             }
@@ -237,11 +238,11 @@ class ChatFragment : Fragment() {
             // Send messages on click.
             val friendlyMessage =
                 FriendlyMessage(
-                    messageEditText.text.toString(),
-                    username.toString(),
-                    mPhotoUrl,
-                    null /* no image */
+                    text = messageEditText.text.toString(),
+                    name = username.toString(),
+                    photoUrl = mPhotoUrl
                 )
+
             saveMessageToDb(friendlyMessage)
 
             messageEditText.setText("")

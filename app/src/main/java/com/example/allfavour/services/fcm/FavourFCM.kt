@@ -14,10 +14,17 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.example.allfavour.MainActivity
 import com.example.allfavour.R
+import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.example.allfavour.utility.HandleNotifications
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.FirebaseMessaging
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import java.io.IOException
+
 
 class FavourFCM : FirebaseMessagingService() {
     /**
@@ -81,6 +88,20 @@ class FavourFCM : FirebaseMessagingService() {
     }
     // [END on_new_token]
 
+
+    private fun sendRegistrationToServer(token: String) {
+        val userId = AuthenticationProvider.getUserId(this) ?: return
+
+        val firebaseDB = FirebaseDatabase.getInstance().reference
+
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["users/$userId/fcmTokens/$token"] = true
+        childUpdates["fcmTokens/$token"] = true
+
+        firebaseDB.updateChildren(childUpdates)
+    }
+
+
     /**
      * Schedule async work using WorkManager.
      */
@@ -96,25 +117,6 @@ class FavourFCM : FirebaseMessagingService() {
      */
     private fun handleNow() {
         Log.d(TAG, "Short lived task is done.")
-    }
-
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM InstanceID token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
-
-
-        // if userId 
-        val firebaseDB = FirebaseDatabase.getInstance().reference
-
-        firebaseDB.child("users")
     }
 
     private fun getIntent(): PendingIntent {
@@ -181,6 +183,42 @@ class FavourFCM : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "FavourFCM"
+
+        // isAutoInitEnabled --> disabled by default from manifest
+
+        fun enable(userId: String) {
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+
+            // token will be send to server in onNewToken()
+        }
+
+        fun disable(userId: String) {
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                deleteTokenFromFirebase(userId, it.token)
+
+                FirebaseMessaging.getInstance().isAutoInitEnabled = false
+
+                Thread {
+                    try {
+                        // Remove InstanceID initiate to unsubscribe all topic
+                        // TODO: May be a better way to use FirebaseMessaging.getInstance().unsubscribeFromTopic()
+                        FirebaseInstanceId.getInstance().deleteInstanceId()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }.start()
+            }
+        }
+
+        private fun deleteTokenFromFirebase(userId: String, token: String) {
+            val firebaseDB = FirebaseDatabase.getInstance().reference
+
+            val childUpdates = HashMap<String, Any?>()
+            childUpdates["users/$userId/fcmTokens/$token"] = null
+            childUpdates["fcmTokens/$token"] = null
+
+            firebaseDB.updateChildren(childUpdates)
+        }
     }
 
 }
