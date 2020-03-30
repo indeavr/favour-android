@@ -2521,7 +2521,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "auth",
+              "name": "AuthPayloadType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2548,7 +2548,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "auth",
+              "name": "AuthPayloadType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2617,7 +2617,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "auth",
+              "name": "AuthPayloadType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3463,7 +3463,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "auth",
+        "name": "AuthPayloadType",
         "description": null,
         "fields": [
           {

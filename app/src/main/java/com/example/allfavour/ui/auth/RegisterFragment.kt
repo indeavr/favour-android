@@ -2,12 +2,8 @@ package com.example.allfavour.ui.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.content.ContentValues
-import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +11,10 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.MainNavigationDirections
 
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.register_fragment.*
 import kotlinx.android.synthetic.main.register_fragment_x.*
 
@@ -63,7 +52,7 @@ class RegisterFragment : GoogleLoginBaseFragment() {
             findNavController().navigate(action)
         }
 
-        val observer = viewModel.registeredUser.observe(this) {
+        val observer = viewModel.authModel.observe(this) {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
 
@@ -82,7 +71,7 @@ class RegisterFragment : GoogleLoginBaseFragment() {
         }
 
         continue_with_google_button.setOnClickListener {
-            viewModel.registeredUser.removeObserver(observer)
+            viewModel.authModel.removeObserver(observer)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }

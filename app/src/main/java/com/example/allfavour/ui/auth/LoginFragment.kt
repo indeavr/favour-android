@@ -11,12 +11,8 @@ import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.allfavour.MainNavigationDirections
 import com.example.allfavour.R
-import com.example.allfavour.data.model.LoggedInUser
-import com.example.allfavour.data.model.LoggedUser
-import com.example.allfavour.services.authentication.AuthenticationProvider
-import kotlinx.android.synthetic.main.login_fragment.*
+import com.example.allfavour.data.model.AuthModel
 import kotlinx.android.synthetic.main.login_fragment_x.*
 
 inline fun <reified T : ViewModel> NavController.viewModel(@NavigationRes navGraphId: Int): T {
@@ -30,7 +26,7 @@ class LoginFragment : GoogleLoginBaseFragment() {
 
     private val mainNavController: NavController? by lazy { activity?.findNavController(R.id.main_nav_activity) }
 
-    private lateinit var observer: Observer<LoggedUser>
+    private lateinit var observer: Observer<AuthModel>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

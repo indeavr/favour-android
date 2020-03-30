@@ -9,14 +9,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.example.allfavour.MainActivity
-import com.example.allfavour.data.LoginRepository
+import com.example.allfavour.data.AuthRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class FavourAccountAuthenticator(
     val context: Context,
     val application: Application,
-    val loginRepository: LoginRepository
+    val authRepository: AuthRepository
 ) :
     AbstractAccountAuthenticator(context) {
 
@@ -58,12 +58,12 @@ class FavourAccountAuthenticator(
             if (password != null) {
                 GlobalScope.launch {
                     if (account != null) {
-                        val loginResult = loginRepository.login(account.name, password)
+                        val loginResult = authRepository.login(account.name, password)
 
                         bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
                         bundle.putString(AccountManager.KEY_PASSWORD, password)
                         bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-                        bundle.putString(AccountManager.KEY_AUTHTOKEN, loginResult.displayName)
+                        bundle.putString(AccountManager.KEY_AUTHTOKEN, loginResult.token)
                         bundle.putString("AUTH_TOKEN_TYPE", authTokenType)
 
                         response?.onResult(bundle)

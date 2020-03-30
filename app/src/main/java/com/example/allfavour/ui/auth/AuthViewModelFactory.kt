@@ -2,7 +2,7 @@ package com.example.allfavour.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.allfavour.data.LoginRepository
+import com.example.allfavour.data.AuthRepository
 
 /**
  * ViewModel consumer factory to instantiate LoginViewModel.
@@ -14,7 +14,7 @@ class AuthViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AuthenticationViewModel::class.java)) {
             return AuthenticationViewModel(
-                authRepository = LoginRepository()
+                authRepository = AuthRepository()
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

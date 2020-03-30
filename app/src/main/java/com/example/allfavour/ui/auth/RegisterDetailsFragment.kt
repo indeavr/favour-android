@@ -48,7 +48,7 @@ class RegisterDetailsFragment: Fragment() {
             viewModel.register(email,password, firstName, lastName)
         }
 
-        viewModel.registeredUser.observe(this) {
+        viewModel.authModel.observe(this) {
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
 

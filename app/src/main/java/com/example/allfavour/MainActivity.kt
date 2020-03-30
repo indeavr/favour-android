@@ -2,7 +2,6 @@ package com.example.allfavour
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -30,7 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.allfavour.data.model.LoggedUser
+import com.example.allfavour.data.model.AuthModel
 import com.example.allfavour.services.fcm.FavourFCM
 import com.example.allfavour.ui.auth.AuthViewModelFactory
 import com.example.allfavour.ui.auth.AuthenticationViewModel
@@ -175,7 +174,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        if(this.isGooglePlayServicesAvailable()){
+        if (this.isGooglePlayServicesAvailable()) {
             showFCMId()
         } else {
             GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this)
@@ -555,10 +554,10 @@ class MainActivity : AppCompatActivity(),
                     user!!.getIdToken(false).addOnCompleteListener { task ->
                         val token = task.result!!.token!!
 
-                        authViewModel.loginWithGoogle(user.email!!, token)
+                        authViewModel.loginWithGoogle(token)
 
-                        authViewModel.registeredUser.observe(this, Observer<LoggedUser> {
-                            handleLogin(it)
+                        authViewModel.authModel.observe(this, Observer<AuthModel> {
+                            handleLogin(user.email!!, it)
                         })
                     }
 
@@ -569,8 +568,7 @@ class MainActivity : AppCompatActivity(),
             }
     }
 
-    private fun handleLogin(it: LoggedUser) {
-        val email = it.email
+    private fun handleLogin(email: String, it: AuthModel) {
         val password = ""
 
         val account: Account = addOrFindAccount(email, password)
@@ -632,7 +630,7 @@ class MainActivity : AppCompatActivity(),
             currentSide = inputSide
         }
 
-        val permissions = authViewModel.registeredUser.value!!.permissions
+        val permissions = authViewModel.authModel.value!!.permissions
 
         if (currentSide == "consumer") {
 

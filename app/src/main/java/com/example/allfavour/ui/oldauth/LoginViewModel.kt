@@ -2,23 +2,23 @@ package com.example.allfavour.ui.oldauth
 
 import android.util.Patterns
 import androidx.lifecycle.*
-import com.example.allfavour.data.LoginRepository
+import com.example.allfavour.data.AuthRepository
 
 import com.example.allfavour.R
-import com.example.allfavour.data.model.LoggedInUser
+import com.example.allfavour.data.model.AuthModel
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
-    private var _loginResult = MutableLiveData<LoggedInUser>()
-    val loginResult: LiveData<LoggedInUser> = _loginResult
+    private var _loginResult = MutableLiveData<AuthModel>()
+    val loginResult: LiveData<AuthModel> = _loginResult
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            val result = loginRepository.login(username, password)
+            val result = authRepository.login(username, password)
             _loginResult.value = result
         }
     }
