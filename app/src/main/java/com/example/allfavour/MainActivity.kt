@@ -175,7 +175,11 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.main_nav_activity)
         GraphqlConnector.setup(applicationContext)
 
-        showFCMId()
+        if(this.isGooglePlayServicesAvailable()){
+            showFCMId()
+        } else {
+            GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this)
+        }
 
         authViewModel = ViewModelProviders.of(this, AuthViewModelFactory())
             .get(AuthenticationViewModel::class.java)
@@ -684,13 +688,13 @@ class MainActivity : AppCompatActivity(),
 
 
     // TODO: launch only if this is true --> onCreate & onResume
-    fun isGooglePlayServicesAvailable(activity: Activity): Boolean {
+    fun isGooglePlayServicesAvailable(): Boolean {
         val googleApiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance()
 
-        val status: Int = googleApiAvailability.isGooglePlayServicesAvailable(activity)
+        val status: Int = googleApiAvailability.isGooglePlayServicesAvailable(this)
         if (status != ConnectionResult.SUCCESS) {
             if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activity, status, 2404).show()
+                googleApiAvailability.getErrorDialog(this, status, 2404).show()
             }
             return false
         }
