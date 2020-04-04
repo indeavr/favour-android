@@ -32,10 +32,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:taskAffinity=""
-
             >
-
-            <nav-graph android:value="@navigation/provider_notifications" />
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -81,9 +78,16 @@
             </intent-filter>
 
         </service>
-
         <!-- [END firebase_service] -->
 
+<!--        <receiver-->
+<!--            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"-->
+<!--            android:exported="true"-->
+<!--            android:permission="com.google.android.c2dm.permission.SEND" >-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
      See README(https://goo.gl/l4GJaQ) for more. -->
