@@ -52,26 +52,26 @@ class RegisterFragment : GoogleLoginBaseFragment() {
             findNavController().navigate(action)
         }
 
-        val observer = viewModel.authModel.observe(this) {
-            val email = emailField.text.toString()
-            val password = passwordField.text.toString()
-
-            val account: Account = addOrFindAccount(email, password)
-
-            with(accountManager) {
-                AuthenticationProvider.setAuthToken("FavourToken", context!!)
-                setAuthToken(account, "FavourToken", it.token)
-                setPassword(account, password)
-                setUserData(account, "FavourToken", "FavourToken")
-                setUserData(account, "userId", it.userId)
-                setUserData(account, "fullName", it.fullName)
-            }
-
-            mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
-        }
+//        val observer = viewModel.authModel.observe(this) {
+//            val email = emailField.text.toString()
+//            val password = passwordField.text.toString()
+//
+//            val account: Account = addOrFindAccount(email, password)
+//
+//            with(accountManager) {
+//                AuthenticationProvider.setAuthToken("FavourToken", context!!)
+//                setAuthToken(account, "FavourToken", it.token)
+//                setPassword(account, password)
+//                setUserData(account, "FavourToken", "FavourToken")
+//                setUserData(account, "userId", it.userId)
+//                setUserData(account, "fullName", it.fullName)
+//            }
+//
+//            mainNavController.navigate(MainNavigationDirections.consumerSearchDest())
+//        }
 
         continue_with_google_button.setOnClickListener {
-            viewModel.authModel.removeObserver(observer)
+//            viewModel.authModel.removeObserver(observer)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }

@@ -90,7 +90,7 @@ class FavourFCM : FirebaseMessagingService() {
 
 
     private fun sendRegistrationToServer(token: String) {
-        val userId = AuthenticationProvider.getUserId(this) ?: return
+        val userId = AuthenticationProvider.getFirebaseUserId(this) ?: return
 
         val firebaseDB = FirebaseDatabase.getInstance().reference
 

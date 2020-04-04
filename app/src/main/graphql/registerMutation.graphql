@@ -11,7 +11,9 @@ mutation Register(
     lastName: $lastName
   ) {
     token
+    firebaseToken
     userId
+    firebaseId
     fullName
     lastAccountSide
     permissions {

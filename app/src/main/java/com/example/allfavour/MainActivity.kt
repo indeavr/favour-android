@@ -61,11 +61,14 @@ val authFragments: Set<Int> = setOf(R.id.login) // TODO
 interface DecoratedActivity {
     fun switchToNotificaitons()
     fun setToolbar(toolbar: Toolbar)
-    fun handleGoogleLogin(account: GoogleSignInAccount?)
     fun toggleBottomNavVisibility(show: Boolean)
+
+    fun handleGoogleLogin(account: GoogleSignInAccount?)
+    fun handleServerLogin(email: String, authModel: AuthModel)
+    fun handleLogout()
+
     fun navigateToConsumerOrProvider(side: String?)
     fun activateAuthNavigation()
-    fun handleLogout()
 }
 
 class MainActivity : AppCompatActivity(),
@@ -554,11 +557,11 @@ class MainActivity : AppCompatActivity(),
                     user!!.getIdToken(false).addOnCompleteListener { task ->
                         val token = task.result!!.token!!
 
-                        authViewModel.loginWithGoogle(token)
-
                         authViewModel.authModel.observe(this, Observer<AuthModel> {
                             handleLogin(user.email!!, it)
                         })
+
+                        authViewModel.loginWithGoogle(token)
                     }
 
                 } else {
@@ -568,6 +571,25 @@ class MainActivity : AppCompatActivity(),
             }
     }
 
+    override fun handleServerLogin(email: String, authModel: AuthModel) {
+        authModel.firebaseToken.let {
+            auth.signInWithCustomToken(it)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        handleLogin(email, authModel)
+                    } else {
+                        // Sign in Fails
+                        Log.w(TAG, "signInWithCustomToken:failure", task.exception)
+                        Toast.makeText(
+                            baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+
+    }
+
     private fun handleLogin(email: String, it: AuthModel) {
         val password = ""
 
@@ -575,11 +597,15 @@ class MainActivity : AppCompatActivity(),
         val context = this
         with(accountManager) {
             AuthenticationProvider.setAuthToken("FavourToken", context)
+
             setAuthToken(account, "FavourToken", it.token)
             setPassword(account, password)
             setUserData(account, "FavourToken", "FavourToken")
-            setUserData(account, "userId", it.userId)
-            setUserData(account, "fullName", it.fullName)
+            setUserData(account,  AuthenticationProvider.USER_ID, it.userId)
+            setUserData(account,  AuthenticationProvider.FULL_NAME, it.fullName)
+
+            setUserData(account,  AuthenticationProvider.FIREBASE_TOKEN, it.firebaseToken)
+            setUserData(account,  AuthenticationProvider.FIREBASE_USER_ID, it.firebaseId)
         }
 
         if (it.permissions.sideChosen) {

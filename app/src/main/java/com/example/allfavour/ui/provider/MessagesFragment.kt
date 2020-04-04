@@ -18,7 +18,6 @@ import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.R
 import com.example.allfavour.services.authentication.AuthenticationProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 
@@ -33,7 +32,7 @@ class MessagesFragment : Fragment() {
 
     private val chatData = ArrayList<ChatItem>()
 
-    private val myUserId: String by lazy { AuthenticationProvider.getUserId(requireActivity())!! }
+    private val firebaseUserId: String by lazy { AuthenticationProvider.getFirebaseUserId(requireActivity())!! }
     private val myUsername: String by lazy { AuthenticationProvider.getUserFullname(requireActivity()) }
     val USERS_CHILD = "users"
     val CHAT_CHILD = "chats"
@@ -42,7 +41,7 @@ class MessagesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         firebaseDB.child(USERS_CHILD)
-            .child(myUserId)
+            .child(firebaseUserId)
             .child("chats")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnap: DataSnapshot) {
@@ -78,7 +77,7 @@ class MessagesFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(activity)
 
-        adapter = PeopleListAdapter(chatData, myUserId, navController)
+        adapter = PeopleListAdapter(chatData, firebaseUserId, navController)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.chat_people_recycle_list)
 
@@ -127,7 +126,7 @@ class MessagesFragment : Fragment() {
 
                 users.forEach {
                     val id = it.key
-                    if (id != myUserId) {
+                    if (id != firebaseUserId) {
 
                         // TODO: what if there is no fullName for some reason ? -> crash
                         val fullName = it.child("fullName").getValue(String::class.java)
@@ -164,7 +163,7 @@ class MessagesFragment : Fragment() {
             .push()
             .key
 
-        val userIdToUsername = mutableMapOf(userId to username, myUserId to myUsername)
+        val userIdToUsername = mutableMapOf(userId to username, firebaseUserId to myUsername)
 
         val chatItem = ChatItem(userIdToUsername)
         val chatItemValues = chatItem.toMap()
@@ -173,7 +172,7 @@ class MessagesFragment : Fragment() {
         val childUpdates = HashMap<String, Any>()
         childUpdates["/chats/$chatId"] = chatItemValues
         childUpdates["/users/$userId/chats/$chatId"] = true
-        childUpdates["/users/$myUserId/chats/$chatId"] = true
+        childUpdates["/users/$firebaseUserId/chats/$chatId"] = true
 
         firebaseDB.updateChildren(childUpdates)
     }

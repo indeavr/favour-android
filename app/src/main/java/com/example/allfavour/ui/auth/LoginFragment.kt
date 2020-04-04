@@ -11,6 +11,7 @@ import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.allfavour.DecoratedActivity
 import com.example.allfavour.R
 import com.example.allfavour.data.model.AuthModel
 import kotlinx.android.synthetic.main.login_fragment_x.*
@@ -45,6 +46,10 @@ class LoginFragment : GoogleLoginBaseFragment() {
             val email = email_input_field.text.toString()
             val password = password_input_field.text.toString()
 
+            viewModel.authModel.observe(viewLifecycleOwner, Observer<AuthModel> {
+                (requireActivity() as DecoratedActivity).handleServerLogin(email, it)
+            })
+
             viewModel.login(email, password)
         }
 
@@ -73,7 +78,7 @@ class LoginFragment : GoogleLoginBaseFragment() {
 //        }
 
         continue_with_google_button.setOnClickListener {
-//            viewModel.registeredUser.removeObserver(observer)
+            //            viewModel.registeredUser.removeObserver(observer)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }

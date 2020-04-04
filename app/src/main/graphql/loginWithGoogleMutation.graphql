@@ -1,10 +1,11 @@
 mutation LoginWithGoogle($serverToken: String!) {
   loginWithGoogle(serverToken: $serverToken) {
     token
+    firebaseToken
     userId
+    firebaseId
     fullName
     lastAccountSide
-
     permissions {
       hasSufficientInfoProvider
       hasSufficientInfoConsumer
